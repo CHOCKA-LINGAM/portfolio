@@ -3,16 +3,16 @@ import { useEffect, useRef } from 'react'
 import { useTheme } from '@/lib/theme'
 import { useNav, PAGES, Page } from '@/lib/nav'
 import Nav from './Nav'
-import ThemeSwitcher from './ThemeSwitcher'
-import PageHome from './pages/PageHome'
-import PageSkills from './pages/PageSkills'
-import PageProjects from './pages/PageProjects'
-import PageExperience from './pages/PageExperience'
-import PageContact from './pages/PageContact'
+import ThemeSwitcher from "./ui/ThemeSwitcher";
+import Home from "./sections/Home";
+import Skills from "./sections/Skills";
+import Projects from "./sections/Projects";
+import Experience from "./sections/Experience";
+import Contact from "./sections/Contact";
 
 export default function ClientShell() {
   const { vars } = useTheme()
-  const { current } = useNav()
+  const { current, goTo } = useNav();
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
   const mouse = useRef({ x: null as number | null, y: null as number | null, r: 150 })
@@ -27,16 +27,16 @@ export default function ClientShell() {
     class Particle {
       x: number; y: number; vx: number; vy: number; s: number
       constructor() {
-        this.x = Math.random() * canvas.width
-        this.y = Math.random() * canvas.height
+        this.x = Math.random() * canvas!.width
+        this.y = Math.random() * canvas!.height
         this.vx = (Math.random() - 0.5) * 0.18
         this.vy = (Math.random() - 0.5) * 0.18
         this.s = Math.random() * 1.5 + 0.7
       }
       update() {
         this.x += this.vx; this.y += this.vy
-        if (this.x < 0 || this.x > canvas.width)  this.vx *= -1
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1
+        if (this.x < 0 || this.x > canvas!.width)  this.vx *= -1
+        if (this.y < 0 || this.y > canvas!.height) this.vy *= -1
         const { x, y, r } = mouse.current
         if (x !== null && y !== null) {
           const dx = this.x - x, dy = this.y - y, d = Math.hypot(dx, dy)
@@ -53,8 +53,8 @@ export default function ClientShell() {
 
     let particles: Particle[] = []
     function init() {
-      canvas.width = window.innerWidth; canvas.height = window.innerHeight
-      const n = Math.min(90, Math.floor(canvas.width * canvas.height / 14000))
+      canvas!.width = window.innerWidth; canvas!.height = window.innerHeight
+      const n = Math.min(90, Math.floor(canvas!.width * canvas!.height / 14000))
       particles = Array.from({ length: n }, () => new Particle())
     }
     function connect() {
@@ -74,7 +74,7 @@ export default function ClientShell() {
       }
     }
     function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvas!.width, canvas!.height)
       particles.forEach(p => { p.update(); p.draw() })
       connect()
       animId = requestAnimationFrame(animate)
@@ -100,13 +100,13 @@ export default function ClientShell() {
     return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseout', onOut) }
   }, [])
 
-  const pages: Record<Page, React.ReactNode> = {
-    home: <PageHome />,
-    skills: <PageSkills />,
-    projects: <PageProjects />,
-    experience: <PageExperience />,
-    contact: <PageContact />,
-  }
+ const pages = {
+  home: <Home goTo={goTo} />,
+  skills: <Skills />,
+  projects: <Projects />,
+  experience: <Experience />,
+  contact: <Contact />,
+}
 
   return (
     <>
@@ -120,7 +120,7 @@ export default function ClientShell() {
         }}
       />
       <Nav />
-      <ThemeSwitcher />
+      {/* <ThemeSwitcher /> */}
 
       {/* SPA — all pages mounted, only current is visible */}
       <div id="root" className="relative z-[2] w-full h-screen overflow-hidden">

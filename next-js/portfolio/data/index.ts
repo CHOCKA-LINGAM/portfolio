@@ -21,6 +21,7 @@ export const DAG_EDGES = skills.edges;
 // ─── Types ────────────────────────────────────────────────────────
 export interface Project {
   id: string;
+  project_status: string;
   title: string;
   tags: string[];
   status: string;
