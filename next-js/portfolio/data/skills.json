@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    {
+      "id": "core",
+      "label": "Backend_Core",
+      "x": 0.05,
+      "y": 0.5,
+      "skills": ["Python (Expert)", "FastAPI · Django · Flask", "REST APIs · Microservices", "Async Processing", "SQLAlchemy"]
+    },
+    {
+      "id": "ai",
+      "label": "AI_Layer",
+      "x": 0.33,
+      "y": 0.13,
+      "skills": ["OpenAI API","AWS Bedrock","Claude","Openclaw", "Auto DAG Exec Engine", "H2O.ai AutoML", "XGBoost · LightGBM", "LLM Fallback Exec"]
+    },
+    {
+      "id": "data",
+      "label": "Data_Platform",
+      "x": 0.33,
+      "y": 0.87,
+      "skills": ["Databricks · PySpark", "Apache Airflow", "Pandas · ETL Pipelines", "Celery · Async Tasks", "Azure Blob Storage"]
+    },
+    {
+      "id": "infra",
+      "label": "Cloud_Infra",
+      "x": 0.62,
+      "y": 0.13,
+      "skills": ["Azure · AKS · Docker", "GCP · Firestore · Bucket", "CI/CD Pipelines", "Containerisation"]
+    },
+    {
+      "id": "ui",
+      "label": "Frontend_Layer",
+      "x": 0.62,
+      "y": 0.87,
+      "skills": ["React.js", "Angular", "Power BI Dashboards"]
+    },
+    {
+      "id": "db",
+      "label": "Database_Layer",
+      "x": 0.88,
+      "y": 0.5,
+      "skills": ["SQL Server", "PostgreSQL · MySQL", "Databricks Hive", "GCP Bucket"]
+    }
+  ],
+  "edges": [
+    { "from": "core", "to": "ai" },
+    { "from": "core", "to": "data" },
+    { "from": "ai",   "to": "infra" },
+    { "from": "data", "to": "ui" },
+    { "from": "infra","to": "db" },
+    { "from": "ui",   "to": "db" }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Chockalingam Balan",
+  "title": "Backend · Fullstack · AI Engineer",
+  "role": "Technical Specialist @ iLink Digital Inc",
+  "location": "Chennai, India",
+  "email": "chockalingam1805@gmail.com",
+  "phone": "",
+  "github": "https://github.com/CHOCKA-LINGAM",
+  "linkedin": "https://www.linkedin.com/in/chockalingam-balan",
+  "summary": "Available for senior backend, fullstack & AI engineering roles. Let's build something remarkable together.",
+  "stats": [
+    {
+      "value": "AI",
+      "label": "Workflow Pipelines"
+    },
+    {
+      "value": "LLM",
+      "label": "Task Automation"
+    }
+  ],
+  "chips": [
+    "5+ Years Experience",
+    "Python · FastAPI · Django",
+    "DAG Orchestration Engines",
+    "Databricks · PySpark · ETL",
+    "OpenAI · LLM Workflows",
+    "Azure · Docker · AKS"
+  ],
+  "typingTitles": [
+    "Senior Backend Engineer",
+    "Full Stack Engineer",
+    "Data Platform Engineer",
+    "AI Systems Engineer"
+  ]
+}

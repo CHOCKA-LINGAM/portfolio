@@ -1,0 +1,46 @@
+[
+  {
+    "id": "ilink",
+    "status": "ACTIVE_PROD",
+    "statusColor": "accent",
+    "period": "Dec 2025 — Present",
+    "role": "Technical Specialist",
+    "company": "iLink Digital Inc",
+    "location": "Chennai, India",
+    "description": "Architecting enterprise BI migration platform converting Tableau Prep workflows into distributed DAG-based ETL pipelines. Built FastAPI orchestration service achieving <5s API response time. Engineered OpenAI-based fallback execution engine. Reduced AI Claims Adjudication response time from 25s → 10s.",
+    "tags": ["FastAPI", "DAG Engine", "OpenAI", "Azure Databricks", "Docker", "AKS", "PySpark"]
+  },
+  {
+    "id": "tiger-ml",
+    "status": "STABLE_NODE",
+    "statusColor": "muted",
+    "period": "Jan 2025 — Nov 2025",
+    "role": "Machine Learning Engineer",
+    "company": "Tiger Analytics",
+    "location": "Chennai, India",
+    "description": "Designed and built Django-based multi-tenant backend deployed across 10–12 international markets for the PepIris retail CV platform. Automated ML model deployment pipeline, reduced QA validation cycle by 90%+. Migrated legacy Pandas pipelines to PySpark on Azure Databricks.",
+    "tags": ["Django", "Multi-tenant", "Celery", "PySpark", "Azure Databricks", "ML Deploy"]
+  },
+  {
+    "id": "tiger-analyst",
+    "status": "STABLE_NODE",
+    "statusColor": "muted",
+    "period": "Oct 2023 — Dec 2024",
+    "role": "Senior Analyst",
+    "company": "Tiger Analytics",
+    "location": "Chennai, India",
+    "description": "Developed Django REST APIs for analytics, KPI retrieval, and reporting. Designed SQL Server schema for scalable multi-market architecture. Built ETL pipelines using Pandas and SQLAlchemy, implemented API versioning, optimised database connection pooling.",
+    "tags": ["Django REST", "SQL Server", "Pandas", "SQLAlchemy", "ETL", "API Versioning"]
+  },
+  {
+    "id": "kaar",
+    "status": "CORE_INIT",
+    "statusColor": "muted",
+    "period": "Nov 2020 — Oct 2023",
+    "role": "Fullstack & AI Application Developer",
+    "company": "KAAR Technologies",
+    "location": "Chennai, India",
+    "description": "Built Model Builder ML training platform (React + Flask) integrating H2O.ai AutoML, XGBoost, LightGBM and Airflow DAGs. Developed Scenario Builder forecasting platform with Databricks Hive and GCP backends.",
+    "tags": ["React", "Flask", "Airflow", "H2O.ai", "XGBoost", "GCP", "Databricks"]
+  }
+]
