@@ -13,6 +13,8 @@ const LLM_ENABLED = false;
 // Remove any entry to hide that question chip
 const PRESET_QUESTIONS = [
   "What's his core stack?",
+  "Architecture Experience?",
+  "Why hire him?",
   "Key achievements?",
   "Open to roles?",
 ];
@@ -20,17 +22,31 @@ const PRESET_QUESTIONS = [
 const PRESET_ANSWERS: Record<string, string> = {
   "what's his core stack?":
     "Chockalingam's core stack is Python (Expert) + FastAPI/Django for backend, Databricks + PySpark + Airflow for data engineering, and OpenAI API for AI/ML workflows. He deploys on Azure AKS with Docker and manages SQL Server, PostgreSQL, and Databricks Hive databases.",
+  "architecture experience?":
+    "Experienced in FastAPI microservices, distributed ETL pipelines, async APIs, multi-tenant platforms, workflow orchestration and cloud-native architectures.",
 
+  "why hire him?":
+    "Strong ownership from architecture to deployment, production AI experience, backend optimization, distributed systems expertise and measurable business impact.",
   "key achievements?":
-  "Built production AI platforms, architected scalable FastAPI & Databricks solutions, delivered products across 10+ global markets, and automated enterprise workflows reducing QA effort by 90%+.",
+    "Built production AI platforms, architected scalable FastAPI & Databricks solutions, delivered products across 10+ global markets, and automated enterprise workflows reducing QA effort by 90%+.",
 
   "open to roles?":
     "Open to Senior Backend, AI Systems, Full Stack, Fullstack and Data Platform Engineering roles. Feel free to reach out if you'd like to connect or explore opportunities together!",
 };
+
 export default function Home({ goTo }: { goTo: (p: Page) => void }) {
   const [titleIdx, setTitleIdx] = useState(0);
   const titles = PERSONAL.typingTitles ?? ["Backend Engineer", "AI Engineer"];
+  const [assistantResponse, setAssistantResponse] = useState(
+    "👋 Hi! I'm Chockalingam's Resume Assistant.\nSelect one of the questions above to learn more about my experience."
+  );
+  const handleQuestionClick = (question: string) => {
+    const answer =
+      PRESET_ANSWERS[question.toLowerCase()] ??
+      "Sorry, I don't have an answer for that yet.";
 
+    setAssistantResponse(answer);
+  };
   useEffect(() => {
     const t = setInterval(() => setTitleIdx(i => (i + 1) % titles.length), 2800);
     return () => clearInterval(t);
@@ -96,7 +112,7 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
 
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1.5 text-[var(--accent)] text-[10px] font-extrabold uppercase tracking-[1px]">
-              <Zap size={12} /> Resume Assistant
+              <Zap size={12} />AI Resume Assistant
             </div>
             {/* Coming soon badge */}
             {/* <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[.5px] text-[var(--muted)] px-2 py-0.5 rounded-full"
@@ -109,23 +125,35 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
           {PRESET_QUESTIONS.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
               {PRESET_QUESTIONS.map(q => (
-                <span key={q}
-                  className="font-mono text-[9px] font-bold px-2.5 py-1 rounded-[6px] opacity-40 cursor"
+                <button key={q}
+                  className="font-mono text-[9px] font-bold px-2.5 py-1 rounded-[6px]"
                   style={{
                     background: "rgba(var(--ar),.07)",
                     border: "1px solid rgba(var(--ar),.18)",
                     color: "rgba(var(--ar),1)",
+
                   }}
-                  // title="LLM integration not yet connected"
-                  >
+                  onClick={() => handleQuestionClick(q)}
+                // title="LLM integration not yet connected"
+                >
                   {q}
-                </span>
+                </button>
               ))}
             </div>
           )}
+          <div
+            className="rounded-lg p-2 h-[100px] overflow-y-auto text-[10px] leading-6 whitespace-pre-line"
+            style={{
+              background: "rgba(0,0,0,.35)",
+              border: "1px solid var(--border)",
+              color: "rgba(var(--af),.85)",
+            }}
+          >
+            {assistantResponse}
+          </div>
 
           {/* Input — disabled until LLM_ENABLED */}
-          <div className="flex gap-2">
+          <div className="flex gap-2" style={{ marginTop: "12px" }}>
             <div className="relative flex-1">
               <input
                 disabled={!LLM_ENABLED}
@@ -150,12 +178,14 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
         </div>
 
         {/* Stats grid — always visible */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid gap-2" style={{
+          gridTemplateColumns: `repeat(${PERSONAL.stats.length}, minmax(0, 1fr))`,
+        }}>
           {PERSONAL.stats.map(s => (
             <div key={s.label}
               className="rounded-2xl p-4 transition-all hover:border-[rgba(var(--ar),.2)] hover:bg-[rgba(var(--ar),.05)]"
               style={{ background: "rgba(255,255,255,.025)", border: "1px solid var(--border)" }}>
-              <span className="block text-[34px] font-extrabold text-white leading-none mb-1">{s.value}</span>
+              <span className="block text-[25px] font-extrabold text-white leading-none mb-1">{s.value}</span>
               <span className="text-[9px] text-[var(--muted)] uppercase tracking-[1.5px] font-bold">{s.label}</span>
             </div>
           ))}

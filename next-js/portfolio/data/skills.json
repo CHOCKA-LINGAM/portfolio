@@ -12,7 +12,7 @@
       "label": "AI_Layer",
       "x": 0.33,
       "y": 0.13,
-      "skills": ["OpenAI API", "DAG Exec Engine", "H2O.ai AutoML", "XGBoost · LightGBM", "LLM Fallback Exec"]
+      "skills": ["OpenAI API","AWS Bedrock","Claude","Openclaw", "Auto DAG Exec Engine", "H2O.ai AutoML", "XGBoost · LightGBM", "LLM Fallback Exec"]
     },
     {
       "id": "data",
@@ -26,21 +26,21 @@
       "label": "Cloud_Infra",
       "x": 0.62,
       "y": 0.13,
-      "skills": ["Azure · AKS · Docker", "GCP · Firestore", "SQL Server · PostgreSQL", "CI/CD Pipelines", "Containerisation"]
+      "skills": ["Azure · AKS · Docker", "GCP · Firestore · Bucket", "CI/CD Pipelines", "Containerisation"]
     },
     {
       "id": "ui",
       "label": "Frontend_Layer",
       "x": 0.62,
       "y": 0.87,
-      "skills": ["React.js · Angular", "Power BI Dashboards", "Lazy Load · Suspense", "REST API Design", "Protected Routes"]
+      "skills": ["React.js", "Angular", "Power BI Dashboards"]
     },
     {
       "id": "db",
-      "label": "Persistence",
+      "label": "Database_Layer",
       "x": 0.88,
       "y": 0.5,
-      "skills": ["SQL Server", "PostgreSQL · MySQL", "Databricks Hive", "GCP Bucket", "DB Connection Pooling"]
+      "skills": ["SQL Server", "PostgreSQL · MySQL", "Databricks Hive", "GCP Bucket"]
     }
   ],
   "edges": [

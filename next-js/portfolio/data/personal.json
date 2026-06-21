@@ -8,12 +8,16 @@
   "github": "https://github.com/CHOCKA-LINGAM",
   "linkedin": "https://www.linkedin.com/in/chockalingam-balan",
   "summary": "Available for senior backend, fullstack & AI engineering roles. Let's build something remarkable together.",
- "stats": [
-  { "value": "10+", "label": "Markets" },
-  { "value": "LLM", "label": "AI Platforms" },
-  { "value": "DAG", "label": "Workflow Engine" },
-  { "value": "90%", "label": "QA Reduction" }
-],
+  "stats": [
+    {
+      "value": "AI",
+      "label": "Workflow Pipelines"
+    },
+    {
+      "value": "LLM",
+      "label": "Task Automation"
+    }
+  ],
   "chips": [
     "5+ Years Experience",
     "Python · FastAPI · Django",
@@ -24,9 +28,8 @@
   ],
   "typingTitles": [
     "Senior Backend Engineer",
-  "AI Systems Engineer",
-  "Distributed Systems Engineer",
-  "Data Platform Engineer",
-  "Full Stack Engineer"
+    "Full Stack Engineer",
+    "Data Platform Engineer",
+    "AI Systems Engineer"
   ]
 }
