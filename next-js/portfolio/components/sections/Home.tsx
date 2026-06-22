@@ -53,26 +53,26 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
   }, [titles.length]);
 
   return (
-    <div className="min-h-[calc(100vh-130px)] grid grid-cols-1 lg:grid-cols-[1.15fr_.85fr] gap-8 lg:gap-[52px] items-center">
+    <div className="h-full min-h-0 w-full grid grid-cols-1 lg:grid-cols-[1.08fr_.92fr] gap-7 lg:gap-12 items-center">
 
       {/* ── LEFT ── */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3.5 py-[7px] rounded-full border border-white/[.07] text-[var(--muted)] text-[12px] font-semibold mb-6 backdrop-blur-xl"
+        <div className="inline-flex items-center gap-2 px-3.5 py-[7px] rounded-full border border-white/[.07] text-[var(--muted)] text-[12px] font-semibold mb-4 sm:mb-6 backdrop-blur-xl"
           style={{ background: "rgba(255,255,255,.025)" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
           {PERSONAL.role}
         </div>
 
-        <h1 className="text-[clamp(46px,6.2vw,82px)] font-black tracking-[-4px] text-white leading-[.9] mb-4">
+        <h1 className="text-[clamp(42px,6vw,78px)] font-black tracking-[-0.055em] text-white leading-[.92] mb-4">
           {PERSONAL.name.split(" ").map((w, i) => <span key={i} className="block">{w}</span>)}
         </h1>
 
-        <div className="flex items-center gap-2 font-mono text-[16px] font-semibold text-[var(--accent)] mb-7">
+        <div className="flex items-center gap-2 font-mono text-[clamp(13px,1.6vw,16px)] font-semibold text-[var(--accent)] mb-5 sm:mb-7">
           <span>&gt; {titles[titleIdx]}</span>
           <span className="w-2.5 h-[22px] bg-[var(--accent)] animate-blink" />
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-7">
+        <div className="flex flex-wrap gap-2 mb-5 sm:mb-7">
           {PERSONAL.chips.map((c, i) => (
             <span key={c} className="animate-chip-in inline-flex items-center gap-1.5 px-3.5 py-[7px] rounded-[11px] border border-[rgba(var(--ar),.18)] text-[var(--muted2)] text-[12px] font-bold transition-all hover:bg-[rgba(var(--ar),.14)] hover:border-[rgba(var(--ar),.36)] hover:text-white hover:-translate-y-0.5 cursor-default"
               style={{ background: "rgba(var(--ar),.055)", animationDelay: `${i * 0.06}s` }}>
@@ -96,7 +96,7 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
       </div>
 
       {/* ── RIGHT — monitor widget ── */}
-      <div className="rounded-3xl p-6 font-mono shadow-[0_56px_96px_-28px_rgba(0,0,0,.8)]"
+      <div className="rounded-3xl p-4 sm:p-5 xl:p-6 font-mono shadow-[0_56px_96px_-28px_rgba(0,0,0,.8)]"
         style={{ background: "rgba(7,8,16,.96)", border: "1px solid var(--border)" }}>
 
         {/* mac dots */}

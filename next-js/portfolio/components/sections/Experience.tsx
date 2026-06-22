@@ -14,7 +14,7 @@ export default function Experience() {
         Career History
       </h2>
 
-      <div className="max-w-[860px] mx-auto flex flex-col relative">
+      <div className="w-full max-w-[860px] mx-auto flex flex-col relative overflow-hidden">
         {/* vertical line */}
         <div className="absolute left-0 top-2.5 bottom-2.5 w-px"
           style={{ background: "linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent)" }} />
@@ -43,9 +43,11 @@ export default function Experience() {
               <div className="text-[13px] text-[var(--muted)] mb-3 font-semibold">
                 {exp.company} · {exp.location}
               </div>
-              <div className="text-[13px] leading-[1.78] text-[var(--muted)] mb-3 max-w-[580px]">
-                {exp.description}
-              </div>
+              {exp.description && (
+                <div className="text-[13px] leading-[1.78] text-[var(--muted)] mb-3 max-w-[580px]">
+                  {exp.description}
+                </div>
+              )}
               <div className="flex flex-wrap gap-1.5">
                 {exp.tags.map(t => (
                   <span key={t} className="px-2.5 py-1 rounded-[7px] text-[10px] font-bold text-[var(--muted2)]"

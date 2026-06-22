@@ -1,22 +1,11 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PAGES, Page } from "@/hooks/useNav";
 
 interface NavProps { current: Page; goTo: (p: Page) => void; }
 
 export default function Nav({ current, goTo }: NavProps) {
-  const pillRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!listRef.current || !pillRef.current) return;
-    const el = listRef.current.querySelector(`[data-p="${current}"]`) as HTMLElement | null;
-    if (el) {
-      pillRef.current.style.width = el.offsetWidth + "px";
-      pillRef.current.style.left  = el.offsetLeft  + "px";
-    }
-  }, [current]);
 
   useEffect(() => { setOpen(false); }, [current]);
 
@@ -121,18 +110,13 @@ export default function Nav({ current, goTo }: NavProps) {
         style={{ background: "rgba(4,5,10,.92)", border: "1px solid rgba(255,255,255,.07)", backdropFilter: "blur(24px)" }}
       >
         {/* page links */}
-        <div className="relative flex items-center gap-0.5" ref={listRef}>
-          <div ref={pillRef} className="absolute h-[28px] rounded-full pointer-events-none -z-10"
-            style={{
-              background: "rgba(var(--ar),.1)",
-              border: "1px solid rgba(var(--ar),.18)",
-              transition: "left .35s cubic-bezier(.16,1,.3,1), width .35s cubic-bezier(.16,1,.3,1)",
-            }}
-          />
+        <div className="relative flex items-center gap-0.5">
           {PAGES.map(p => (
             <button key={p} data-p={p} onClick={() => goTo(p)}
               className={`text-[11px] font-bold px-3 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 ${
-                current === p ? "text-white" : "text-[var(--muted)] hover:text-white"
+                current === p
+                  ? "text-white bg-[rgba(var(--ar),.1)] ring-1 ring-inset ring-[rgba(var(--ar),.18)]"
+                  : "text-[var(--muted)] hover:text-white"
               }`}
             >
               {label(p)}
@@ -154,18 +138,13 @@ export default function Nav({ current, goTo }: NavProps) {
                    shadow-[0_20px_48px_-12px_rgba(0,0,0,.65)]"
         style={{ background: "rgba(4,5,10,.92)", border: "1px solid rgba(255,255,255,.07)", backdropFilter: "blur(28px)" }}
       >
-        <div className="relative flex items-center gap-0.5" ref={listRef}>
-          <div ref={pillRef} className="absolute h-[30px] rounded-full pointer-events-none -z-10"
-            style={{
-              background: "rgba(var(--ar),.1)",
-              border: "1px solid rgba(var(--ar),.18)",
-              transition: "left .35s cubic-bezier(.16,1,.3,1), width .35s cubic-bezier(.16,1,.3,1)",
-            }}
-          />
+        <div className="relative flex items-center gap-0.5">
           {PAGES.map(p => (
             <button key={p} data-p={p} onClick={() => goTo(p)}
               className={`text-[11px] font-bold px-3.5 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 ${
-                current === p ? "text-white" : "text-[var(--muted)] hover:text-white"
+                current === p
+                  ? "text-white bg-[rgba(var(--ar),.1)] ring-1 ring-inset ring-[rgba(var(--ar),.18)]"
+                  : "text-[var(--muted)] hover:text-white"
               }`}
             >
               {label(p)}

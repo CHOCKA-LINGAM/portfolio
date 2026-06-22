@@ -5,6 +5,12 @@ export default function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.innerWidth < 768
+    ) {
+      return;
+    }
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
     const mouse = { x: null as number | null, y: null as number | null, r: 150 };
@@ -69,5 +75,11 @@ export default function ParticleCanvas() {
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseout", onOut); };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />;
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="fixed inset-0 z-0 pointer-events-none hidden md:block"
+    />
+  );
 }

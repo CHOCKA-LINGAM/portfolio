@@ -1,8 +1,6 @@
 "use client";
 import { useNav } from "@/hooks/useNav";
-import { useTheme } from "@/hooks/useTheme";
 import Nav from "@/components/layout/Nav";
-import ThemeSwitcher from "@/components/ui/ThemeSwitcher";
 import ParticleCanvas from "@/components/ui/ParticleCanvas";
 import MouseGlow from "@/components/ui/MouseGlow";
 import Home from "@/components/sections/Home";
@@ -13,7 +11,6 @@ import Contact from "@/components/sections/Contact";
 
 export default function Page() {
   const { current, goTo } = useNav();
-  const { theme, setTheme } = useTheme();
 
   const pages: Record<string, React.ReactNode> = {
     home: <Home goTo={goTo} />,
@@ -28,9 +25,13 @@ export default function Page() {
       <ParticleCanvas />
       <MouseGlow />
       <Nav current={current} goTo={goTo} />
-      {/* <ThemeSwitcher theme={theme} setTheme={setTheme} /> */}
-      <main className="relative z-10 min-h-screen w-full max-w-[1360px] mx-auto px-5 sm:px-8 lg:px-14 pt-[90px] pb-16 overflow-y-auto h-screen">
-        <div key={current} className="page-active">
+      <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px]">
+        <div
+          key={current}
+          className="page-active portfolio-panel"
+          role="tabpanel"
+          aria-label={`${current} section`}
+        >
           {pages[current]}
         </div>
       </main>

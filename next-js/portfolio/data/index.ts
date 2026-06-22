@@ -39,7 +39,7 @@ export interface ExperienceItem {
   role: string;
   company: string;
   location: string;
-  description: string;
+  description?: string;
   tags: string[];
 }
 
