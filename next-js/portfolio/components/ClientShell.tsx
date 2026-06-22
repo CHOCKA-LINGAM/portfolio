@@ -123,7 +123,7 @@ export default function ClientShell() {
       {/* <ThemeSwitcher /> */}
 
       {/* SPA — all pages mounted, only current is visible */}
-      <div id="root" className="relative z-[2] w-full h-screen overflow-hidden">
+      <div id="root"  className="relative z-[2] w-full h-screen overflow-x-hidden overflow-y-hidden">
         {PAGES.map(page => (
           <div
             key={page}

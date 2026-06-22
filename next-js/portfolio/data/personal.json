@@ -1,5 +1,5 @@
 {
-  "name": "Chockalingam Balan",
+  "name": "Chockalingam",
   "title": "Backend · Fullstack · AI Engineer",
   "role": "Technical Specialist @ iLink Digital Inc",
   "location": "Chennai, India",
@@ -9,10 +9,6 @@
   "linkedin": "https://www.linkedin.com/in/chockalingam-balan",
   "summary": "Available for senior backend, fullstack & AI engineering roles. Let's build something remarkable together.",
   "stats": [
-    {
-      "value": "5+",
-      "label": "Years"
-    },
     {
       "value": "AI",
       "label": "Workflow Pipelines"

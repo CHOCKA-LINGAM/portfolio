@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Github, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { PROJECTS, type Project } from "@/data/index";
 
 // ─── Edit data/projects.json to add / remove / reorder projects ───
@@ -13,15 +13,17 @@ const FILTERS = [
   { id: "fullstack", label: "Fullstack" },
 ];
 
+const PUBLISHED_PROJECT_STATUSES = new Set(["active"]);
+
 export default function Projects() {
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
 
   const visible = (PROJECTS as Project[]).filter(p => {
+    const matchStatus = PUBLISHED_PROJECT_STATUSES.has(p.project_status);
     const matchF = filter === "all" || p.tags.includes(filter);
     const matchQ = !query || [p.title, p.desc, ...p.stack].join(" ").toLowerCase().includes(query.toLowerCase());
-    const matchStatus = p.project_status === "active";
-    return matchF && matchQ && matchStatus;
+    return matchStatus && matchF && matchQ;
   });
 
 
