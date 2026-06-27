@@ -7,7 +7,7 @@
     "role": "Technical Specialist",
     "company": "iLink Digital Inc",
     "location": "Chennai, India",
-    "tags": ["FastAPI", "DAG Engine", "Azure Databricks", "Docker", "AKS", "PySpark","AWS Bedrock", "Prompt Engineering", "Context Engineering", "LLM Evaluation", "AI Workflow Automation", "Semantic Translation Systems", "Multi-Model Orchestration"]
+    "tags": ["Workflow Automation","AI Powered Pipelines","FastAPI", "DAG Engine", "Azure Databricks", "Docker", "AKS", "PySpark","AWS Bedrock", "Prompt Engineering", "Context Engineering", "LLM Evaluation", "AI Workflow Automation", "Semantic Translation Systems", "Multi-Model Orchestration"]
   },
   {
     "id": "tiger-ml",

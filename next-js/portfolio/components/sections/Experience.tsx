@@ -41,7 +41,8 @@ export default function Experience() {
             <div>
               <div className="text-[20px] font-black tracking-[-0.7px] text-white mb-1">{exp.role}</div>
               <div className="text-[13px] text-[var(--muted)] mb-3 font-semibold">
-                {exp.company} · {exp.location}
+                {exp.company} 
+                {/* · {exp.location} */}
               </div>
               {exp.description && (
                 <div className="text-[13px] leading-[1.78] text-[var(--muted)] mb-3 max-w-[580px]">
