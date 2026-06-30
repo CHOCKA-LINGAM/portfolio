@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { PAGES, Page } from "@/hooks/useNav";
 
 interface NavProps { current: Page; goTo: (p: Page) => void; }
@@ -7,7 +7,34 @@ interface NavProps { current: Page; goTo: (p: Page) => void; }
 export default function Nav({ current, goTo }: NavProps) {
   const [open, setOpen] = useState(false);
 
+  const desktopNavRef = useRef<HTMLDivElement>(null);
+  const desktopPillRef = useRef<HTMLDivElement>(null);
+  const tabletNavRef = useRef<HTMLDivElement>(null);
+  const tabletPillRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => { setOpen(false); }, [current]);
+
+  useEffect(() => {
+    const updatePill = (nav: HTMLDivElement | null, pill: HTMLDivElement | null) => {
+      if (!nav || !pill) return;
+      const active = nav.querySelector(`[data-p="${current}"]`) as HTMLElement;
+      if (active) {
+        pill.style.width = `${active.offsetWidth}px`;
+        pill.style.left = `${active.offsetLeft}px`;
+        pill.style.height = `${active.offsetHeight}px`;
+        pill.style.top = `${active.offsetTop}px`;
+        pill.style.opacity = "1";
+      } else {
+        pill.style.opacity = "0";
+      }
+    };
+    
+    const id = requestAnimationFrame(() => {
+      updatePill(desktopNavRef.current, desktopPillRef.current);
+      updatePill(tabletNavRef.current, tabletPillRef.current);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [current]);
 
   useEffect(() => {
     const fn = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
@@ -110,12 +137,21 @@ export default function Nav({ current, goTo }: NavProps) {
         style={{ background: "rgba(4,5,10,.92)", border: "1px solid rgba(255,255,255,.07)", backdropFilter: "blur(24px)" }}
       >
         {/* page links */}
-        <div className="relative flex items-center gap-0.5">
+        <div ref={tabletNavRef} className="relative flex items-center gap-0.5">
+          <div
+            ref={tabletPillRef}
+            className="absolute rounded-full z-[0] transition-all duration-[380ms] ease-[cubic-bezier(.16,1,.3,1)] pointer-events-none"
+            style={{
+              background: "rgba(143,178,255,.1)",
+              border: "1px solid rgba(143,178,255,.18)",
+              opacity: 0,
+            }}
+          />
           {PAGES.map(p => (
             <button key={p} data-p={p} onClick={() => goTo(p)}
-              className={`text-[11px] font-bold px-3 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 ${
+              className={`text-[11px] font-bold px-3 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 relative z-10 ${
                 current === p
-                  ? "text-white bg-[rgba(var(--ar),.1)] ring-1 ring-inset ring-[rgba(var(--ar),.18)]"
+                  ? "text-white"
                   : "text-[var(--muted)] hover:text-white"
               }`}
             >
@@ -138,12 +174,21 @@ export default function Nav({ current, goTo }: NavProps) {
                    shadow-[0_20px_48px_-12px_rgba(0,0,0,.65)]"
         style={{ background: "rgba(4,5,10,.92)", border: "1px solid rgba(255,255,255,.07)", backdropFilter: "blur(28px)" }}
       >
-        <div className="relative flex items-center gap-0.5">
+        <div ref={desktopNavRef} className="relative flex items-center gap-0.5">
+          <div
+            ref={desktopPillRef}
+            className="absolute rounded-full z-[0] transition-all duration-[380ms] ease-[cubic-bezier(.16,1,.3,1)] pointer-events-none"
+            style={{
+              background: "rgba(143,178,255,.1)",
+              border: "1px solid rgba(143,178,255,.18)",
+              opacity: 0,
+            }}
+          />
           {PAGES.map(p => (
             <button key={p} data-p={p} onClick={() => goTo(p)}
-              className={`text-[11px] font-bold px-3.5 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 ${
+              className={`text-[11px] font-bold px-3.5 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 relative z-10 ${
                 current === p
-                  ? "text-white bg-[rgba(var(--ar),.1)] ring-1 ring-inset ring-[rgba(var(--ar),.18)]"
+                  ? "text-white"
                   : "text-[var(--muted)] hover:text-white"
               }`}
             >

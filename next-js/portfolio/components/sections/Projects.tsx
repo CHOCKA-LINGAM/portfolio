@@ -13,7 +13,7 @@ const FILTERS = [
   { id: "fullstack", label: "Fullstack" },
 ];
 
-const PUBLISHED_PROJECT_STATUSES = new Set(["active"]);
+const PUBLISHED_PROJECT_STATUSES = new Set(["active", "in-progress"]);
 
 export default function Projects() {
   const [filter, setFilter] = useState("all");

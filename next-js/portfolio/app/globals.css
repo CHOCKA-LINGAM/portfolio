@@ -19,8 +19,15 @@
   --t3: #3a5068;
 }
 
-[data-theme='lilac'] { --accent:#c4b8f8; --ar:196,184,248; --ag:rgba(196,184,248,.13); }
-[data-theme='teal']  { --accent:#2dd4bf; --ar:45,212,191;  --ag:rgba(45,212,191,.13); }
+/* Shake animation for input validation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+.animate-shake {
+  animation: shake 0.3s ease-in-out;
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
