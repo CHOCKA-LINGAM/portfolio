@@ -18,7 +18,11 @@ export default function Contact() {
   function nbRun() {
     if (!name || !email || !msg) {
       setCount(c => c + 1);
-      setOutput({ text: `ValidationError: missing required fields\n  name=${name ? "✓" : "✗"}  email=${email ? "✓" : "✗"}  message=${msg ? "✓" : "✗"}`, cls: "err" });
+      setOutput({
+        text: `Oops! Some details are missing:\n${!name ? "- Please enter your name\n" : ""}${!email ? "- Please enter your email\n" : ""}${!msg ? "- Please enter a message\n" : ""}`,
+        cls: "err"
+      });
+
       return;
     }
     setOutput({ text: "Executing…  ⟳", cls: "running" });
@@ -104,8 +108,8 @@ export default function Contact() {
                     ? "rgba(var(--ar),.1)"
                     : "rgba(255,255,255,.035)",
                   border: `1px solid ${b.accent
-                      ? "rgba(var(--ar),.22)"
-                      : "rgba(255,255,255,.07)"
+                    ? "rgba(var(--ar),.22)"
+                    : "rgba(255,255,255,.07)"
                     }`,
                 }}>
                 {b.icon}{b.label}
