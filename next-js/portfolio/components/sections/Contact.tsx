@@ -2,15 +2,16 @@
 import { useState, useEffect } from "react";
 import { Linkedin, Github, Mail, Copy, Play, RotateCcw, CheckCircle, AlertCircle, X } from "lucide-react";
 import { PERSONAL } from "@/data/index";
+// Default message pre-filled for the visitor \u2014 they edit before sending
+const DEFAULT_MSG = `Hi Chockalingam,\n\nI came across your portfolio and would love to connect. I'm interested in discussing [role/opportunity] with you.\n\nLooking forward to hearing from you!\n\nBest regards,`;
 
-const DEFAULT_PLACEHOLDER = `Hi Chockalingam,\n\nI came across your portfolio and would love to connect.\n\n[Your message here]\n\nBest regards,`;
-
-// ─── Toast ──────────────────────────────────────────────────────────────────
+// \u2500\u2500\u2500 Toast \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 type ToastType = "success" | "error" | "warn";
 interface ToastData { id: number; type: ToastType; title: string; body: string; }
 
 function Toast({ data, onClose }: { data: ToastData; onClose: () => void }) {
   const [exiting, setExiting] = useState(false);
+  
   useEffect(() => {
     const t = setTimeout(() => { setExiting(true); setTimeout(onClose, 220); }, 4000);
     return () => clearTimeout(t);
@@ -44,7 +45,7 @@ function Toast({ data, onClose }: { data: ToastData; onClose: () => void }) {
 export default function Contact() {
   const [name,  setName]  = useState("");
   const [email, setEmail] = useState("");
-  const [msg,   setMsg]   = useState("");
+  const [msg,   setMsg]   = useState(DEFAULT_MSG);
   const [output, setOutput] = useState<{ text: string; cls: "idle" | "running" | "ok" }>({
     text: "# Output appears here after running",
     cls: "idle",
@@ -54,6 +55,17 @@ export default function Contact() {
   const [errors,  setErrors]  = useState<{ name?: string; email?: string; msg?: string }>({});
   const [shake,   setShake]   = useState<{ name?: boolean; email?: boolean; msg?: boolean }>({});
   const [toasts,  setToasts]  = useState<ToastData[]>([]);
+
+  // Auto-append name below "Best regards," whenever the name field changes
+  useEffect(() => {
+    setMsg(prev => {
+      const anchor = "Best regards,";
+      const idx = prev.indexOf(anchor);
+      if (idx === -1) return prev; // user removed the anchor — don't touch
+      const beforeAnchor = prev.slice(0, idx + anchor.length);
+      return name.trim() ? `${beforeAnchor}\n${name.trim()}` : beforeAnchor;
+    });
+  }, [name]);
 
   function addToast(type: ToastType, title: string, body: string) {
     const id = Date.now();
@@ -84,7 +96,9 @@ export default function Contact() {
     setTimeout(() => {
       const subj = encodeURIComponent(`Reaching out — via Portfolio | ${name}`);
       const body = encodeURIComponent(`From: ${name} <${email}>\n\n${msg}`);
-      window.location.href = `mailto:${PERSONAL.email}?subject=${subj}&body=${body}`;
+      // window.open with mailto works with Gmail, Outlook, Apple Mail —
+      // opens whichever handler the user has configured in their browser.
+      window.open(`mailto:${PERSONAL.email}?subject=${subj}&body=${body}`);
       setCount((c) => c + 1);
 
       const successText =
@@ -100,8 +114,8 @@ export default function Contact() {
   }
 
   function nbClear() {
-    setName(""); setEmail(""); setMsg(""); setErrors({});
-    setOutput({ text: "# Output appears here after running", cls: "idle" });
+    setName(""); setEmail(""); setMsg(DEFAULT_MSG); setErrors({});
+    setOutput({ text: "# Awaiting execution…", cls: "idle" });
   }
 
   function copyEmail() {
@@ -128,7 +142,7 @@ export default function Contact() {
   const nbCellNum = { background: "#070810", borderRight: "1px solid rgba(255,255,255,.04)" } as const;
 
   return (
-    <div>
+    <div className="min-h-full flex flex-col justify-center py-4">
       {/* ── Toast container (fixed top-right) ─────────────────────────── */}
       <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-2.5 pointer-events-none">
         {toasts.map(t => (
@@ -137,7 +151,7 @@ export default function Contact() {
       </div>
 
       {/* ── Two-column grid ─────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
 
         {/* LEFT — label + heading + summary + links ───────────────────── */}
         <div className="flex flex-col gap-6">
@@ -297,9 +311,9 @@ export default function Contact() {
                       message <span className="text-[var(--accent)] opacity-80">*</span>
                     </label>
                     <textarea
-                      value={msg}
+                      value={msg || DEFAULT_MSG}
                       onChange={(e) => { setMsg(e.target.value); if (errors.msg) setErrors(p => ({ ...p, msg: undefined })); }}
-                      placeholder={DEFAULT_PLACEHOLDER}
+                      placeholder={DEFAULT_MSG}
                       rows={7}
                       className={`rounded-[6px] px-2.5 py-2 text-white font-mono text-[12px] outline-none resize-none leading-[1.65] w-full border ${
                         errors.msg ? "border-[#f87171] bg-[#f87171]/[0.04]" : "border-white/[.07] focus:border-[rgba(143,178,255,.28)] focus:bg-[rgba(143,178,255,.04)]"

@@ -6,7 +6,6 @@ import { DAG_NODES, type DagNode } from "@/data/index";
 // import { DAG_EDGES, type DagEdge } from "@/data/index";
 
 const nodes = DAG_NODES as DagNode[];
-// const edges = DAG_EDGES as DagEdge[]; // reserved for DAG reuse
 
 function displayLabel(label: string) {
   return label.replaceAll("_", " ");
@@ -74,7 +73,6 @@ function DagView() {
   return (
     <div className="flex flex-col gap-4 w-full">
       // ... Mobile/Tablet fallback and Desktop SVG DAG here
-      // Full implementation preserved in git history / task-189 log
     </div>
   );
 }
@@ -86,16 +84,25 @@ function BentoView() {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full pb-2">
+    /* On xl (3 cols × 2 rows): h-full + gridAutoRows:1fr makes cards fill the panel.
+       On sm/mobile: natural height, scrollable via the parent overflow-y-auto panel. */
+    <div
+      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full xl:h-full"
+      style={{ gridAutoRows: "minmax(0, 1fr)" }}
+    >
       {nodes.map((node) => {
         const col = ACCENT_COLORS[node.id] ?? ACCENT_COLORS.core;
         const isActive = activeId === node.id;
+        const previewCount = 4; // show more tags since cards are taller
+        const hiddenCount = node.skills.length - previewCount;
+
         return (
           <div
             key={node.id}
             onClick={() => setActiveId(isActive ? null : node.id)}
-            className="relative group rounded-2xl border p-5 cursor-pointer transition-all duration-300 overflow-hidden select-none"
+            className="relative group rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden select-none flex flex-col"
             style={{
+              padding: "clamp(18px, 2vw, 28px)",
               background: isActive
                 ? `radial-gradient(circle at 0% 0%, ${col.glow}, transparent 55%), rgba(7,8,16,.97)`
                 : "rgba(7,8,16,.9)",
@@ -109,24 +116,27 @@ function BentoView() {
             {/* Hover ambient glow */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-              style={{
-                background: `radial-gradient(circle at 0% 0%, ${col.glow}, transparent 55%)`,
-              }}
+              style={{ background: `radial-gradient(circle at 0% 0%, ${col.glow}, transparent 55%)` }}
             />
 
             {/* Card header */}
             <div className="flex items-start justify-between mb-4 relative z-10">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-3">
                 <span
-                  className="flex items-center justify-center w-9 h-9 rounded-xl text-[18px] flex-shrink-0"
-                  style={{ background: col.bg, border: `1px solid ${col.border}` }}
+                  className="flex items-center justify-center rounded-xl text-[20px] flex-shrink-0"
+                  style={{
+                    width: "clamp(36px, 3vw, 44px)",
+                    height: "clamp(36px, 3vw, 44px)",
+                    background: col.bg,
+                    border: `1px solid ${col.border}`,
+                  }}
                 >
                   {ICONS[node.id]}
                 </span>
                 <div>
                   <div
-                    className="font-mono text-[10px] font-extrabold uppercase tracking-[1.5px] leading-tight"
-                    style={{ color: col.text }}
+                    className="font-mono font-extrabold uppercase leading-tight"
+                    style={{ fontSize: "clamp(9px, 1vw, 11px)", letterSpacing: "1.5px", color: col.text }}
                   >
                     {displayLabel(node.label)}
                   </div>
@@ -147,13 +157,14 @@ function BentoView() {
               </span>
             </div>
 
-            {/* Skill tags — 3 preview or full list when active */}
+            {/* Skill tags — more in preview, all when active */}
             <div className="flex flex-wrap gap-1.5 relative z-10">
-              {(isActive ? node.skills : node.skills.slice(0, 3)).map((skill) => (
+              {(isActive ? node.skills : node.skills.slice(0, previewCount)).map((skill) => (
                 <span
                   key={skill}
-                  className="font-mono text-[9px] font-bold px-2.5 py-1 rounded-[6px] transition-all duration-200"
+                  className="font-mono font-bold px-2.5 py-1 rounded-[6px] transition-all duration-200"
                   style={{
+                    fontSize: "clamp(8px, .85vw, 10px)",
                     background: isActive ? col.bg : "rgba(255,255,255,.025)",
                     border: `1px solid ${isActive ? col.border : "rgba(255,255,255,.06)"}`,
                     color: isActive ? col.text : "var(--muted)",
@@ -162,18 +173,39 @@ function BentoView() {
                   {skill}
                 </span>
               ))}
-              {!isActive && node.skills.length > 3 && (
+              {!isActive && hiddenCount > 0 && (
                 <span
-                  className="font-mono text-[9px] font-bold px-2.5 py-1 rounded-[6px]"
+                  className="font-mono font-bold px-2.5 py-1 rounded-[6px]"
                   style={{
+                    fontSize: "clamp(8px, .85vw, 10px)",
                     background: "rgba(255,255,255,.025)",
                     border: "1px solid rgba(255,255,255,.06)",
                     color: "var(--muted)",
                   }}
                 >
-                  +{node.skills.length - 3} more
+                  +{hiddenCount} more
                 </span>
               )}
+            </div>
+
+            {/* Spacer — pushes bottom elements down in tall cards */}
+            <div className="flex-1" />
+
+            {/* Bottom: subtle capability dots */}
+            <div className="relative z-10 flex items-center gap-1.5 mt-4">
+              {node.skills.map((_, i) => (
+                <span
+                  key={i}
+                  className="rounded-full transition-all duration-300"
+                  style={{
+                    width: isActive || i < previewCount ? "clamp(5px,0.6vw,7px)" : "clamp(3px,0.4vw,5px)",
+                    height: isActive || i < previewCount ? "clamp(5px,0.6vw,7px)" : "clamp(3px,0.4vw,5px)",
+                    background: isActive || i < previewCount ? col.text : "rgba(255,255,255,.12)",
+                    opacity: isActive ? 1 : i < previewCount ? 0.8 : 0.3,
+                    boxShadow: isActive || i < previewCount ? `0 0 6px ${col.glow}` : "none",
+                  }}
+                />
+              ))}
             </div>
 
             {/* Bottom accent line */}
@@ -195,18 +227,20 @@ function BentoView() {
 // ─── Main Skills Section ───────────────────────────────────────────────────
 export default function Skills() {
   return (
-    <section className="flex h-full min-h-0 flex-col">
+    /* h-full + flex-col so the grid can stretch to fill the panel height */
+    <section className="flex h-full min-h-0 flex-col py-4">
       {/* Section header */}
       <div className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[2px] text-[var(--accent)]">
         <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
         Skills Overview
       </div>
-      <h2 className="mb-6 text-[clamp(28px,4.5vw,50px)] font-black leading-none tracking-[-2.5px] text-white">
+      <h2 className="mb-5 text-[clamp(28px,4.5vw,50px)] font-black leading-none tracking-[-2.5px] text-white">
         Technical Skills
       </h2>
 
-      {/* Bento grid — click any card to expand full skill list */}
-      <div className="flex-1 min-h-0 overflow-y-auto">
+      {/* Bento grid: on xl, overflow hidden so cards fill height without scrolling.
+          On smaller screens, overflow-y auto lets the stack scroll naturally. */}
+      <div className="flex-1 min-h-0 overflow-y-auto xl:overflow-hidden">
         <BentoView />
       </div>
     </section>

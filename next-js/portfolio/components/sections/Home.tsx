@@ -36,7 +36,7 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
 
   const response = activeQ
     ? PRESET_ANSWERS[activeQ.toLowerCase()] ?? "I don't have an answer for that yet."
-    : "Select a question below — curated answers for recruiters & hiring managers.";
+    : "Select a question above";
 
   useEffect(() => {
     const t = setInterval(() => setTitleIdx(i => (i + 1) % titles.length), 2800);

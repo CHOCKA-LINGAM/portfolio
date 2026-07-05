@@ -13,7 +13,7 @@ const FILTERS = [
   { id: "fullstack", label: "Fullstack" },
 ];
 
-const PUBLISHED_PROJECT_STATUSES = new Set(["active", "in-progress"]);
+const PUBLISHED_PROJECT_STATUSES = new Set(["active"]);
 
 export default function Projects() {
   const [filter, setFilter] = useState("all");
@@ -28,7 +28,7 @@ export default function Projects() {
 
 
   return (
-    <div>
+    <div className="py-4">
       <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--accent)] uppercase tracking-[2px] mb-3">
         <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
         Project Portfolio
