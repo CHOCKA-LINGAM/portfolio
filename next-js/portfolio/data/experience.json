@@ -1,44 +1,46 @@
 [
   {
     "id": "ilink",
-    "status": "",
+    "status": "Active",
     "statusColor": "accent",
     "period": "Dec 2025 — Present",
     "role": "Technical Specialist",
     "company": "iLink Digital Inc",
     "location": "Chennai, India",
+    "description": "Architect and lead development of high-performance workflow automation and AI pipelines. Designed an custom asynchronous Python-based DAG execution engine reducing ETL latency by 40%. Engineered context management strategies and evaluation mechanisms utilizing AWS Bedrock and OpenAI for enterprise task automation, deploying scalable services on Azure Kubernetes Service (AKS).",
     "tags": ["Workflow Automation","AI Powered Pipelines","FastAPI", "DAG Engine", "Azure Databricks", "Docker", "AKS", "PySpark","AWS Bedrock", "Prompt Engineering", "Context Engineering", "LLM Evaluation", "AI Workflow Automation", "Semantic Translation Systems", "Multi-Model Orchestration"]
   },
   {
     "id": "tiger-ml",
-    "status": "",
+    "status": "Previous",
     "statusColor": "muted",
     "period": "Jan 2025 — Nov 2025",
     "role": "Machine Learning Engineer",
     "company": "Tiger Analytics",
     "location": "Chennai, India",
-    
+    "description": "Developed robust multi-tenant web platforms powered by Django and Celery for scheduled ML operations. Optimized large-scale analytical databases using Databricks Hive and PySpark. Packaged and containerized machine learning pipelines into production-ready API services deployed on Azure.",
     "tags": ["Django", "Multi-tenant", "Celery", "PySpark", "Azure Databricks", "ML Deploy"]
   },
   {
     "id": "tiger-analyst",
-    "status": "",
+    "status": "Previous",
     "statusColor": "muted",
     "period": "Oct 2023 — Dec 2024",
     "role": "Senior Analyst",
     "company": "Tiger Analytics",
     "location": "Chennai, India",
-    
+    "description": "Built and versioned robust RESTful API endpoints using Django REST Framework and SQLAlchemy. Integrated and optimized relational database schemas on SQL Server, implementing high-throughput Pandas ETL processing scripts to clean and ingestion enterprise transactional data.",
     "tags": ["Django REST", "SQL Server", "Pandas", "SQLAlchemy", "ETL", "API Versioning"]
   },
   {
     "id": "kaar",
-    "status": "",
+    "status": "Previous",
     "statusColor": "muted",
     "period": "Nov 2020 — Oct 2023",
     "role": "Fullstack & AI Application Developer",
     "company": "KAAR Technologies",
     "location": "Chennai, India",
+    "description": "Engineered responsive full-stack dashboards using React and Flask. Formulated predictive ML models (XGBoost, AutoML) utilizing H2O.ai, orchestrating data pipeline runs via Apache Airflow DAGs. Managed cloud assets and object storage buckets on Google Cloud Platform (GCP).",
     "tags": ["React", "Flask", "Airflow", "H2O.ai", "XGBoost", "GCP", "Databricks"]
   }
 ]

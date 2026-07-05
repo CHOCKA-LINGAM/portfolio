@@ -19,8 +19,27 @@
   --t3: #3a5068;
 }
 
-[data-theme='lilac'] { --accent:#c4b8f8; --ar:196,184,248; --ag:rgba(196,184,248,.13); }
-[data-theme='teal']  { --accent:#2dd4bf; --ar:45,212,191;  --ag:rgba(45,212,191,.13); }
+/* Shake animation for input validation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+.animate-shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* Toast slide-in animation */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)     scale(1); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0)     scale(1); }
+  to   { opacity: 0; transform: translateY(-8px)  scale(0.96); }
+}
+.toast-enter { animation: toast-in  0.28s cubic-bezier(0.16,1,0.3,1) forwards; }
+.toast-exit  { animation: toast-out 0.22s ease-in forwards; }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -28,6 +47,7 @@
 html {
   width: 100%;
   height: 100%;
+  overflow: hidden;
   font-family: var(--font-manrope), sans-serif;
   background: var(--bg);
 }

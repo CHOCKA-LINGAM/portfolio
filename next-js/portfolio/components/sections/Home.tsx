@@ -1,52 +1,43 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Mail, Zap, Lock } from "lucide-react";
+import { Mail, MessageSquare } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 import { Page } from "@/hooks/useNav";
 
-// ─── Feature flag ─────────────────────────────────────────────────
-// Set to true once you wire up your LLM API endpoint
-const LLM_ENABLED = false;
-
-// ─── Preset questions ─────────────────────────────────────────────
-// Optional display only — no functionality until LLM_ENABLED = true
-// Remove any entry to hide that question chip
+// ─── HR-focused Q&A — curated answers for recruiters & hiring managers ────
 const PRESET_QUESTIONS = [
-  "What's his core stack?",
-  "Architecture Experience?",
-  "Why hire him?",
-  "Key achievements?",
-  "Open to roles?",
+  // "Open to remote?",
+  // "Notice period?",
+  "Core stack?",
+  "Biggest impact?",
+  "Why hire you?",
+  "Current role?",
 ];
 
 const PRESET_ANSWERS: Record<string, string> = {
-  "what's his core stack?":
-    "Chockalingam's core stack is Python (Expert) + FastAPI/Django for backend, Databricks + PySpark + Airflow for data engineering, and OpenAI API for AI/ML workflows. He deploys on Azure AKS with Docker and manages SQL Server, PostgreSQL, and Databricks Hive databases.",
-  "architecture experience?":
-    "Experienced in FastAPI microservices, distributed ETL pipelines, async APIs, multi-tenant platforms, workflow orchestration and cloud-native architectures.",
-
-  "why hire him?":
-    "Strong ownership from architecture to deployment, production AI experience, backend optimization, distributed systems expertise and measurable business impact.",
-  "key achievements?":
-    "Built production AI platforms, architected scalable FastAPI & Databricks solutions, delivered products across 10+ global markets, and automated enterprise workflows reducing QA effort by 90%+.",
-
-  "open to roles?":
-    "Open to Senior Backend, AI Systems, Full Stack, Fullstack and Data Platform Engineering roles. Feel free to reach out if you'd like to connect or explore opportunities together!",
+  "open to remote?":
+    "Fully open to remote, hybrid, or on-site. Based in Chennai, India (IST, UTC+5:30). Available for interviews immediately and can join on short notice.",
+  "notice period?":
+    "30 days, negotiable depending on the role. Happy to discuss timelines — reach out and we'll work it out.",
+  "core stack?":
+    "Python · FastAPI · Django (backend), Databricks · PySpark · Airflow (data), OpenAI · AWS Bedrock (AI/LLM), Azure AKS · Docker (infra), PostgreSQL · SQL Server (databases).",
+  "biggest impact?":
+    "Automated enterprise QA workflows — 90%+ reduction in manual effort. Built an AI pipeline serving 10+ global markets. Architected Databricks ETL processing millions of records daily.",
+  "why hire you?":
+    "5+ years shipping production systems across backend, data, and AI — with measurable business impact at every step. I own the full stack from architecture to deployment.",
+  "current role?":
+    "Technical Specialist at iLink Digital Inc — backend systems, AI workflow automation, and data engineering. Open to senior/lead backend, AI systems, and data platform roles.",
 };
 
 export default function Home({ goTo }: { goTo: (p: Page) => void }) {
   const [titleIdx, setTitleIdx] = useState(0);
   const titles = PERSONAL.typingTitles ?? ["Backend Engineer", "AI Engineer"];
-  const [assistantResponse, setAssistantResponse] = useState(
-    "👋 Hi! I'm Chockalingam's Resume Assistant.\nSelect one of the questions above to learn more about my experience."
-  );
-  const handleQuestionClick = (question: string) => {
-    const answer =
-      PRESET_ANSWERS[question.toLowerCase()] ??
-      "Sorry, I don't have an answer for that yet.";
+  const [activeQ, setActiveQ] = useState<string | null>(null);
 
-    setAssistantResponse(answer);
-  };
+  const response = activeQ
+    ? PRESET_ANSWERS[activeQ.toLowerCase()] ?? "I don't have an answer for that yet."
+    : "Select a question above";
+
   useEffect(() => {
     const t = setInterval(() => setTitleIdx(i => (i + 1) % titles.length), 2800);
     return () => clearInterval(t);
@@ -95,100 +86,91 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
         </div>
       </div>
 
-      {/* ── RIGHT — monitor widget ── */}
+      {/* ── RIGHT — profile widget ── */}
       <div className="rounded-3xl p-4 sm:p-5 xl:p-6 font-mono shadow-[0_56px_96px_-28px_rgba(0,0,0,.8)]"
         style={{ background: "rgba(7,8,16,.96)", border: "1px solid var(--border)" }}>
 
         {/* mac dots */}
-        <div className="flex gap-1.5 mb-5 opacity-40">
+        <div className="flex gap-1.5 mb-5">
           {["#ff5f56", "#ffbd2e", "#27c93f"].map(c => (
             <span key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />
           ))}
         </div>
 
-        {/* career assistant box */}
+        {/* Recruiter Q&A panel */}
         <div className="rounded-[13px] p-4 mb-4"
           style={{ background: "rgba(255,255,255,.02)", border: "1px solid var(--border)" }}>
 
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1.5 text-[var(--accent)] text-[10px] font-extrabold uppercase tracking-[1px]">
-              <Zap size={12} />AI Resume Assistant
+              <MessageSquare size={11} />Recruiter Q&amp;A
             </div>
-            {/* Coming soon badge */}
-            {/* <span className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[.5px] text-[var(--muted)] px-2 py-0.5 rounded-full"
-              style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}>
-              <Lock size={8} /> LLM integration coming soon
-            </span> */}
+            <span className="text-[9px] font-bold text-[var(--muted)] opacity-40 font-mono">
+              click any question ↓
+            </span>
           </div>
 
-          {/* Preset question chips — display only, no action */}
-          {PRESET_QUESTIONS.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {PRESET_QUESTIONS.map(q => (
-                <button key={q}
-                  className="font-mono text-[9px] font-bold px-2.5 py-1 rounded-[6px]"
-                  style={{
-                    background: "rgba(var(--ar),.07)",
-                    border: "1px solid rgba(var(--ar),.18)",
-                    color: "rgba(var(--ar),1)",
+          {/* Question chips */}
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            {PRESET_QUESTIONS.map(q => (
+              <button
+                key={q}
+                onClick={() => setActiveQ(activeQ === q ? null : q)}
+                className="font-mono text-[9px] font-bold px-2.5 py-1 rounded-[6px] transition-all duration-200"
+                style={{
+                  background: activeQ === q ? "rgba(var(--ar),.16)" : "rgba(var(--ar),.06)",
+                  border: `1px solid ${activeQ === q ? "rgba(var(--ar),.4)" : "rgba(var(--ar),.16)"}`,
+                  color: activeQ === q ? "#fff" : "rgba(var(--ar),1)",
+                  transform: activeQ === q ? "translateY(-1px)" : "none",
+                }}
+              >
+                {q}
+              </button>
+            ))}
+          </div>
 
-                  }}
-                  onClick={() => handleQuestionClick(q)}
-                // title="LLM integration not yet connected"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Answer area */}
           <div
-            className="rounded-lg p-2 h-[100px] overflow-y-auto text-[10px] leading-6 whitespace-pre-line"
+            className="rounded-lg px-3 py-2.5 text-[11px] leading-[1.75] font-mono min-h-[76px] transition-all duration-200"
             style={{
-              background: "rgba(0,0,0,.35)",
-              border: "1px solid var(--border)",
-              color: "rgba(var(--af),.85)",
+              background: "rgba(0,0,0,.3)",
+              border: `1px solid ${activeQ ? "rgba(var(--ar),.12)" : "var(--border)"}`,
+              color: activeQ ? "rgba(143,178,255,.9)" : "rgba(255,255,255,.2)",
             }}
           >
-            {assistantResponse}
+            <span style={{ color: activeQ ? "rgba(74,222,128,.7)" : "rgba(74,222,128,.25)" }}>› </span>
+            {response}
           </div>
-
-          {/* Input — disabled until LLM_ENABLED */}
-          <div className="flex gap-2" style={{ marginTop: "12px" }}>
-            <div className="relative flex-1">
-              <input
-                disabled={!LLM_ENABLED}
-                placeholder={LLM_ENABLED ? "Ask about my stack, projects…" : "Coming soon"}
-                className="w-full rounded-lg px-3 py-2 text-white font-mono text-[12px] outline-none transition-all cursor-not-allowed opacity-40"
-                style={{ background: "rgba(0,0,0,.35)", border: "1px solid var(--border)" }}
-              />
-            </div>
-            <button
-              // disabled={!LLM_ENABLED}
-              className="w-9 h-9 flex items-center justify-center rounded-lg flex-shrink-0 cursor-not-allowed opacity-30"
-              style={{ background: "var(--accent)" }}>
-              <Zap size={14} className="text-[#05101e]" />
-            </button>
-          </div>
-
-          {/* {!LLM_ENABLED && (
-            <p className="mt-2 text-[10px] text-[var(--muted)] opacity-50">
-              Set <code className="font-mono bg-black/30 px-1 rounded">LLM_ENABLED = true</code> in <code className="font-mono bg-black/30 px-1 rounded">Home.tsx</code> once your API is wired up.
-            </p>
-          )} */}
         </div>
 
-        {/* Stats grid — always visible */}
+        {/* Stats grid */}
         <div className="grid gap-2" style={{
           gridTemplateColumns: `repeat(${PERSONAL.stats.length}, minmax(0, 1fr))`,
         }}>
-          {PERSONAL.stats.map(s => (
-            <div key={s.label}
-              className="rounded-2xl p-4 transition-all hover:border-[rgba(var(--ar),.2)] hover:bg-[rgba(var(--ar),.05)]"
-              style={{ background: "rgba(255,255,255,.025)", border: "1px solid var(--border)" }}>
-              <span className="block text-[25px] font-extrabold text-white leading-none mb-1">{s.value}</span>
-              <span className="text-[9px] text-[var(--muted)] uppercase tracking-[1.5px] font-bold">{s.label}</span>
-            </div>
-          ))}
+          {PERSONAL.stats.map((s, i) => {
+            const accents = [
+              { text: "#a78bfa", glow: "rgba(139,92,246,.15)", border: "rgba(139,92,246,.2)" },
+              { text: "#60a5fa", glow: "rgba(59,130,246,.15)",  border: "rgba(59,130,246,.2)" },
+              { text: "#34d399", glow: "rgba(16,185,129,.15)",  border: "rgba(16,185,129,.2)" },
+              { text: "#fbbf24", glow: "rgba(245,158,11,.15)",  border: "rgba(245,158,11,.2)" },
+            ];
+            const a = accents[i % accents.length];
+            return (
+              <div key={s.label}
+                className="rounded-2xl p-3 transition-all hover:-translate-y-0.5 group"
+                style={{ background: "rgba(255,255,255,.025)", border: `1px solid ${a.border}` }}>
+                <span
+                  className="block text-[22px] font-black leading-none mb-1.5"
+                  style={{ color: a.text, textShadow: `0 0 20px ${a.glow}` }}
+                >
+                  {s.value}
+                </span>
+                <span className="text-[8.5px] text-[var(--muted)] uppercase tracking-[1.5px] font-bold leading-tight block">
+                  {s.label}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
