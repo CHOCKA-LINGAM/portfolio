@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Mail, MessageSquare } from "lucide-react";
 import { PERSONAL } from "@/data/index";
+import { STAT_ACCENTS } from "@/data/theme";
 import { Page } from "@/hooks/useNav";
 
 // ─── HR-focused Q&A — curated answers for recruiters & hiring managers ────
@@ -148,13 +149,7 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
           gridTemplateColumns: `repeat(${PERSONAL.stats.length}, minmax(0, 1fr))`,
         }}>
           {PERSONAL.stats.map((s, i) => {
-            const accents = [
-              { text: "#a78bfa", glow: "rgba(139,92,246,.15)", border: "rgba(139,92,246,.2)" },
-              { text: "#60a5fa", glow: "rgba(59,130,246,.15)",  border: "rgba(59,130,246,.2)" },
-              { text: "#34d399", glow: "rgba(16,185,129,.15)",  border: "rgba(16,185,129,.2)" },
-              { text: "#fbbf24", glow: "rgba(245,158,11,.15)",  border: "rgba(245,158,11,.2)" },
-            ];
-            const a = accents[i % accents.length];
+            const a = STAT_ACCENTS[i % STAT_ACCENTS.length];
             return (
               <div key={s.label}
                 className="rounded-2xl p-3 transition-all hover:-translate-y-0.5 group"

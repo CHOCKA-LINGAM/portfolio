@@ -7,7 +7,14 @@ export function useNav() {
   const goTo = useCallback((page: Page) => { setCurrent(page); }, []);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (["INPUT","TEXTAREA"].includes((e.target as HTMLElement).tagName)) return;
+      const target = e.target as HTMLElement;
+      if (
+        ["INPUT", "TEXTAREA", "SELECT", "OPTION"].includes(target.tagName) ||
+        target.isContentEditable ||
+        target.getAttribute("role") === "textbox"
+      ) {
+        return;
+      }
       const idx = PAGES.indexOf(current);
       if (e.key === "ArrowRight" && idx < PAGES.length - 1) goTo(PAGES[idx + 1]);
       if (e.key === "ArrowLeft" && idx > 0) goTo(PAGES[idx - 1]);

@@ -2,8 +2,10 @@
 import { useState, useEffect } from "react";
 import { Linkedin, Github, Mail, Copy, Play, RotateCcw, CheckCircle, AlertCircle, X } from "lucide-react";
 import { PERSONAL } from "@/data/index";
-// Default message pre-filled for the visitor \u2014 they edit before sending
-const DEFAULT_MSG = `Hi Chockalingam,\n\nI came across your portfolio and would love to connect. I'm interested in discussing [role/opportunity] with you.\n\nLooking forward to hearing from you!\n\nBest regards,`;
+// Default message pre-filled for the visitor — they edit before sending
+// Uses PERSONAL.name so it stays in sync with data/personal.json
+const _firstName = PERSONAL.name.split(" ")[0];
+const DEFAULT_MSG = `Hi ${_firstName},\n\nI came across your portfolio and would love to connect. I'm interested in discussing [role/opportunity] with you.\n\nLooking forward to hearing from you!\n\nBest regards,`;
 
 // \u2500\u2500\u2500 Toast \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 type ToastType = "success" | "error" | "warn";
@@ -138,7 +140,7 @@ export default function Contact() {
   ];
 
   const nbWrap    = { background: "#08090f", border: "1px solid rgba(255,255,255,.09)" } as const;
-  const nbTitleBg = { background: "#0b0c15", borderBottom: "1px solid rgba(255,255,255,.05)" } as const;
+  const nbTitleBg = { background: "#111322", borderBottom: "1px solid rgba(255,255,255,.12)" } as const;
   const nbCellNum = { background: "#070810", borderRight: "1px solid rgba(255,255,255,.04)" } as const;
 
   return (
@@ -174,19 +176,23 @@ export default function Contact() {
                 href={l.href}
                 target={l.target}
                 rel="noreferrer"
-                className="flex items-center gap-3 px-4 py-3 rounded-[12px] border text-[var(--muted2)] font-bold text-[13px] transition-all hover:border-[rgba(143,178,255,.25)] hover:bg-[rgba(143,178,255,.06)] hover:translate-x-1.5 hover:text-white"
-                style={{ border: "1px solid var(--border)", background: "rgba(255,255,255,.02)" }}
+                className="relative flex items-center gap-3 px-4 py-3 pl-5 rounded-[12px] border text-[var(--muted2)] font-bold text-[13px] transition-all duration-300 hover:border-[rgba(143,178,255,.25)] hover:bg-[rgba(143,178,255,.04)] hover:translate-x-1.5 hover:text-white group overflow-hidden"
+                style={{ border: "1px solid var(--border)", background: "rgba(255,255,255,.015)", willChange: "transform" }}
               >
-                <span className="text-[var(--accent)] flex-shrink-0">{l.icon}</span>
+                {/* Sliding left accent bar */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--accent)] transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300" />
+                <span className="text-[var(--accent)] flex-shrink-0 group-hover:drop-shadow-[0_0_6px_rgba(143,178,255,.6)] transition-all duration-300">{l.icon}</span>
                 {l.label}
               </a>
             ))}
             <button
               onClick={copyEmail}
-              className="flex items-center gap-3 px-4 py-3 rounded-[12px] border text-[var(--accent)] font-bold text-[13px] text-left w-full transition-all hover:border-[rgba(143,178,255,.3)] hover:translate-x-1.5"
-              style={{ border: "1px solid rgba(143,178,255,.18)", background: "rgba(143,178,255,.06)" }}
+              className="relative flex items-center gap-3 px-4 py-3 pl-5 rounded-[12px] border text-[var(--accent)] font-bold text-[13px] text-left w-full transition-all duration-300 hover:border-[rgba(143,178,255,.32)] hover:bg-[rgba(143,178,255,.06)] hover:translate-x-1.5 group overflow-hidden"
+              style={{ border: "1px solid rgba(143,178,255,.18)", background: "rgba(143,178,255,.03)", willChange: "transform" }}
             >
-              <Copy size={16} />
+              {/* Sliding left accent bar */}
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--accent)] transform -translate-x-1 group-hover:translate-x-0 transition-transform duration-300" />
+              <span className="flex-shrink-0 group-hover:drop-shadow-[0_0_6px_rgba(143,178,255,.6)] transition-all duration-300"><Copy size={16} /></span>
               {copied ? "Copied! ✓" : "Copy email address"}
             </button>
           </div>

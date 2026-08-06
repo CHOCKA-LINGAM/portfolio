@@ -28,9 +28,10 @@ export default function Page() {
       <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px]">
         <div
           key={current}
+          id="portfolio-main-panel"
           className="page-active portfolio-panel"
           role="tabpanel"
-          aria-label={`${current} section`}
+          aria-labelledby={`tab-${current}-desktop`}
         >
           {pages[current]}
         </div>
