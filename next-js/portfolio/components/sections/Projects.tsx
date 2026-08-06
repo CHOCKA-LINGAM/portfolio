@@ -1,7 +1,8 @@
-"use client";
 import { useState } from "react";
 import { ExternalLink } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { PROJECTS, type Project } from "@/data/index";
+import SectionLayout from "@/components/layout/SectionLayout";
 
 // ─── Edit data/projects.json to add / remove / reorder projects ───
 // Tags used for filtering — add new tags here if you add them to JSON
@@ -27,19 +28,9 @@ export default function Projects() {
   });
 
   return (
-    <section className="flex h-full min-h-0 flex-col py-4">
-
-      {/* Section label */}
-      <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--accent)] uppercase tracking-[2px] mb-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
-        Project Portfolio
-      </div>
-      <h2 className="text-[clamp(32px,4.5vw,50px)] font-black tracking-[-2.5px] text-white leading-none mb-8">
-        Highlighted Projects
-      </h2>
-
+    <SectionLayout label="Project Portfolio" title="Highlighted Projects" scrollable={false}>
       {/* ── Filters ── */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
+      <div className="flex flex-wrap items-center gap-3 mb-6 flex-shrink-0">
         <input
           value={query}
           onChange={e => setQuery(e.target.value)}
@@ -65,69 +56,77 @@ export default function Projects() {
       </div>
 
       {/* ── Cards ── */}
-      <div className="flex-1 min-h-0 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto pb-2 overflow-x-hidden">
         {visible.length === 0 ? (
           <div className="text-[var(--muted)] text-[14px] py-12 text-center">
             No projects match — try a different filter or search term.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-2">
-            {visible.map((p, i) => (
-              <div
-                key={p.id}
-                className="animate-card-in flex flex-col rounded-[20px] p-6 relative overflow-hidden transition-all duration-[320ms] hover:-translate-y-1 hover:shadow-[0_22px_48px_-10px_rgba(0,0,0,.5)] hover:border-[rgba(var(--ar),.22)] group"
-                style={{
-                  background: "rgba(7,8,16,.9)",
-                  border: "1px solid var(--border)",
-                  animationDelay: `${i * 0.05}s`,
-                  willChange: "transform, box-shadow",
-                }}
-              >
-                {/* Hover glow */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[320ms] pointer-events-none"
-                  style={{ background: "radial-gradient(circle at 100% 0%, rgba(var(--ar),.08), transparent)" }}
-                />
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <AnimatePresence mode="popLayout">
+              {visible.map((p, i) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                  transition={{ duration: 0.3, type: "spring", bounce: 0.2 }}
+                  key={p.id}
+                  className="flex flex-col rounded-[20px] p-6 relative overflow-hidden transition-all duration-[320ms] hover:-translate-y-1 hover:shadow-[0_22px_48px_-10px_rgba(0,0,0,.5)] hover:border-[rgba(var(--ar),.22)] group"
+                  style={{
+                    background: "rgba(12,14,28,.95)",
+                    border: "1px solid var(--border)",
+                    willChange: "transform, box-shadow",
+                    backdropFilter: "blur(12px)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+                  }}
+                >
+                  {/* Hover glow */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[320ms] pointer-events-none"
+                    style={{ background: "radial-gradient(circle at 100% 0%, rgba(var(--ar),.08), transparent)" }}
+                  />
 
-                {/* Header row: project id + status badge */}
-                <div className="flex justify-between items-center mb-3">
-                  <span className="font-mono text-[9px] text-[var(--muted)] opacity-50">{p.id}</span>
-                  <span className="font-mono text-[9px] font-extrabold text-[var(--green)] uppercase tracking-[.5px]">{p.status}</span>
-                </div>
+                  {/* Header row: project id + status badge */}
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="font-mono text-[9px] text-[var(--muted)] opacity-50">{p.id}</span>
+                    <span className="font-mono text-[9px] font-extrabold text-[var(--green)] uppercase tracking-[.5px]">{p.status}</span>
+                  </div>
 
-                {/* Title + description */}
-                <div className="text-[18px] font-black tracking-[-0.6px] text-white mb-2">{p.title}</div>
-                <div className="text-[13px] leading-[1.72] text-[var(--muted)] mb-4 flex-1">{p.desc}</div>
+                  {/* Title + description */}
+                  <div className="text-[18px] font-black tracking-[-0.6px] text-white mb-2">{p.title}</div>
+                  <div className="text-[13px] leading-[1.72] text-[var(--muted)] mb-4 flex-1">{p.desc}</div>
 
-                {/* Stack tags */}
-                <div className="flex flex-wrap gap-1.5 mb-3.5">
-                  {p.stack.map(s => (
-                    <span
-                      key={s}
-                      className="font-mono text-[9px] font-bold px-2.5 py-[3px] rounded-[6px] uppercase tracking-[.4px]"
-                      style={{ background: "rgba(var(--ar),.07)", border: "1px solid rgba(var(--ar),.15)", color: "rgba(var(--ar),1)" }}
+                  {/* Stack tags */}
+                  <div className="flex flex-wrap gap-1.5 mb-3.5">
+                    {p.stack.map(s => (
+                      <span
+                        key={s}
+                        className="font-mono text-[9px] font-bold px-2.5 py-[3px] rounded-[6px] uppercase tracking-[.4px]"
+                        style={{ background: "rgba(var(--ar),.07)", border: "1px solid rgba(var(--ar),.15)", color: "rgba(var(--ar),1)" }}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Footer link */}
+                  <div className="flex gap-3 border-t pt-3.5" style={{ borderColor: "rgba(255,255,255,.04)" }}>
+                    <a
+                      href={p.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1.5 text-[11px] font-extrabold text-[var(--muted2)] hover:text-[var(--accent)] transition-colors"
                     >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Footer link */}
-                <div className="flex gap-3 border-t pt-3.5" style={{ borderColor: "rgba(255,255,255,.04)" }}>
-                  <a
-                    href={p.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1.5 text-[11px] font-extrabold text-[var(--muted2)] hover:text-[var(--accent)] transition-colors"
-                  >
-                    <ExternalLink size={12} /> Details
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
+                      <ExternalLink size={12} /> Details
+                    </a>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
-    </section>
+    </SectionLayout>
   );
 }

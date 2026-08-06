@@ -75,7 +75,7 @@ export default function Contact() {
   }
   function removeToast(id: number) { setToasts(prev => prev.filter(t => t.id !== id)); }
 
-  function nbRun() {
+  async function nbRun() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const newErrors: { name?: string; email?: string; msg?: string } = {};
     if (!name.trim())  newErrors.name  = "Name is required.";
@@ -95,12 +95,25 @@ export default function Contact() {
     setErrors({});
     setOutput({ text: "Executing…  ⟳", cls: "running" });
 
-    setTimeout(() => {
-      const subj = encodeURIComponent(`Reaching out — via Portfolio | ${name}`);
-      const body = encodeURIComponent(`From: ${name} <${email}>\n\n${msg}`);
-      // window.open with mailto works with Gmail, Outlook, Apple Mail —
-      // opens whichever handler the user has configured in their browser.
-      window.open(`mailto:${PERSONAL.email}?subject=${subj}&body=${body}`);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message: msg }),
+      });
+
+      if (res.status === 501) {
+        // Fallback to mailto if server isn't configured
+        const subj = encodeURIComponent(`Reaching out — via Portfolio | ${name}`);
+        const body = encodeURIComponent(`From: ${name} <${email}>\n\n${msg}`);
+        window.open(`mailto:${PERSONAL.email}?subject=${subj}&body=${body}`);
+        addToast("warn", "Using Mail Client", `Opening your default email app to send to ${PERSONAL.email}`);
+      } else if (!res.ok) {
+        throw new Error("Failed to send message via API.");
+      } else {
+        addToast("success", "Message Sent!", "Your message was dispatched directly to my inbox.");
+      }
+
       setCount((c) => c + 1);
 
       const successText =
@@ -111,8 +124,10 @@ export default function Contact() {
         `  <span style="color:#8fb2ff;">'status'</span> : <span style="color:#fbbf24;">200</span>,\n` +
         `  <span style="color:#8fb2ff;">'ts'</span>     : <span style="color:#86c986;">'${new Date().toISOString()}'</span>\n}`;
       setOutput({ text: successText, cls: "ok" });
-      addToast("success", "Message sent!", `Opening your email client to send to ${PERSONAL.email}`);
-    }, 900);
+    } catch (err) {
+      setOutput({ text: "# Error: Network failed or endpoint rejected the payload.", cls: "idle" });
+      addToast("error", "Dispatch Failed", "Could not send the message. Please try the mailto button on the left.");
+    }
   }
 
   function nbClear() {

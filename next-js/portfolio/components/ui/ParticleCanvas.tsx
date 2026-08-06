@@ -24,7 +24,8 @@ export default function ParticleCanvas() {
     }
 
     function init() {
-      const n = Math.min(90, Math.floor(canvas.width * canvas.height / 14000));
+      // Capped at 65 particles to keep the O(N^2) loop below ~2000 iterations per frame
+      const n = Math.min(65, Math.floor(canvas.width * canvas.height / 15000));
       particles = Array.from({ length: n }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -50,15 +51,19 @@ export default function ParticleCanvas() {
         ctx.shadowBlur = 7; ctx.shadowColor = "rgba(143,178,255,.18)";
         ctx.fill(); ctx.shadowBlur = 0;
       });
-      for (let a = 0; a < particles.length; a++) for (let b = a+1; b < particles.length; b++) {
-        const dx = particles[a].x - particles[b].x, dy = particles[a].y - particles[b].y, d2 = dx*dx + dy*dy;
-        if (d2 < 18000) {
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(143,178,255,${(1-d2/18000)*.055})`;
-          ctx.lineWidth = .7;
-          ctx.moveTo(particles[a].x, particles[a].y);
-          ctx.lineTo(particles[b].x, particles[b].y);
-          ctx.stroke();
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a+1; b < particles.length; b++) {
+          const dx = particles[a].x - particles[b].x;
+          const dy = particles[a].y - particles[b].y;
+          const d2 = dx*dx + dy*dy;
+          if (d2 < 15000) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(143,178,255,${(1-d2/15000)*.06})`;
+            ctx.lineWidth = .7;
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.stroke();
+          }
         }
       }
       raf = requestAnimationFrame(draw);

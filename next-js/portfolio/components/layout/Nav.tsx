@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { PAGES, Page } from "@/hooks/useNav";
 
 interface NavProps { current: Page; goTo: (p: Page) => void; }
@@ -7,34 +8,7 @@ interface NavProps { current: Page; goTo: (p: Page) => void; }
 export default function Nav({ current, goTo }: NavProps) {
   const [open, setOpen] = useState(false);
 
-  const desktopNavRef = useRef<HTMLDivElement>(null);
-  const desktopPillRef = useRef<HTMLDivElement>(null);
-  const tabletNavRef = useRef<HTMLDivElement>(null);
-  const tabletPillRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => { setOpen(false); }, [current]);
-
-  useEffect(() => {
-    const updatePill = (nav: HTMLDivElement | null, pill: HTMLDivElement | null) => {
-      if (!nav || !pill) return;
-      const active = nav.querySelector(`[data-p="${current}"]`) as HTMLElement;
-      if (active) {
-        pill.style.width = `${active.offsetWidth}px`;
-        pill.style.left = `${active.offsetLeft}px`;
-        pill.style.height = `${active.offsetHeight}px`;
-        pill.style.top = `${active.offsetTop}px`;
-        pill.style.opacity = "1";
-      } else {
-        pill.style.opacity = "0";
-      }
-    };
-    
-    const id = requestAnimationFrame(() => {
-      updatePill(desktopNavRef.current, desktopPillRef.current);
-      updatePill(tabletNavRef.current, tabletPillRef.current);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [current]);
 
   useEffect(() => {
     const fn = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
@@ -136,34 +110,29 @@ export default function Nav({ current, goTo }: NavProps) {
                    shadow-[0_16px_40px_-10px_rgba(0,0,0,.65)]"
         style={{ background: "rgba(4,5,10,.92)", border: "1px solid rgba(255,255,255,.07)", backdropFilter: "blur(24px)" }}
       >
-        {/* page links */}
-        <div ref={tabletNavRef} className="relative flex items-center gap-0.5" role="tablist" aria-label="Navigation Tabs">
-          <div
-            ref={tabletPillRef}
-            className="absolute rounded-full z-[0] transition-all duration-[380ms] ease-[cubic-bezier(.16,1,.3,1)] pointer-events-none"
-            style={{
-              background: "rgba(143,178,255,.1)",
-              border: "1px solid rgba(143,178,255,.18)",
-              opacity: 0,
-            }}
-          />
+        <div className="relative flex items-center gap-0.5" role="tablist" aria-label="Navigation Tabs">
           {PAGES.map(p => (
             <button key={p} data-p={p} onClick={() => goTo(p)}
               id={`tab-${p}`}
               role="tab"
               aria-selected={current === p}
               aria-controls="portfolio-main-panel"
-              className={`text-[11px] font-bold px-3 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 relative z-10 ${
-                current === p
-                  ? "text-white"
-                  : "text-[var(--muted)] hover:text-white"
+              className={`relative text-[11px] font-bold px-3 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 z-10 ${
+                current === p ? "text-white" : "text-[var(--muted)] hover:text-white"
               }`}
             >
+              {current === p && (
+                <motion.div
+                  layoutId="tablet-nav-pill"
+                  className="absolute inset-0 rounded-full z-[-1]"
+                  style={{ background: "rgba(143,178,255,.1)", border: "1px solid rgba(143,178,255,.18)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
               {label(p)}
             </button>
           ))}
         </div>
-        {/* compact meta — no wrapping badge */}
         <div className="flex items-center gap-2 pl-2.5 border-l border-white/[.07]">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring flex-shrink-0" />
           <span className="font-mono text-[10px] font-bold text-[var(--accent)] tabular-nums whitespace-nowrap">{num}/{String(PAGES.length).padStart(2,"0")}</span>
@@ -178,28 +147,25 @@ export default function Nav({ current, goTo }: NavProps) {
                    shadow-[0_20px_48px_-12px_rgba(0,0,0,.65)]"
         style={{ background: "rgba(4,5,10,.92)", border: "1px solid rgba(255,255,255,.07)", backdropFilter: "blur(28px)" }}
       >
-        <div ref={desktopNavRef} className="relative flex items-center gap-0.5" role="tablist" aria-label="Navigation Tabs">
-          <div
-            ref={desktopPillRef}
-            className="absolute rounded-full z-[0] transition-all duration-[380ms] ease-[cubic-bezier(.16,1,.3,1)] pointer-events-none"
-            style={{
-              background: "rgba(143,178,255,.1)",
-              border: "1px solid rgba(143,178,255,.18)",
-              opacity: 0,
-            }}
-          />
+        <div className="relative flex items-center gap-0.5" role="tablist" aria-label="Navigation Tabs">
           {PAGES.map(p => (
             <button key={p} data-p={p} onClick={() => goTo(p)}
               id={`tab-${p}-desktop`}
               role="tab"
               aria-selected={current === p}
               aria-controls="portfolio-main-panel"
-              className={`text-[11px] font-bold px-3.5 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 relative z-10 ${
-                current === p
-                  ? "text-white"
-                  : "text-[var(--muted)] hover:text-white"
+              className={`relative text-[11px] font-bold px-3.5 py-1.5 rounded-full lowercase tracking-[.4px] transition-colors duration-200 z-10 ${
+                current === p ? "text-white" : "text-[var(--muted)] hover:text-white"
               }`}
             >
+              {current === p && (
+                <motion.div
+                  layoutId="desktop-nav-pill"
+                  className="absolute inset-0 rounded-full z-[-1]"
+                  style={{ background: "rgba(143,178,255,.1)", border: "1px solid rgba(143,178,255,.18)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
               {label(p)}
             </button>
           ))}

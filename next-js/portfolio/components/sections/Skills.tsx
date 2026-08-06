@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { DAG_NODES, type DagNode } from "@/data/index";
+import { ACCENT_COLORS } from "@/data/theme";
+import SectionLayout from "@/components/layout/SectionLayout";
 // DAG_EDGES imported below inside commented-out DagView — kept for future reuse
 // import { DAG_EDGES, type DagEdge } from "@/data/index";
 
@@ -18,15 +20,6 @@ const ICONS: Record<string, string> = {
   infra: "☁",
   ui:    "🎨",
   db:    "🗄",
-};
-
-const ACCENT_COLORS: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  core:  { bg: "rgba(139,92,246,.08)",  border: "rgba(139,92,246,.25)",  text: "#a78bfa", glow: "rgba(139,92,246,.15)" },
-  ai:    { bg: "rgba(59,130,246,.08)",  border: "rgba(59,130,246,.25)",  text: "#60a5fa", glow: "rgba(59,130,246,.15)" },
-  data:  { bg: "rgba(16,185,129,.08)",  border: "rgba(16,185,129,.25)",  text: "#34d399", glow: "rgba(16,185,129,.15)" },
-  infra: { bg: "rgba(245,158,11,.08)",  border: "rgba(245,158,11,.25)",  text: "#fbbf24", glow: "rgba(245,158,11,.15)" },
-  ui:    { bg: "rgba(236,72,153,.08)",  border: "rgba(236,72,153,.25)",  text: "#f472b6", glow: "rgba(236,72,153,.15)" },
-  db:    { bg: "rgba(20,184,166,.08)",  border: "rgba(20,184,166,.25)",  text: "#2dd4bf", glow: "rgba(20,184,166,.15)" },
 };
 
 // ─── DAG View (commented out — reserved for future reuse) ──────────────────
@@ -227,22 +220,14 @@ function BentoView() {
 // ─── Main Skills Section ───────────────────────────────────────────────────
 export default function Skills() {
   return (
-    /* h-full + flex-col so the grid can stretch to fill the panel height */
-    <section className="flex h-full min-h-0 flex-col py-4">
-      {/* Section header */}
-      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[2px] text-[var(--accent)]">
-        <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
-        Skills Overview
-      </div>
-      <h2 className="mb-5 text-[clamp(28px,4.5vw,50px)] font-black leading-none tracking-[-2.5px] text-white">
-        Technical Skills
-      </h2>
-
-      {/* Bento grid: on xl, overflow hidden so cards fill height without scrolling.
-          On smaller screens, overflow-y auto lets the stack scroll naturally. */}
-      <div className="flex-1 min-h-0 overflow-y-auto xl:overflow-hidden">
+    <SectionLayout label="Skills Overview" title="Technical Skills" scrollable={false}>
+      {/* 
+          Bento grid container. Using flex-1 to fill SectionLayout height.
+          On xl screens, overflow is hidden and it uses flex-col to pass flex-1 to grid. 
+      */}
+      <div className="flex-1 min-h-0 overflow-y-auto xl:overflow-hidden xl:flex xl:flex-col">
         <BentoView />
       </div>
-    </section>
+    </SectionLayout>
   );
 }

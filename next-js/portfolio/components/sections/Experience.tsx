@@ -1,48 +1,37 @@
 "use client";
+import { motion } from "framer-motion";
 import { EXPERIENCE, type ExperienceItem } from "@/data/index";
+import SectionLayout from "@/components/layout/SectionLayout";
 
 // ─── Edit data/experience.json to add / remove / reorder roles ────
 
 export default function Experience() {
   return (
-    <section className="flex h-full min-h-0 flex-col py-4">
-
-      {/* Section label */}
-      <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--accent)] uppercase tracking-[2px] mb-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
-        Professional Experience
-      </div>
-      <h2 className="text-[clamp(32px,4.5vw,50px)] font-black tracking-[-2.5px] text-white leading-none mb-8">
-        Career History
-      </h2>
+    <SectionLayout label="Professional Experience" title="Career History">
 
       {/* Timeline — scrollable */}
-      <div className="flex-1 min-h-0 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto pb-4">
         <div className="w-full max-w-[860px] mx-auto flex flex-col relative">
 
-          {/* Vertical line */}
+          {/* Vertical line (timeline backbone) */}
           <div
-            className="absolute left-0 top-2.5 bottom-2.5 w-px"
-            style={{ background: "linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent)" }}
+            className="absolute left-[38px] sm:left-[178px] top-6 bottom-6 w-px hidden sm:block"
+            style={{ background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.06) 10%, rgba(255,255,255,0.06) 90%, transparent)" }}
           />
 
-          {(EXPERIENCE as ExperienceItem[]).map(exp => (
-            <div
+          {(EXPERIENCE as ExperienceItem[]).map((exp, i) => (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               key={exp.id}
-              className="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-6 sm:gap-7 py-7 pl-7 relative border-b last:border-b-0
-                         transition-transform duration-200 hover:translate-x-2"
-              style={{ borderColor: "rgba(255,255,255,.04)", willChange: "transform" }}
+              className="group grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-4 sm:gap-7 mb-6 relative"
             >
-              {/* Timeline dot */}
-              <div
-                className="absolute left-[-5px] top-[34px] w-[11px] h-[11px] rounded-full border-2"
-                style={{ background: "var(--accent)", borderColor: "var(--bg)", boxShadow: "0 0 12px rgba(var(--ar),.5)" }}
-              />
-
-              {/* Meta: status + period */}
-              <div>
+              {/* Meta: status + period (Left Column) */}
+              <div className="pt-5 sm:text-right flex flex-row sm:flex-col items-center sm:items-end gap-3 sm:gap-0 pl-4 sm:pl-0">
                 <div
-                  className="font-mono text-[10px] font-bold uppercase tracking-[.5px] mb-1"
+                  className="font-mono text-[10px] font-bold uppercase tracking-[.5px] sm:mb-1"
                   style={{ color: exp.statusColor === "accent" ? "var(--accent)" : "var(--muted)" }}
                 >
                   {exp.status}
@@ -50,15 +39,38 @@ export default function Experience() {
                 <div className="font-mono text-[9px] opacity-60 text-[var(--muted)]">{exp.period}</div>
               </div>
 
-              {/* Content */}
-              <div>
+              {/* Card Content (Right Column) */}
+              <div
+                className="relative rounded-[20px] p-6 sm:p-7 transition-all duration-[320ms] hover:-translate-y-1 hover:shadow-[0_22px_48px_-10px_rgba(0,0,0,.5)] hover:border-[rgba(var(--ar),.22)]"
+                style={{
+                  background: "rgba(12,14,28,.95)",
+                  border: "1px solid var(--border)",
+                  backdropFilter: "blur(12px)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+                  willChange: "transform, box-shadow",
+                }}
+              >
+                {/* Timeline dot (absolutely positioned relative to the right column) */}
+                <div
+                  className="absolute left-[-16px] sm:left-[-33px] top-[34px] w-[11px] h-[11px] rounded-full border-2 transition-transform duration-300 group-hover:scale-[1.6] hidden sm:block"
+                  style={{ background: "var(--accent)", borderColor: "var(--bg)", boxShadow: "0 0 12px rgba(var(--ar),.5)" }}
+                />
+
+                {/* Hover glow */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[320ms] pointer-events-none rounded-[20px]"
+                  style={{ background: "radial-gradient(circle at 100% 0%, rgba(var(--ar),.08), transparent)" }}
+                />
+
                 <div className="text-[20px] font-black tracking-[-0.7px] text-white mb-1">{exp.role}</div>
-                <div className="text-[13px] text-[var(--muted)] mb-3 font-semibold">{exp.company}</div>
+                <div className="text-[13px] text-[var(--muted)] mb-4 font-semibold">{exp.company}</div>
+                
                 {exp.description && (
-                  <div className="text-[13px] leading-[1.78] text-[var(--muted)] mb-3">
+                  <div className="text-[13px] leading-[1.78] text-[var(--muted)] mb-5">
                     {exp.description}
                   </div>
                 )}
+                
                 <div className="flex flex-wrap gap-1.5">
                   {exp.tags.map(t => (
                     <span
@@ -71,10 +83,10 @@ export default function Experience() {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </SectionLayout>
   );
 }
