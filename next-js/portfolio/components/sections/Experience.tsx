@@ -1,90 +1,181 @@
 "use client";
-import { motion } from "framer-motion";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Briefcase,
+  Calendar,
+  MapPin,
+  Building2,
+  CheckCircle2,
+  ChevronRight,
+  Award,
+  Zap,
+  TrendingUp,
+} from "lucide-react";
 import { EXPERIENCE, type ExperienceItem } from "@/data/index";
 import SectionLayout from "@/components/layout/SectionLayout";
 
-// ─── Edit data/experience.json to add / remove / reorder roles ────
-
 export default function Experience() {
+  const experiences = EXPERIENCE as ExperienceItem[];
+  const [selectedId, setSelectedId] = useState<string>(experiences[0]?.id || "ilink");
+
+  const activeExp = experiences.find((e) => e.id === selectedId) || experiences[0];
+
   return (
-    <SectionLayout label="Professional Experience" title="Career History">
+    <SectionLayout label="Career History" title="Professional Experience" scrollable={false}>
+      <div className="w-full flex-1 min-h-0 flex flex-col gap-3.5">
+        
+        {/* ─── Top Career Summary Metrics Bar ─── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 rounded-2xl bg-[#080b18]/90 border border-white/10 backdrop-blur-md shadow-xl">
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center gap-2.5">
+            <Award className="w-4 h-4 text-sky-400 flex-shrink-0" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">Total Exp.</span>
+              <span className="text-xs font-bold text-white font-mono">5+ Years</span>
+            </div>
+          </div>
 
-      {/* Timeline — scrollable */}
-      <div className="flex-1 min-h-0 overflow-y-auto pb-4">
-        <div className="w-full max-w-[860px] mx-auto flex flex-col relative">
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center gap-2.5">
+            <Building2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">Companies</span>
+              <span className="text-xs font-bold text-white font-mono">3 Tech Enterprises</span>
+            </div>
+          </div>
 
-          {/* Vertical line (timeline backbone) */}
-          <div
-            className="absolute left-[38px] sm:left-[178px] top-6 bottom-6 w-px hidden sm:block"
-            style={{ background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.06) 10%, rgba(255,255,255,0.06) 90%, transparent)" }}
-          />
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center gap-2.5">
+            <TrendingUp className="w-4 h-4 text-amber-400 flex-shrink-0" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">Impact</span>
+              <span className="text-xs font-bold text-emerald-400 font-mono">40% Latency Cut</span>
+            </div>
+          </div>
 
-          {(EXPERIENCE as ExperienceItem[]).map((exp, i) => (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              key={exp.id}
-              className="group grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-4 sm:gap-7 mb-6 relative"
-            >
-              {/* Meta: status + period (Left Column) */}
-              <div className="pt-5 sm:text-right flex flex-row sm:flex-col items-center sm:items-end gap-3 sm:gap-0 pl-4 sm:pl-0">
-                <div
-                  className="font-mono text-[10px] font-bold uppercase tracking-[.5px] sm:mb-1"
-                  style={{ color: exp.statusColor === "accent" ? "var(--accent)" : "var(--muted)" }}
-                >
-                  {exp.status}
-                </div>
-                <div className="font-mono text-[9px] opacity-60 text-[var(--muted)]">{exp.period}</div>
-              </div>
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center gap-2.5">
+            <Zap className="w-4 h-4 text-purple-400 flex-shrink-0" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">Primary Domain</span>
+              <span className="text-xs font-bold text-slate-200">Backend, Data & AI</span>
+            </div>
+          </div>
+        </div>
 
-              {/* Card Content (Right Column) */}
-              <div
-                className="relative rounded-[20px] p-6 sm:p-7 transition-all duration-[320ms] hover:-translate-y-1 hover:shadow-[0_22px_48px_-10px_rgba(0,0,0,.5)] hover:border-[rgba(var(--ar),.22)]"
-                style={{
-                  background: "rgba(12,14,28,.95)",
-                  border: "1px solid var(--border)",
-                  backdropFilter: "blur(12px)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
-                  willChange: "transform, box-shadow",
-                }}
+        {/* ─── 100% Fit Split-Pane Experience Workspace (ZERO SCROLL, ZERO OVERFLOW) ─── */}
+        <div className="w-full h-[450px] sm:h-[480px] rounded-2xl border border-white/10 bg-[#060812] shadow-2xl overflow-hidden flex flex-col md:flex-row">
+          
+          {/* LEFT PANEL: Role Navigator (1/3 Width) */}
+          <div className="w-full md:w-[310px] lg:w-[340px] bg-[#090c18] border-r border-white/10 p-3 flex flex-col gap-2 overflow-y-auto flex-shrink-0">
+            <div className="px-2 py-1 flex items-center justify-between border-b border-white/10 pb-2">
+              <span className="text-[11px] font-mono text-sky-400 uppercase tracking-widest font-bold flex items-center gap-1.5">
+                <Briefcase className="w-3.5 h-3.5 text-sky-400" />
+                Career Roles ({experiences.length})
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              {experiences.map((exp) => {
+                const isSelected = exp.id === activeExp.id;
+                const isCurrent = exp.status.toLowerCase().includes("active") || exp.period.toLowerCase().includes("present");
+
+                return (
+                  <motion.div
+                    key={exp.id}
+                    onClick={() => setSelectedId(exp.id)}
+                    whileHover={{ x: 2 }}
+                    className={`p-3 rounded-xl cursor-pointer border transition-all duration-200 flex items-center justify-between group ${
+                      isSelected
+                        ? "bg-[#0f152a] border-sky-500/40 shadow-lg ring-1 ring-sky-500/30"
+                        : "bg-[#060812]/80 border-white/5 hover:border-white/15 hover:bg-[#0b0e20]"
+                    }`}
+                  >
+                    <div className="flex flex-col gap-1 min-w-0 pr-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-bold border ${
+                          isCurrent ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-slate-800 text-slate-400 border-slate-700"
+                        }`}>
+                          {isCurrent ? "CURRENT" : "PREVIOUS"}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400 truncate">{exp.period}</span>
+                      </div>
+                      <h4 className={`text-xs font-bold truncate ${isSelected ? "text-white" : "text-slate-300 group-hover:text-white"}`}>
+                        {exp.role}
+                      </h4>
+                      <p className="text-[11px] text-sky-400 font-semibold truncate">
+                        {exp.company}
+                      </p>
+                    </div>
+
+                    <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform ${isSelected ? "text-sky-400 translate-x-0.5" : "text-slate-600 group-hover:text-slate-400"}`} />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* RIGHT PANEL: Role Inspector (2/3 Width) */}
+          <div className="flex-1 bg-[#050712] p-5 sm:p-6 flex flex-col justify-between overflow-y-auto relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeExp.id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.18 }}
+                className="flex flex-col gap-4"
               >
-                {/* Timeline dot (absolutely positioned relative to the right column) */}
-                <div
-                  className="absolute left-[-16px] sm:left-[-33px] top-[34px] w-[11px] h-[11px] rounded-full border-2 transition-transform duration-300 group-hover:scale-[1.6] hidden sm:block"
-                  style={{ background: "var(--accent)", borderColor: "var(--bg)", boxShadow: "0 0 12px rgba(var(--ar),.5)" }}
-                />
-
-                {/* Hover glow */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[320ms] pointer-events-none rounded-[20px]"
-                  style={{ background: "radial-gradient(circle at 100% 0%, rgba(var(--ar),.08), transparent)" }}
-                />
-
-                <div className="text-[20px] font-black tracking-[-0.7px] text-white mb-1">{exp.role}</div>
-                <div className="text-[13px] text-[var(--muted)] mb-4 font-semibold">{exp.company}</div>
-                
-                {exp.description && (
-                  <div className="text-[13px] leading-[1.78] text-[var(--muted)] mb-5">
-                    {exp.description}
-                  </div>
-                )}
-                
-                <div className="flex flex-wrap gap-1.5">
-                  {exp.tags.map(t => (
-                    <span
-                      key={t}
-                      className="px-2.5 py-1 rounded-[7px] text-[10px] font-bold text-[var(--muted2)]"
-                      style={{ border: "1px solid rgba(255,255,255,.04)", background: "rgba(255,255,255,.02)" }}
-                    >
-                      {t}
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3.5">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-mono text-[10px] font-bold border border-sky-500/30">
+                        {activeExp.period}
+                      </span>
+                      <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-slate-400" />
+                        {activeExp.location}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-black text-white tracking-tight mt-0.5">
+                      {activeExp.role}
+                    </h3>
+                    <span className="text-xs font-bold text-sky-400 flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-sky-400" />
+                      {activeExp.company}
                     </span>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Role Description */}
+                <div className="flex flex-col gap-1.5">
+                  <h4 className="text-[11px] font-mono font-bold text-sky-400 uppercase tracking-widest">
+                    Role Summary & Architectural Impact
+                  </h4>
+                  <p className="text-xs text-slate-200 leading-relaxed bg-[#090d1a] p-3.5 rounded-xl border border-white/10">
+                    {activeExp.description}
+                  </p>
+                </div>
+
+                {/* Tech Stack Pills */}
+                <div className="flex flex-col gap-1.5">
+                  <h4 className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+                    Technologies & Core Competencies
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeExp.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs font-mono px-2.5 py-1 rounded-lg bg-white/[0.05] text-slate-100 border border-white/10 flex items-center gap-1.5 font-medium shadow-sm"
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5 text-sky-400" />
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </SectionLayout>

@@ -1,232 +1,331 @@
 "use client";
 
-import { useState } from "react";
-import { DAG_NODES, type DagNode } from "@/data/index";
-import { ACCENT_COLORS } from "@/data/theme";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Database,
+  Server,
+  Cpu,
+  Cloud,
+  Layout,
+  ArrowRight,
+  Terminal,
+  Code2,
+  Box,
+  Flame,
+  Globe,
+  GitBranch,
+  ShieldCheck,
+  Workflow,
+  LineChart,
+  Search,
+  X,
+} from "lucide-react";
+import skillsData from "@/data/skills.json";
 import SectionLayout from "@/components/layout/SectionLayout";
-// DAG_EDGES imported below inside commented-out DagView — kept for future reuse
-// import { DAG_EDGES, type DagEdge } from "@/data/index";
 
-const nodes = DAG_NODES as DagNode[];
-
-function displayLabel(label: string) {
-  return label.replaceAll("_", " ");
+function getSkillIcon(skill: string) {
+  const s = skill.toLowerCase();
+  if (s.includes("python")) return <Terminal className="w-3.5 h-3.5 text-yellow-400" />;
+  if (s.includes("fastapi") || s.includes("django") || s.includes("flask"))
+    return <Server className="w-3.5 h-3.5 text-emerald-400" />;
+  if (s.includes("databricks") || s.includes("pyspark"))
+    return <Flame className="w-3.5 h-3.5 text-orange-400" />;
+  if (s.includes("postgresql") || s.includes("sql"))
+    return <Database className="w-3.5 h-3.5 text-sky-400" />;
+  if (s.includes("openai") || s.includes("bedrock") || s.includes("langchain"))
+    return <Cpu className="w-3.5 h-3.5 text-purple-400" />;
+  if (s.includes("azure") || s.includes("docker") || s.includes("kubernetes"))
+    return <Box className="w-3.5 h-3.5 text-amber-400" />;
+  if (s.includes("github") || s.includes("ci/cd"))
+    return <GitBranch className="w-3.5 h-3.5 text-slate-300" />;
+  if (s.includes("next.js") || s.includes("react"))
+    return <Globe className="w-3.5 h-3.5 text-cyan-400" />;
+  if (s.includes("typescript")) return <Code2 className="w-3.5 h-3.5 text-blue-400" />;
+  if (s.includes("power bi") || s.includes("analytics"))
+    return <LineChart className="w-3.5 h-3.5 text-yellow-400" />;
+  if (s.includes("guardrails") || s.includes("fallback"))
+    return <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />;
+  return <Workflow className="w-3.5 h-3.5 text-indigo-400" />;
 }
 
-const ICONS: Record<string, string> = {
-  core:  "⚙",
-  ai:    "🤖",
-  data:  "📊",
-  infra: "☁",
-  ui:    "🎨",
-  db:    "🗄",
+const STAGE_ICONS: Record<string, React.ReactNode> = {
+  Database: <Database className="w-4 h-4 text-emerald-400" />,
+  Server: <Server className="w-4 h-4 text-sky-400" />,
+  Cpu: <Cpu className="w-4 h-4 text-purple-400" />,
+  Cloud: <Cloud className="w-4 h-4 text-amber-400" />,
+  Layout: <Layout className="w-4 h-4 text-indigo-400" />,
 };
 
-// ─── DAG View (commented out — reserved for future reuse) ──────────────────
-/*
-import { useEffect, useRef } from "react";
-import { DAG_EDGES, type DagEdge } from "@/data/index";
-const edges = DAG_EDGES as DagEdge[];
+const STAGE_THEMES: Record<string, { border: string; glow: string; text: string; badge: string }> = {
+  "layer-data": {
+    border: "border-emerald-500/30 hover:border-emerald-500/60",
+    glow: "rgba(52, 211, 153, 0.15)",
+    text: "#34d399",
+    badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  },
+  "layer-backend": {
+    border: "border-sky-500/30 hover:border-sky-500/60",
+    glow: "rgba(56, 189, 248, 0.15)",
+    text: "#38bdf8",
+    badge: "bg-sky-500/10 text-sky-400 border-sky-500/20",
+  },
+  "layer-ai": {
+    border: "border-purple-500/30 hover:border-purple-500/60",
+    glow: "rgba(192, 132, 252, 0.15)",
+    text: "#c084fc",
+    badge: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  },
+  "layer-infra": {
+    border: "border-amber-500/30 hover:border-amber-500/60",
+    glow: "rgba(251, 191, 36, 0.15)",
+    text: "#fbbf24",
+    badge: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  },
+  "layer-ui": {
+    border: "border-indigo-500/30 hover:border-indigo-500/60",
+    glow: "rgba(129, 140, 248, 0.15)",
+    text: "#818cf8",
+    badge: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
+  },
+};
 
-function DagView() {
-  const [activeId, setActiveId] = useState(nodes[0]?.id ?? "");
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [svgWidth, setSvgWidth] = useState(0);
-  const outerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!outerRef.current) return;
-    const obs = new ResizeObserver(([entry]) => {
-      setSvgWidth(Math.floor(entry.contentRect.width));
-    });
-    obs.observe(outerRef.current);
-    setSvgWidth(outerRef.current.clientWidth);
-    return () => obs.disconnect();
-  }, []);
-
-  const accent = "#8fb2ff";
-  const W = svgWidth;
-  const nodeW = W > 0 ? Math.min(Math.max(Math.floor(W * 0.175), 130), 200) : 160;
-  const nodeH = Math.min(Math.max(Math.floor(nodeW * 0.68), 88), 132);
-  const pad   = Math.max(16, Math.floor(W * 0.025));
-  const svgH  = W > 0 ? Math.floor(nodeH * 3.2 + pad * 2) : 320;
-
-  const pos: Record<string, { x: number; y: number }> = {};
-  if (W > 0) {
-    nodes.forEach((n) => {
-      pos[n.id] = {
-        x: pad + n.x * (W - pad * 2 - nodeW),
-        y: pad + n.y * (svgH - pad * 2 - nodeH),
-      };
-    });
-  }
-
-  const activeNode = nodes.find((n) => n.id === activeId) ?? nodes[0];
-
-  return (
-    <div className="flex flex-col gap-4 w-full">
-      // ... Mobile/Tablet fallback and Desktop SVG DAG here
-    </div>
-  );
-}
-*/
-// ─── End DAG View ──────────────────────────────────────────────────────────
-
-// ─── Bento Grid ────────────────────────────────────────────────────────────
-function BentoView() {
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  return (
-    /* On xl (3 cols × 2 rows): h-full + gridAutoRows:1fr makes cards fill the panel.
-       On sm/mobile: natural height, scrollable via the parent overflow-y-auto panel. */
-    <div
-      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full xl:h-full"
-      style={{ gridAutoRows: "minmax(0, 1fr)" }}
-    >
-      {nodes.map((node) => {
-        const col = ACCENT_COLORS[node.id] ?? ACCENT_COLORS.core;
-        const isActive = activeId === node.id;
-        const previewCount = 4; // show more tags since cards are taller
-        const hiddenCount = node.skills.length - previewCount;
-
-        return (
-          <div
-            key={node.id}
-            onClick={() => setActiveId(isActive ? null : node.id)}
-            className="relative group rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden select-none flex flex-col"
-            style={{
-              padding: "clamp(18px, 2vw, 28px)",
-              background: isActive
-                ? `radial-gradient(circle at 0% 0%, ${col.glow}, transparent 55%), rgba(7,8,16,.97)`
-                : "rgba(7,8,16,.9)",
-              borderColor: isActive ? col.border : "rgba(255,255,255,.06)",
-              boxShadow: isActive
-                ? `0 20px 48px -12px ${col.glow}`
-                : "0 4px 16px -4px rgba(0,0,0,.4)",
-              transform: isActive ? "translateY(-2px)" : "translateY(0)",
-            }}
-          >
-            {/* Hover ambient glow */}
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-              style={{ background: `radial-gradient(circle at 0% 0%, ${col.glow}, transparent 55%)` }}
-            />
-
-            {/* Card header */}
-            <div className="flex items-start justify-between mb-4 relative z-10">
-              <div className="flex items-center gap-3">
-                <span
-                  className="flex items-center justify-center rounded-xl text-[20px] flex-shrink-0"
-                  style={{
-                    width: "clamp(36px, 3vw, 44px)",
-                    height: "clamp(36px, 3vw, 44px)",
-                    background: col.bg,
-                    border: `1px solid ${col.border}`,
-                  }}
-                >
-                  {ICONS[node.id]}
-                </span>
-                <div>
-                  <div
-                    className="font-mono font-extrabold uppercase leading-tight"
-                    style={{ fontSize: "clamp(9px, 1vw, 11px)", letterSpacing: "1.5px", color: col.text }}
-                  >
-                    {displayLabel(node.label)}
-                  </div>
-                  <div className="font-mono text-[9px] text-[var(--muted)] opacity-60 mt-0.5">
-                    {node.skills.length} capabilities
-                  </div>
-                </div>
-              </div>
-              <span
-                className="font-mono text-[8px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ml-2 transition-all duration-200"
-                style={{
-                  background: col.bg,
-                  border: `1px solid ${col.border}`,
-                  color: col.text,
-                }}
-              >
-                {isActive ? "▲ HIDE" : "▼ VIEW"}
-              </span>
-            </div>
-
-            {/* Skill tags — more in preview, all when active */}
-            <div className="flex flex-wrap gap-1.5 relative z-10">
-              {(isActive ? node.skills : node.skills.slice(0, previewCount)).map((skill) => (
-                <span
-                  key={skill}
-                  className="font-mono font-bold px-2.5 py-1 rounded-[6px] transition-all duration-200"
-                  style={{
-                    fontSize: "clamp(8px, .85vw, 10px)",
-                    background: isActive ? col.bg : "rgba(255,255,255,.025)",
-                    border: `1px solid ${isActive ? col.border : "rgba(255,255,255,.06)"}`,
-                    color: isActive ? col.text : "var(--muted)",
-                  }}
-                >
-                  {skill}
-                </span>
-              ))}
-              {!isActive && hiddenCount > 0 && (
-                <span
-                  className="font-mono font-bold px-2.5 py-1 rounded-[6px]"
-                  style={{
-                    fontSize: "clamp(8px, .85vw, 10px)",
-                    background: "rgba(255,255,255,.025)",
-                    border: "1px solid rgba(255,255,255,.06)",
-                    color: "var(--muted)",
-                  }}
-                >
-                  +{hiddenCount} more
-                </span>
-              )}
-            </div>
-
-            {/* Spacer — pushes bottom elements down in tall cards */}
-            <div className="flex-1" />
-
-            {/* Bottom: subtle capability dots */}
-            <div className="relative z-10 flex items-center gap-1.5 mt-4">
-              {node.skills.map((_, i) => (
-                <span
-                  key={i}
-                  className="rounded-full transition-all duration-300"
-                  style={{
-                    width: isActive || i < previewCount ? "clamp(5px,0.6vw,7px)" : "clamp(3px,0.4vw,5px)",
-                    height: isActive || i < previewCount ? "clamp(5px,0.6vw,7px)" : "clamp(3px,0.4vw,5px)",
-                    background: isActive || i < previewCount ? col.text : "rgba(255,255,255,.12)",
-                    opacity: isActive ? 1 : i < previewCount ? 0.8 : 0.3,
-                    boxShadow: isActive || i < previewCount ? `0 0 6px ${col.glow}` : "none",
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Bottom accent line */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300"
-              style={{
-                background: `linear-gradient(to right, transparent, ${col.text}, transparent)`,
-                opacity: isActive ? 0.5 : 0.15,
-              }}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-// ─── End Bento Grid ────────────────────────────────────────────────────────
-
-// ─── Main Skills Section ───────────────────────────────────────────────────
 export default function Skills() {
+  const authenticNodes = skillsData.nodes;
+  const [selectedLayer, setSelectedLayer] = useState<string>("layer-backend");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("All");
+
+  const activeData = authenticNodes.find((l) => l.id === selectedLayer) || authenticNodes[1];
+  const activeTheme = STAGE_THEMES[activeData.id] || STAGE_THEMES["layer-backend"];
+
+  const q = searchQuery.toLowerCase().trim();
+
+  const isMatch = (skillName: string) => {
+    if (!q) return true;
+    return skillName.toLowerCase().includes(q);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    const val = value.toLowerCase().trim();
+
+    if (val) {
+      const matchingLayer = authenticNodes.find((layer) =>
+        layer.skills.some((skill) => skill.toLowerCase().includes(val))
+      );
+      if (matchingLayer) {
+        setSelectedLayer(matchingLayer.id);
+      }
+    }
+  };
+
+  const categories = ["All", "1. Data Layer", "2. Core Services", "3. AI Engine", "4. DevOps & Cloud", "5. User Interface"];
+
   return (
-    <SectionLayout label="Skills Overview" title="Technical Skills" scrollable={false}>
-      {/* 
-          Bento grid container. Using flex-1 to fill SectionLayout height.
-          On xl screens, overflow is hidden and it uses flex-col to pass flex-1 to grid. 
-      */}
-      <div className="flex-1 min-h-0 overflow-y-auto xl:overflow-hidden xl:flex xl:flex-col">
-        <BentoView />
+    <SectionLayout
+      label="Skills & Expertise"
+      title="System Architecture Pipeline"
+      scrollable={false}
+    >
+      <div className="w-full flex flex-col gap-3.5 max-w-full">
+        {/* ─── Search & Category Filter Bar ─── */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#080b18]/80 p-3 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg max-w-full">
+          {/* Search Bar */}
+          <div className="relative flex-1 min-w-0">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Search authentic skills & tools (e.g. Python, Databricks, Docker, OpenAI, React)..."
+              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[#04050a] border border-white/10 text-xs text-white placeholder-slate-400 outline-none focus:border-sky-500/50 transition-all font-mono"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => handleSearchChange("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Quick Filter Badges */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 max-w-full">
+            {categories.map((cat) => {
+              const isActive = selectedCategoryFilter === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    setSelectedCategoryFilter(cat);
+                    if (cat !== "All") {
+                      const layer = authenticNodes.find((l) => l.category === cat);
+                      if (layer) setSelectedLayer(layer.id);
+                    }
+                  }}
+                  className={`px-3 py-1 rounded-xl text-[11px] font-mono whitespace-nowrap transition-all border ${
+                    isActive
+                      ? "bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shadow-md"
+                      : "bg-white/[0.03] text-slate-400 border-white/10 hover:text-white hover:bg-white/[0.06]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ─── Responsive Pipeline Container ─── */}
+        <div className="relative w-full rounded-2xl p-4 border border-white/10 bg-[#050712] shadow-2xl flex flex-col gap-3.5 overflow-hidden max-w-full">
+          {/* Ambient Glow */}
+          <div
+            className="absolute inset-0 opacity-20 pointer-events-none transition-all duration-500"
+            style={{
+              background: `radial-gradient(circle at 50% 20%, ${activeTheme.glow}, transparent 70%)`,
+            }}
+          />
+
+          {/* Flow Track */}
+          <div className="hidden lg:flex items-center justify-between px-8 relative z-0 mb-[-8px]">
+            <div className="w-full h-0.5 bg-gradient-to-r from-emerald-500/40 via-sky-500/40 via-purple-500/40 via-amber-500/40 to-indigo-500/40 relative">
+              <motion.div
+                animate={{ x: ["0%", "100%"] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                className="w-12 h-1 bg-sky-400 rounded-full shadow-[0_0_12px_#38bdf8] absolute -top-0.5"
+              />
+            </div>
+          </div>
+
+          {/* 5 Stage Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 relative z-10 max-w-full">
+            {authenticNodes.map((node, idx) => {
+              const isSelected = selectedLayer === node.id;
+              const hasMatchingSkill = q && node.skills.some((s) => isMatch(s));
+              const isFiltered =
+                selectedCategoryFilter !== "All" && selectedCategoryFilter !== node.category;
+              const theme = STAGE_THEMES[node.id] || STAGE_THEMES["layer-backend"];
+
+              return (
+                <motion.div
+                  key={node.id}
+                  onClick={() => setSelectedLayer(node.id)}
+                  whileHover={{ y: -2 }}
+                  className={`relative rounded-xl p-3.5 cursor-pointer border backdrop-blur-xl transition-all duration-300 flex flex-col justify-between select-none max-w-full overflow-hidden ${theme.border} ${
+                    isSelected ? "ring-2 ring-sky-400 bg-[#0c1022]" : "bg-[#080b18]/90"
+                  } ${hasMatchingSkill ? "!border-amber-400/80 ring-2 ring-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)]" : ""} ${
+                    isFiltered ? "opacity-40" : "opacity-100"
+                  }`}
+                  style={{
+                    boxShadow: isSelected
+                      ? `0 10px 28px -4px ${theme.glow}, inset 0 1px 0 rgba(255,255,255,0.12)`
+                      : "0 4px 16px -4px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
+                      <div className="p-1.5 rounded-lg bg-white/[0.05] border border-white/10">
+                        {STAGE_ICONS[node.icon] || <Database className="w-4 h-4 text-sky-400" />}
+                      </div>
+                      <span className="text-[11px] font-mono font-bold text-slate-400">
+                        0{idx + 1}
+                      </span>
+                    </div>
+
+                    <span
+                      className={`text-[9px] font-mono font-bold tracking-widest uppercase px-1.5 py-0.5 rounded border inline-block truncate ${theme.badge}`}
+                    >
+                      {node.category}
+                    </span>
+                    <h3 className="text-xs font-bold text-white mt-1 leading-tight truncate">
+                      {node.label}
+                    </h3>
+                  </div>
+
+                  {/* Authentic Skills Pills */}
+                  <div className="flex flex-wrap gap-1 mt-2.5">
+                    {node.skills.map((skill) => {
+                      const matched = isMatch(skill);
+                      return (
+                        <span
+                          key={skill}
+                          className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-all flex items-center gap-1 font-medium border truncate ${
+                            q && matched
+                              ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
+                              : q && !matched
+                              ? "opacity-30 bg-white/[0.02] text-slate-400 border-white/5"
+                              : "bg-white/[0.04] text-slate-200 border-white/10"
+                          }`}
+                        >
+                          {getSkillIcon(skill)}
+                          <span className="truncate">{skill}</span>
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  {/* Flow Arrow */}
+                  {idx < authenticNodes.length - 1 && (
+                    <div className="hidden lg:flex items-center justify-between mt-2.5 pt-1.5 border-t border-white/[0.06] text-[9px] font-mono text-slate-500">
+                      <span>Pipeline</span>
+                      <ArrowRight className="w-3 h-3 text-sky-400 animate-pulse" />
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* ─── Layer Inspector Box ─── */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeData.id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              className="relative z-10 rounded-xl p-4 border border-white/10 bg-[#090d1e] backdrop-blur-xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-full overflow-hidden"
+            >
+              <div className="flex flex-col gap-1 max-w-xl">
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${activeTheme.badge}`}>
+                    {activeData.category}
+                  </span>
+                  <h4 className="text-sm font-bold text-white">
+                    {activeData.label}
+                  </h4>
+                </div>
+                <p className="text-xs text-slate-300 leading-snug">
+                  {activeData.desc}
+                </p>
+              </div>
+
+              {/* Skillset Pills */}
+              <div className="flex flex-wrap gap-1.5 md:max-w-md">
+                {activeData.skills.map((skill) => {
+                  const matched = isMatch(skill);
+                  return (
+                    <span
+                      key={skill}
+                      className={`text-xs font-mono px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 font-medium border ${
+                        q && matched
+                          ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
+                          : q && !matched
+                          ? "opacity-30 bg-white/[0.03] text-slate-400 border-white/5"
+                          : "bg-white/[0.06] text-slate-100 border-white/10"
+                      }`}
+                    >
+                      {getSkillIcon(skill)}
+                      {skill}
+                    </span>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </SectionLayout>
   );

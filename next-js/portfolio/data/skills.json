@@ -1,54 +1,81 @@
 {
   "nodes": [
     {
-      "id": "core",
-      "label": "Backend_Core",
-      "x": 0.05,
-      "y": 0.5,
-      "skills": ["Python (Expert)", "FastAPI · Django · Flask", "REST APIs · Microservices", "Async Processing", "SQLAlchemy"]
+      "id": "layer-data",
+      "label": "Data & Storage",
+      "category": "1. Data Layer",
+      "icon": "Database",
+      "position": { "x": 20, "y": 115 },
+      "skills": [
+        "Databricks · PySpark",
+        "PostgreSQL · SQL Server",
+        "Apache Airflow",
+        "Delta Lake · Blob Storage"
+      ],
+      "desc": "Data ingestion, ETL processing, and storage."
     },
     {
-      "id": "ai",
-      "label": "AI_Layer",
-      "x": 0.33,
-      "y": 0.13,
-      "skills": ["OpenAI API","AWS Bedrock","Claude","Openclaw", "Auto DAG Exec Engine", "H2O.ai AutoML", "XGBoost · LightGBM", "LLM Fallback Exec"]
+      "id": "layer-backend",
+      "label": "Backend & APIs",
+      "category": "2. Core Services",
+      "icon": "Server",
+      "position": { "x": 340, "y": 10 },
+      "skills": [
+        "Python (Expert)",
+        "FastAPI · Django · Flask",
+        "Async Processing (Celery)",
+        "REST & gRPC Microservices"
+      ],
+      "desc": "High-performance APIs & microservices."
     },
     {
-      "id": "data",
-      "label": "Data_Platform",
-      "x": 0.33,
-      "y": 0.87,
-      "skills": ["Databricks · PySpark", "Apache Airflow", "Pandas · ETL Pipelines", "Celery · Async Tasks", "Azure Blob Storage"]
+      "id": "layer-ai",
+      "label": "AI & Machine Learning",
+      "category": "3. AI Engine",
+      "icon": "Cpu",
+      "position": { "x": 340, "y": 225 },
+      "skills": [
+        "OpenAI API · AWS Bedrock",
+        "LangChain · LlamaIndex",
+        "Auto DAG Execution Engine",
+        "LLM Fallback Guardrails"
+      ],
+      "desc": "LLM orchestration & AI model workflows."
     },
     {
-      "id": "infra",
-      "label": "Cloud_Infra",
-      "x": 0.62,
-      "y": 0.13,
-      "skills": ["Azure · AKS · Docker", "GCP · Firestore · Bucket", "CI/CD Pipelines", "Containerisation"]
+      "id": "layer-infra",
+      "label": "Cloud & Infrastructure",
+      "category": "4. DevOps & Cloud",
+      "icon": "Cloud",
+      "position": { "x": 660, "y": 10 },
+      "skills": [
+        "Azure · Docker · AKS",
+        "GCP · Firestore · Storage",
+        "GitHub Actions CI/CD",
+        "Kubernetes & Terraform"
+      ],
+      "desc": "Containerized deployment & CI/CD."
     },
     {
-      "id": "ui",
-      "label": "Frontend_Layer",
-      "x": 0.62,
-      "y": 0.87,
-      "skills": ["React.js", "Angular", "Power BI Dashboards"]
-    },
-    {
-      "id": "db",
-      "label": "Database_Layer",
-      "x": 0.88,
-      "y": 0.5,
-      "skills": ["SQL Server", "PostgreSQL · MySQL", "Databricks Hive", "GCP Bucket"]
+      "id": "layer-ui",
+      "label": "Frontend & Analytics",
+      "category": "5. User Interface",
+      "icon": "Layout",
+      "position": { "x": 660, "y": 225 },
+      "skills": [
+        "Next.js 14 · React.js",
+        "TypeScript · TailwindCSS",
+        "Power BI Dashboards",
+        "Interactive Dashboards"
+      ],
+      "desc": "Responsive web apps & analytics."
     }
   ],
   "edges": [
-    { "from": "core", "to": "ai" },
-    { "from": "core", "to": "data" },
-    { "from": "ai",   "to": "infra" },
-    { "from": "data", "to": "ui" },
-    { "from": "infra","to": "db" },
-    { "from": "ui",   "to": "db" }
+    { "id": "e-data-backend", "source": "layer-data", "target": "layer-backend", "label": "Data Feeds" },
+    { "id": "e-data-ai", "source": "layer-data", "target": "layer-ai", "label": "Datasets" },
+    { "id": "e-backend-infra", "source": "layer-backend", "target": "layer-infra", "label": "API Deploy" },
+    { "id": "e-ai-ui", "source": "layer-ai", "target": "layer-ui", "label": "AI Inference" },
+    { "id": "e-infra-ui", "source": "layer-infra", "target": "layer-ui", "label": "Web Hosting" }
   ]
 }

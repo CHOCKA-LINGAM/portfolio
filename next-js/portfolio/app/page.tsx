@@ -1,4 +1,5 @@
 "use client";
+
 import { useNav } from "@/hooks/useNav";
 import Nav from "@/components/layout/Nav";
 import ParticleCanvas from "@/components/ui/ParticleCanvas";
@@ -12,28 +13,34 @@ import Contact from "@/components/sections/Contact";
 export default function Page() {
   const { current, goTo } = useNav();
 
-  const pages: Record<string, React.ReactNode> = {
-    home: <Home goTo={goTo} />,
-    skills: <Skills />,
-    projects: <Projects />,
-    experience: <Experience />,
-    contact: <Contact />,
-  };
-
   return (
     <>
       <ParticleCanvas />
       <MouseGlow />
       <Nav current={current} goTo={goTo} />
       <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px]">
+        {/* DESKTOP (≥1024px): Sleek Tabbed SPA View — All sections top-aligned */}
         <div
           key={current}
           id="portfolio-main-panel"
-          className="page-active portfolio-panel"
+          className="hidden lg:block page-active portfolio-panel h-full"
           role="tabpanel"
           aria-labelledby={`tab-${current}-desktop`}
         >
-          {pages[current]}
+          {current === "home" && <Home goTo={goTo} />}
+          {current === "experience" && <Experience />}
+          {current === "skills" && <Skills />}
+          {current === "projects" && <Projects />}
+          {current === "contact" && <Contact />}
+        </div>
+
+        {/* MOBILE & TABLET (<1024px): Continuous Vertical Scroll Stream (Zero need to click nav each time!) */}
+        <div className="block lg:hidden flex flex-col gap-16 overflow-y-auto h-full pt-2 pb-16">
+          <div id="section-home"><Home goTo={goTo} /></div>
+          <div id="section-experience"><Experience /></div>
+          <div id="section-skills"><Skills /></div>
+          <div id="section-projects"><Projects /></div>
+          <div id="section-contact"><Contact /></div>
         </div>
       </main>
     </>

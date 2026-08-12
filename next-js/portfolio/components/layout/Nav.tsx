@@ -134,7 +134,13 @@ export default function Nav({ current, goTo }: NavProps) {
           ))}
         </div>
         <div className="flex items-center gap-2 pl-2.5 border-l border-white/[.07]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring flex-shrink-0" />
+          <span
+            className="flex items-center gap-1.5 px-2 py-[3px] rounded-full text-[9px] font-extrabold tracking-[.8px] text-[var(--green)] whitespace-nowrap"
+            style={{ background: "rgba(74,222,128,.08)", border: "1px solid rgba(74,222,128,.2)" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring flex-shrink-0" />
+            OPEN TO WORK
+          </span>
           <span className="font-mono text-[10px] font-bold text-[var(--accent)] tabular-nums whitespace-nowrap">{num}/{String(PAGES.length).padStart(2,"0")}</span>
         </div>
       </nav>
