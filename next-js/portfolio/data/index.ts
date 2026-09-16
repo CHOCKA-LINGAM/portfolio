@@ -1,12 +1,4 @@
 // ─── Central data exports ─────────────────────────────────────────
-// Edit the JSON files below to update portfolio content.
-// No code changes needed — just update the JSON.
-//
-//  data/personal.json   → name, email, chips, stats, typing titles
-//  data/projects.json   → project cards (add/remove/reorder freely)
-//  data/experience.json → work history timeline
-//  data/skills.json     → DAG nodes and edges
-
 import personal from "./personal.json";
 import projects from "./projects.json";
 import experience from "./experience.json";
@@ -21,7 +13,7 @@ export const DAG_EDGES = skills.edges;
 // ─── Types ────────────────────────────────────────────────────────
 export interface Project {
   id: string;
-  project_status: string;
+  featured?: boolean;
   title: string;
   tags: string[];
   status: string;
@@ -34,20 +26,21 @@ export interface Project {
 export interface ExperienceItem {
   id: string;
   status: string;
-  statusColor: string;
+  statusColor?: string;
   period: string;
   role: string;
   company: string;
   location: string;
-  description?: string;
+  description: string;
   tags: string[];
 }
 
 export interface DagNode {
   id: string;
+  category: string;
   label: string;
-  x: number;
-  y: number;
+  icon: string;
+  desc: string;
   skills: string[];
 }
 
@@ -70,3 +63,4 @@ export interface PersonalData {
   chips: string[];
   typingTitles: string[];
 }
+

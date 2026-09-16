@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Mail, ArrowRight, ShieldCheck, Zap, Terminal, Database, Cpu, Cloud, Globe, Box, Flame } from "lucide-react";
+import Image from "next/image";
+import { Mail, ArrowRight, ShieldCheck, Zap, Terminal, Database, Cpu, Box, Flame, Download, Sparkles, Globe } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 import { Page } from "@/hooks/useNav";
 
@@ -27,16 +28,24 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
   }, [titles.length]);
 
   return (
-    <div className="h-full min-h-0 w-full grid grid-cols-1 lg:grid-cols-[1.1fr_.9fr] gap-6 lg:gap-10 items-center justify-center">
+    <div className="w-full min-h-full grid grid-cols-1 lg:grid-cols-[1.15fr_.85fr] gap-6 lg:gap-10 items-center justify-center py-4 pb-12">
       
       {/* ── LEFT HERO COLUMN: Identity & Vision ── */}
       <div className="flex flex-col gap-4 max-w-full">
-        <div
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold w-max backdrop-blur-xl"
-          style={{ background: "rgba(52, 211, 153, 0.08)" }}
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          {PERSONAL.role}
+        <div className="flex items-center gap-3">
+          <div className="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-sky-400/60 shadow-lg shadow-sky-500/20 ring-4 ring-sky-400/10 flex-shrink-0">
+            <Image src="/avatar.png" alt={PERSONAL.name} fill className="object-cover" priority />
+          </div>
+          <div className="flex flex-col">
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold w-max backdrop-blur-xl"
+              style={{ background: "rgba(52, 211, 153, 0.08)" }}
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              {PERSONAL.role}
+            </div>
+            <span className="text-xs text-slate-400 font-mono mt-1">Based in Chennai, India</span>
+          </div>
         </div>
 
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.05] break-words">
@@ -48,7 +57,7 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
           <span className="w-2.5 h-5 bg-sky-400 animate-pulse" />
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
+        <p className="text-sm text-slate-300 leading-relaxed max-w-xl">
           Architecting resilient backend microservices, distributed data ingestion engines, and production AI workflow automation. 5+ years shipping high-performance systems with measurable enterprise business impact.
         </p>
 
@@ -56,13 +65,21 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
         <div className="flex gap-3 flex-wrap mt-2">
           <a
             href={`mailto:${PERSONAL.email}`}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs text-slate-950 bg-sky-400 hover:bg-sky-300 transition-all shadow-lg shadow-sky-400/20"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs text-slate-950 bg-sky-400 hover:bg-sky-300 transition-all shadow-lg shadow-sky-400/20"
           >
             Get in Touch <Mail size={14} />
           </a>
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs text-white border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 hover:border-sky-400 transition-all shadow-md"
+          >
+            Download Resume <Download size={14} className="text-sky-400" />
+          </a>
           <button
             onClick={() => goTo("experience")}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-mono font-bold text-xs text-slate-200 border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-sky-500/40 transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs text-slate-200 border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-sky-500/40 transition-all"
           >
             View Career History <ArrowRight size={14} />
           </button>
@@ -80,7 +97,7 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
               Executive Profile
             </span>
           </div>
-          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+          <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
             AVAILABLE FOR WORK
           </span>
         </div>
@@ -89,21 +106,21 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
         <div className="grid grid-cols-3 gap-2.5">
           <div className="p-3 rounded-xl bg-[#0c1022] border border-white/10 flex flex-col min-w-0">
             <span className="text-lg sm:text-2xl font-black text-white font-mono truncate">5+ Yrs</span>
-            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider mt-0.5 truncate">Experience</span>
+            <span className="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 truncate">Experience</span>
           </div>
           <div className="p-3 rounded-xl bg-[#0c1022] border border-white/10 flex flex-col min-w-0">
             <span className="text-lg sm:text-2xl font-black text-emerald-400 font-mono truncate">40%</span>
-            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider mt-0.5 truncate">ETL Latency Cut</span>
+            <span className="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 truncate">ETL Speedup</span>
           </div>
           <div className="p-3 rounded-xl bg-[#0c1022] border border-white/10 flex flex-col min-w-0">
             <span className="text-lg sm:text-2xl font-black text-sky-400 font-mono truncate">90%+</span>
-            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-wider mt-0.5 truncate">QA Automation</span>
+            <span className="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5 truncate">QA Automation</span>
           </div>
         </div>
 
         {/* Primary Technology Chips Panel */}
         <div className="flex flex-col gap-2 pt-1">
-          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-bold flex items-center gap-1.5">
+          <span className="text-xs text-slate-400 uppercase tracking-wider font-bold flex items-center gap-1.5 font-mono">
             <Zap className="w-3.5 h-3.5 text-amber-400" />
             Primary Technology Stack
           </span>
@@ -112,7 +129,7 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
             {HOME_TECH_STACK.map((tech) => (
               <span
                 key={tech.name}
-                className="px-2.5 py-1 rounded-lg bg-white/[0.05] text-slate-100 border border-white/10 text-[11px] font-mono font-medium flex items-center gap-1.5 shadow-sm"
+                className="px-2.5 py-1 rounded-lg bg-white/[0.05] text-slate-100 border border-white/10 text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm hover:border-sky-400/40 transition-colors"
               >
                 {tech.icon}
                 {tech.name}
@@ -130,3 +147,4 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
     </div>
   );
 }
+

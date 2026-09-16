@@ -94,7 +94,7 @@ export default function Skills() {
   const authenticNodes = skillsData.nodes;
   const [selectedLayer, setSelectedLayer] = useState<string>("layer-backend");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("All");
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("Core Services");
 
   const activeData = authenticNodes.find((l) => l.id === selectedLayer) || authenticNodes[1];
   const activeTheme = STAGE_THEMES[activeData.id] || STAGE_THEMES["layer-backend"];
@@ -104,6 +104,20 @@ export default function Skills() {
   const isMatch = (skillName: string) => {
     if (!q) return true;
     return skillName.toLowerCase().includes(q);
+  };
+
+  const handleCardClick = (node: (typeof authenticNodes)[0]) => {
+    setSelectedLayer(node.id);
+    setSelectedCategoryFilter(node.category);
+  };
+
+  const handleCategoryChipClick = (cat: string) => {
+    setSelectedCategoryFilter(cat);
+    if (cat === "All") return;
+    const matchingLayer = authenticNodes.find((l) => l.category.includes(cat) || cat.includes(l.category));
+    if (matchingLayer) {
+      setSelectedLayer(matchingLayer.id);
+    }
   };
 
   const handleSearchChange = (value: string) => {
@@ -116,11 +130,12 @@ export default function Skills() {
       );
       if (matchingLayer) {
         setSelectedLayer(matchingLayer.id);
+        setSelectedCategoryFilter(matchingLayer.category);
       }
     }
   };
 
-  const categories = ["All", "1. Data Layer", "2. Core Services", "3. AI Engine", "4. DevOps & Cloud", "5. User Interface"];
+  const categories = ["All", "Data", "Core Services", "AI Engine", "DevOps & Cloud", "UI"];
 
   return (
     <SectionLayout
@@ -128,9 +143,9 @@ export default function Skills() {
       title="System Architecture Pipeline"
       scrollable={false}
     >
-      <div className="w-full flex flex-col gap-3.5 max-w-full">
+      <div className="w-full flex-1 flex flex-col gap-3 max-w-full pb-4">
         {/* ─── Search & Category Filter Bar ─── */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#080b18]/80 p-3 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg max-w-full">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 bg-[#080b18]/90 p-2.5 sm:p-3 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg max-w-full flex-shrink-0">
           {/* Search Bar */}
           <div className="relative flex-1 min-w-0">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -138,15 +153,15 @@ export default function Skills() {
               type="text"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
-              placeholder="Search authentic skills & tools (e.g. Python, Databricks, Docker, OpenAI, React)..."
-              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[#04050a] border border-white/10 text-xs text-white placeholder-slate-400 outline-none focus:border-sky-500/50 transition-all font-mono"
+              placeholder="Filter skills (e.g. Python, Databricks, Docker, Bedrock)..."
+              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[#04050a] border border-white/10 text-xs sm:text-sm text-white placeholder-slate-400 outline-none focus:border-sky-500/50 transition-all font-sans"
             />
             {searchQuery && (
               <button
                 onClick={() => handleSearchChange("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>
@@ -154,20 +169,14 @@ export default function Skills() {
           {/* Quick Filter Badges */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 max-w-full">
             {categories.map((cat) => {
-              const isActive = selectedCategoryFilter === cat;
+              const isActive = selectedCategoryFilter === cat || selectedCategoryFilter.includes(cat);
               return (
                 <button
                   key={cat}
-                  onClick={() => {
-                    setSelectedCategoryFilter(cat);
-                    if (cat !== "All") {
-                      const layer = authenticNodes.find((l) => l.category === cat);
-                      if (layer) setSelectedLayer(layer.id);
-                    }
-                  }}
-                  className={`px-3 py-1 rounded-xl text-[11px] font-mono whitespace-nowrap transition-all border ${
+                  onClick={() => handleCategoryChipClick(cat)}
+                  className={`px-3 py-1 rounded-xl text-xs whitespace-nowrap transition-all border font-semibold ${
                     isActive
-                      ? "bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shadow-md"
+                      ? "bg-sky-500/20 text-sky-300 border-sky-500/40 shadow-md ring-1 ring-sky-500/30"
                       : "bg-white/[0.03] text-slate-400 border-white/10 hover:text-white hover:bg-white/[0.06]"
                   }`}
                 >
@@ -178,8 +187,8 @@ export default function Skills() {
           </div>
         </div>
 
-        {/* ─── Responsive Pipeline Container ─── */}
-        <div className="relative w-full rounded-2xl p-4 border border-white/10 bg-[#050712] shadow-2xl flex flex-col gap-3.5 overflow-hidden max-w-full">
+        {/* ─── Pipeline Grid Container ─── */}
+        <div className="relative w-full rounded-2xl p-3.5 sm:p-4.5 border border-white/10 bg-[#050712] shadow-2xl flex flex-col gap-3.5 max-w-full">
           {/* Ambient Glow */}
           <div
             className="absolute inset-0 opacity-20 pointer-events-none transition-all duration-500"
@@ -188,39 +197,30 @@ export default function Skills() {
             }}
           />
 
-          {/* Flow Track */}
-          <div className="hidden lg:flex items-center justify-between px-8 relative z-0 mb-[-8px]">
-            <div className="w-full h-0.5 bg-gradient-to-r from-emerald-500/40 via-sky-500/40 via-purple-500/40 via-amber-500/40 to-indigo-500/40 relative">
-              <motion.div
-                animate={{ x: ["0%", "100%"] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-1 bg-sky-400 rounded-full shadow-[0_0_12px_#38bdf8] absolute -top-0.5"
-              />
-            </div>
-          </div>
-
           {/* 5 Stage Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 relative z-10 max-w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10 max-w-full">
             {authenticNodes.map((node, idx) => {
               const isSelected = selectedLayer === node.id;
               const hasMatchingSkill = q && node.skills.some((s) => isMatch(s));
               const isFiltered =
-                selectedCategoryFilter !== "All" && selectedCategoryFilter !== node.category;
+                selectedCategoryFilter !== "All" &&
+                !selectedCategoryFilter.includes(node.category) &&
+                !node.category.includes(selectedCategoryFilter);
               const theme = STAGE_THEMES[node.id] || STAGE_THEMES["layer-backend"];
 
               return (
                 <motion.div
                   key={node.id}
-                  onClick={() => setSelectedLayer(node.id)}
-                  whileHover={{ y: -2 }}
-                  className={`relative rounded-xl p-3.5 cursor-pointer border backdrop-blur-xl transition-all duration-300 flex flex-col justify-between select-none max-w-full overflow-hidden ${theme.border} ${
-                    isSelected ? "ring-2 ring-sky-400 bg-[#0c1022]" : "bg-[#080b18]/90"
+                  onClick={() => handleCardClick(node)}
+                  whileHover={{ y: -3 }}
+                  className={`relative rounded-xl p-4 cursor-pointer border backdrop-blur-xl transition-all duration-300 flex flex-col justify-between select-none max-w-full ${theme.border} ${
+                    isSelected ? "ring-2 ring-sky-400 bg-[#0c1022] shadow-xl" : "bg-[#080b18]/90"
                   } ${hasMatchingSkill ? "!border-amber-400/80 ring-2 ring-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)]" : ""} ${
-                    isFiltered ? "opacity-40" : "opacity-100"
+                    isFiltered && !isSelected ? "opacity-50" : "opacity-100"
                   }`}
                   style={{
                     boxShadow: isSelected
-                      ? `0 10px 28px -4px ${theme.glow}, inset 0 1px 0 rgba(255,255,255,0.12)`
+                      ? `0 12px 32px -4px ${theme.glow}, inset 0 1px 0 rgba(255,255,255,0.12)`
                       : "0 4px 16px -4px rgba(0,0,0,0.5)",
                   }}
                 >
@@ -229,29 +229,29 @@ export default function Skills() {
                       <div className="p-1.5 rounded-lg bg-white/[0.05] border border-white/10">
                         {STAGE_ICONS[node.icon] || <Database className="w-4 h-4 text-sky-400" />}
                       </div>
-                      <span className="text-[11px] font-mono font-bold text-slate-400">
+                      <span className="text-xs font-mono font-bold text-slate-400">
                         0{idx + 1}
                       </span>
                     </div>
 
                     <span
-                      className={`text-[9px] font-mono font-bold tracking-widest uppercase px-1.5 py-0.5 rounded border inline-block truncate ${theme.badge}`}
+                      className={`text-[11px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded border inline-block truncate max-w-full ${theme.badge}`}
                     >
                       {node.category}
                     </span>
-                    <h3 className="text-xs font-bold text-white mt-1 leading-tight truncate">
+                    <h3 className="text-sm font-bold text-white mt-1.5 leading-snug">
                       {node.label}
                     </h3>
                   </div>
 
-                  {/* Authentic Skills Pills */}
-                  <div className="flex flex-wrap gap-1 mt-2.5">
+                  {/* Skills Pills */}
+                  <div className="flex flex-wrap gap-1.5 mt-3">
                     {node.skills.map((skill) => {
                       const matched = isMatch(skill);
                       return (
                         <span
                           key={skill}
-                          className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-all flex items-center gap-1 font-medium border truncate ${
+                          className={`text-xs font-mono px-2 py-0.5 rounded transition-all flex items-center gap-1 font-medium border ${
                             q && matched
                               ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
                               : q && !matched
@@ -260,7 +260,7 @@ export default function Skills() {
                           }`}
                         >
                           {getSkillIcon(skill)}
-                          <span className="truncate">{skill}</span>
+                          <span>{skill}</span>
                         </span>
                       );
                     })}
@@ -268,9 +268,9 @@ export default function Skills() {
 
                   {/* Flow Arrow */}
                   {idx < authenticNodes.length - 1 && (
-                    <div className="hidden lg:flex items-center justify-between mt-2.5 pt-1.5 border-t border-white/[0.06] text-[9px] font-mono text-slate-500">
+                    <div className="hidden lg:flex items-center justify-between mt-3 pt-2 border-t border-white/[0.06] text-xs font-mono text-slate-500">
                       <span>Pipeline</span>
-                      <ArrowRight className="w-3 h-3 text-sky-400 animate-pulse" />
+                      <ArrowRight className="w-3 h-3 text-sky-400" />
                     </div>
                   )}
                 </motion.div>
@@ -286,30 +286,31 @@ export default function Skills() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.18 }}
-              className="relative z-10 rounded-xl p-4 border border-white/10 bg-[#090d1e] backdrop-blur-xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-full overflow-hidden"
+              className="relative z-10 rounded-xl p-4 sm:p-5 border border-white/10 bg-[#090d1e] backdrop-blur-xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-full"
             >
-              <div className="flex flex-col gap-1 max-w-xl">
+              {/* Layer Title & Badge */}
+              <div className="flex flex-col gap-1 min-w-[220px]">
                 <div className="flex items-center gap-2">
-                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${activeTheme.badge}`}>
+                  <span className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded border ${activeTheme.badge}`}>
                     {activeData.category}
                   </span>
-                  <h4 className="text-sm font-bold text-white">
+                  <h4 className="text-sm sm:text-base font-bold text-white">
                     {activeData.label}
                   </h4>
                 </div>
-                <p className="text-xs text-slate-300 leading-snug">
+                <p className="text-xs text-slate-300 leading-relaxed">
                   {activeData.desc}
                 </p>
               </div>
 
-              {/* Skillset Pills */}
-              <div className="flex flex-wrap gap-1.5 md:max-w-md">
+              {/* Skillset Matrix */}
+              <div className="flex-1 flex flex-wrap gap-2 justify-start md:justify-end border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-5">
                 {activeData.skills.map((skill) => {
                   const matched = isMatch(skill);
                   return (
                     <span
                       key={skill}
-                      className={`text-xs font-mono px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 font-medium border ${
+                      className={`text-xs font-mono px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 font-medium border shadow-sm ${
                         q && matched
                           ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
                           : q && !matched
@@ -318,7 +319,7 @@ export default function Skills() {
                       }`}
                     >
                       {getSkillIcon(skill)}
-                      {skill}
+                      <span className="font-semibold text-white">{skill}</span>
                     </span>
                   );
                 })}
@@ -330,3 +331,4 @@ export default function Skills() {
     </SectionLayout>
   );
 }
+

@@ -7,10 +7,10 @@
       "icon": "Database",
       "position": { "x": 20, "y": 115 },
       "skills": [
-        "Databricks · PySpark",
-        "PostgreSQL · SQL Server",
+        "Databricks · PySpark · Pandas · Datapipelines",
+        "PostgreSQL · SQL Server · MySQL",
         "Apache Airflow",
-        "Delta Lake · Blob Storage"
+        "Delta Lake · Blob Storage · GCP Firestore"
       ],
       "desc": "Data ingestion, ETL processing, and storage."
     },
@@ -21,7 +21,7 @@
       "icon": "Server",
       "position": { "x": 340, "y": 10 },
       "skills": [
-        "Python (Expert)",
+        "Python (Expert) · DSA ",
         "FastAPI · Django · Flask",
         "Async Processing (Celery)",
         "REST & gRPC Microservices"
@@ -35,9 +35,10 @@
       "icon": "Cpu",
       "position": { "x": 340, "y": 225 },
       "skills": [
-        "OpenAI API · AWS Bedrock",
-        "LangChain · LlamaIndex",
+        "Claude integration · AWS Bedrock · Copilot",
+        "XGBoost · LightGBM · PyTorch · H2oAi · Regression Models",
         "Auto DAG Execution Engine",
+        "AI Powered Pipelines & Workflows",
         "LLM Fallback Guardrails"
       ],
       "desc": "LLM orchestration & AI model workflows."
@@ -52,7 +53,7 @@
         "Azure · Docker · AKS",
         "GCP · Firestore · Storage",
         "GitHub Actions CI/CD",
-        "Kubernetes & Terraform"
+        "Kubernetes Orchestration"
       ],
       "desc": "Containerized deployment & CI/CD."
     },
