@@ -4,27 +4,29 @@ import { useNav } from "@/hooks/useNav";
 import Nav from "@/components/layout/Nav";
 import ParticleCanvas from "@/components/ui/ParticleCanvas";
 import MouseGlow from "@/components/ui/MouseGlow";
+import { ScrollEnhancer } from "@/components/ui/ScrollEnhancer";
 import Home from "@/components/sections/Home";
 import Skills from "@/components/sections/Skills";
 import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import Contact from "@/components/sections/Contact";
-import AvatarWalkthrough from "@/components/ui/AvatarWalkthrough";
 
 export default function Page() {
   const { current, goTo } = useNav();
 
   return (
     <>
+      <ScrollEnhancer />
       <ParticleCanvas />
       <MouseGlow />
       <Nav current={current} goTo={goTo} />
+      
       <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] 2xl:max-w-[1920px]">
-        {/* DESKTOP (≥1024px): Sleek Centered SPA Panel */}
+        {/* DESKTOP (≥1024px): Sleek Focused Section Panel with Natural Document Scroll */}
         <div
           key={current}
           id="portfolio-main-panel"
-          className="hidden lg:block page-active portfolio-panel h-full"
+          className="hidden lg:block page-active portfolio-panel w-full"
           role="tabpanel"
           aria-labelledby={`tab-${current}-desktop`}
         >
@@ -35,7 +37,7 @@ export default function Page() {
           {current === "contact" && <Contact />}
         </div>
 
-        {/* MOBILE & TABLET (<1024px): Smooth Natural Vertical Flow (Zero flex scroll traps!) */}
+        {/* MOBILE & TABLET (<1024px): Smooth Natural Vertical Flow Stack */}
         <div className="flex lg:hidden flex-col gap-12 w-full pt-1 pb-16">
           <div id="section-home" className="w-full scroll-mt-20"><Home goTo={goTo} /></div>
           <div id="section-experience" className="w-full scroll-mt-20"><Experience /></div>
@@ -44,7 +46,6 @@ export default function Page() {
           <div id="section-contact" className="w-full scroll-mt-20"><Contact /></div>
         </div>
       </main>
-      <AvatarWalkthrough currentSection={current} goTo={goTo} />
     </>
   );
 }

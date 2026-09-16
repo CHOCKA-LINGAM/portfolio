@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ExternalLink, Github, Sparkles, Terminal, Flame, Database, Cpu, Globe, Box, LayoutGrid, List, Package } from "lucide-react";
+import { ExternalLink, Github, Sparkles, Terminal, Flame, Database, Cpu, Globe, Box, LayoutGrid, List } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PROJECTS, type Project } from "@/data/index";
 import SectionLayout from "@/components/layout/SectionLayout";
+import { NarratorStrip } from "@/components/ui/NarratorStrip";
 
 const DOMAIN_TABS = [
   { id: "all", label: "All Systems", count: 6 },
@@ -44,9 +45,18 @@ export default function Projects() {
 
   return (
     <SectionLayout label="Engineering Portfolio" title="Featured Projects & Systems" scrollable={false}>
-      <div className="w-full flex-1 flex flex-col gap-3 max-w-full pb-4">
+      <div className="w-full flex-1 flex flex-col gap-3 max-w-full">
+        {/* ── NARRATOR STRIP ── */}
+        <NarratorStrip
+          quote="These are real production systems I've architected — open-source PyPI packages, multi-agent AI frameworks, and distributed data engines."
+          details={[
+            { label: "Featured Work", text: "databricks-bundle (PyPI), Multi-Agent AI Workflow, Enterprise RAG Pipeline" },
+            { label: "Design Philosophy", text: "Zero single-points-of-failure, async concurrency, clean decoupled architecture" }
+          ]}
+        />
+
         {/* ─── Segmented Domain Selector & Layout Switcher ─── */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-[#080b18]/90 p-2.5 sm:p-3 rounded-2xl border border-white/10 backdrop-blur-md shadow-lg flex-shrink-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-[var(--surface-1)] p-2.5 sm:p-3 rounded-2xl border border-[var(--border-strong)] backdrop-blur-md shadow-lg flex-shrink-0">
           {/* Domain Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
             {DOMAIN_TABS.map((tab) => {
@@ -55,10 +65,10 @@ export default function Projects() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center gap-2 ${
+                  className={`px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center gap-2 font-sans ${
                     isActive
-                      ? "bg-sky-500/20 text-sky-300 border-sky-500/40 font-bold shadow-md ring-1 ring-sky-500/30"
-                      : "bg-white/[0.03] text-slate-400 border-white/10 hover:text-white hover:bg-white/[0.06]"
+                      ? "bg-sky-500/20 text-sky-300 border-sky-500/50 font-bold shadow-md ring-1 ring-sky-500/30"
+                      : "bg-[var(--surface-2)] text-slate-300 border-[var(--border)] hover:text-white hover:bg-white/10"
                   }`}
                 >
                   <span>{tab.label}</span>
@@ -68,11 +78,11 @@ export default function Projects() {
           </div>
 
           {/* View Mode Switcher */}
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/10 self-end sm:self-auto text-xs font-semibold">
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] self-end sm:self-auto text-xs font-semibold font-sans">
             <button
               onClick={() => setViewMode("grid")}
               className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
-                viewMode === "grid" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30" : "text-slate-400 hover:text-white"
+                viewMode === "grid" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-slate-400 hover:text-white"
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -81,7 +91,7 @@ export default function Projects() {
             <button
               onClick={() => setViewMode("list")}
               className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
-                viewMode === "list" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30" : "text-slate-400 hover:text-white"
+                viewMode === "list" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-slate-400 hover:text-white"
               }`}
             >
               <List className="w-3.5 h-3.5" />
@@ -92,7 +102,7 @@ export default function Projects() {
 
         {/* ─── Projects Display ─── */}
         {visibleProjects.length === 0 ? (
-          <div className="text-slate-400 text-xs py-12 text-center font-mono rounded-2xl bg-[#080b18]/60 border border-white/10">
+          <div className="text-slate-400 text-xs sm:text-sm py-12 text-center font-sans rounded-2xl bg-[var(--surface-1)] border border-[var(--border)]">
             No projects found in this domain. Select another category above.
           </div>
         ) : viewMode === "grid" ? (
@@ -103,24 +113,24 @@ export default function Projects() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.18 }}
-                className="relative rounded-2xl p-4 sm:p-4.5 border border-sky-500/40 bg-gradient-to-br from-[#0c1022] to-[#080b18] backdrop-blur-xl shadow-2xl overflow-hidden group"
+                className="relative rounded-2xl p-4 sm:p-5 border border-sky-500/40 bg-gradient-to-br from-[var(--surface-1)] to-[var(--surface-2)] backdrop-blur-xl shadow-2xl overflow-hidden group"
               >
                 <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                   <div className="flex flex-col gap-2 max-w-2xl">
                     <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/30 tracking-wider">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-sans text-xs font-bold border border-emerald-500/30 tracking-wider">
                         {featured.status}
                       </span>
-                      <span className="text-xs font-mono text-sky-400 font-bold flex items-center gap-1">
-                        <Sparkles size={12} className="text-amber-400" /> Featured Architecture
+                      <span className="text-xs font-sans text-sky-400 font-bold flex items-center gap-1">
+                        <Sparkles size={13} className="text-amber-400" /> Featured Architecture
                       </span>
                     </div>
 
-                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
                       {featured.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
                       {featured.desc}
                     </p>
 
@@ -128,7 +138,7 @@ export default function Projects() {
                       {featured.stack.map((s) => (
                         <span
                           key={s}
-                          className="px-2.5 py-1 rounded-lg bg-white/[0.06] text-slate-100 border border-white/10 text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm"
+                          className="px-2.5 py-1 rounded-lg bg-[var(--surface-1)] text-slate-100 border border-[var(--border-strong)] text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm"
                         >
                           {getStackBadgeIcon(s)}
                           {s}
@@ -143,9 +153,9 @@ export default function Projects() {
                         href={featured.github}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-4 py-2.5 rounded-xl bg-slate-900/90 border border-white/10 text-xs font-mono text-slate-200 hover:text-white hover:border-sky-500/40 transition-all flex items-center gap-2"
+                        className="px-4 py-2.5 rounded-xl bg-[var(--surface-1)] border border-[var(--border-strong)] text-xs font-sans font-semibold text-slate-200 hover:text-white hover:border-sky-400 transition-all flex items-center gap-2"
                       >
-                        <Github className="w-4 h-4 text-slate-400" />
+                        <Github className="w-4 h-4 text-slate-300" />
                         Source Code
                       </a>
                     )}
@@ -154,7 +164,7 @@ export default function Projects() {
                         href={featured.link}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-sky-500/20 flex items-center gap-2"
+                        className="px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-sky-500/20 flex items-center gap-2 font-sans"
                       >
                         <ExternalLink className="w-4 h-4" />
                         {getLinkText(featured.link)}
@@ -177,20 +187,20 @@ export default function Projects() {
                       exit={{ opacity: 0, scale: 0.97, y: -6 }}
                       transition={{ duration: 0.18, delay: i * 0.03 }}
                       key={p.id}
-                      className="flex flex-col rounded-2xl p-5 border border-white/10 bg-[#080b18]/90 backdrop-blur-xl transition-all duration-300 hover:border-sky-500/40 shadow-lg group justify-between"
+                      className="flex flex-col rounded-2xl p-5 border border-[var(--border-strong)] bg-[var(--surface-1)] backdrop-blur-xl transition-all duration-300 hover:border-sky-500/50 shadow-lg group justify-between"
                     >
                       <div>
                         <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-white/10">
-                          <span className="text-xs font-mono text-slate-400 font-bold uppercase">
+                          <span className="text-xs font-sans text-slate-300 font-bold uppercase">
                             {p.tags.includes("ai") ? "AI System" : p.tags.includes("data") ? "Data Engine" : "Fullstack API"}
                           </span>
-                          <span className="px-2.5 py-0.5 rounded bg-sky-500/10 text-sky-400 font-mono text-xs font-bold border border-sky-500/20">
+                          <span className="px-2.5 py-0.5 rounded bg-sky-500/15 text-sky-400 font-sans text-xs font-bold border border-sky-500/30">
                             {p.status}
                           </span>
                         </div>
 
-                        <h4 className="text-base font-bold text-white mb-1.5 group-hover:text-sky-400 transition-colors">{p.title}</h4>
-                        <p className="text-xs text-slate-300 leading-relaxed mb-4">{p.desc}</p>
+                        <h4 className="text-base font-bold text-white mb-1.5 group-hover:text-sky-400 transition-colors font-sans">{p.title}</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed mb-4 font-sans">{p.desc}</p>
                       </div>
 
                       <div>
@@ -198,7 +208,7 @@ export default function Projects() {
                           {p.stack.map((s) => (
                             <span
                               key={s}
-                              className="px-2 py-0.5 rounded bg-white/[0.04] text-slate-200 border border-white/10 text-xs font-mono font-medium flex items-center gap-1"
+                              className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-slate-100 border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
                             >
                               {getStackBadgeIcon(s)}
                               {s}
@@ -206,13 +216,13 @@ export default function Projects() {
                           ))}
                         </div>
 
-                        <div className="flex items-center justify-between pt-2.5 border-t border-white/[0.06]">
+                        <div className="flex items-center justify-between pt-2.5 border-t border-white/10">
                           {p.github && (
                             <a
                               href={p.github}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-xs font-mono text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
+                              className="text-xs font-sans font-semibold text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
                             >
                               <Github className="w-3.5 h-3.5" />
                               Code
@@ -223,7 +233,7 @@ export default function Projects() {
                               href={p.link}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-xs font-mono text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-1 font-bold ml-auto"
+                              className="text-xs font-sans text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-1 font-bold ml-auto"
                             >
                               {getLinkText(p.link)} <ExternalLink className="w-3.5 h-3.5" />
                             </a>
@@ -242,25 +252,25 @@ export default function Projects() {
             {visibleProjects.map((p) => (
               <div
                 key={p.id}
-                className="p-4 rounded-xl border border-white/10 bg-[#080b18]/90 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-sky-500/30 transition-all"
+                className="p-4 sm:p-5 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-1)] flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-sky-500/40 transition-all"
               >
                 <div className="flex flex-col gap-1.5 max-w-2xl">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-slate-400 font-bold uppercase">
+                    <span className="text-xs font-sans text-slate-300 font-bold uppercase">
                       {p.tags.includes("ai") ? "AI System" : p.tags.includes("data") ? "Data Engine" : "Fullstack API"}
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 font-mono text-xs font-bold border border-sky-500/20">
+                    <span className="px-2 py-0.5 rounded bg-sky-500/15 text-sky-400 font-sans text-xs font-bold border border-sky-500/30">
                       {p.status}
                     </span>
                   </div>
-                  <h4 className="text-base font-bold text-white">{p.title}</h4>
-                  <p className="text-xs text-slate-300 leading-relaxed">{p.desc}</p>
+                  <h4 className="text-base font-bold text-white font-sans">{p.title}</h4>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">{p.desc}</p>
                   
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {p.stack.map((s) => (
                       <span
                         key={s}
-                        className="px-2 py-0.5 rounded bg-white/[0.04] text-slate-200 border border-white/10 text-xs font-mono font-medium flex items-center gap-1"
+                        className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-slate-100 border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
                       >
                         {getStackBadgeIcon(s)}
                         {s}
@@ -275,7 +285,7 @@ export default function Projects() {
                       href={p.github}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3.5 py-2 rounded-xl bg-slate-900 border border-white/10 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5"
+                      className="px-3.5 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs font-sans font-semibold text-slate-200 hover:text-white flex items-center gap-1.5"
                     >
                       <Github className="w-3.5 h-3.5" /> Code
                     </a>
@@ -285,7 +295,7 @@ export default function Projects() {
                       href={p.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-4 py-2 rounded-xl bg-sky-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 hover:bg-sky-400 transition-all shadow-md"
+                      className="px-4 py-2 rounded-xl bg-sky-400 text-slate-950 font-bold text-xs font-sans flex items-center gap-1.5 hover:bg-sky-300 transition-all shadow-md"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       {getLinkText(p.link)}
@@ -300,4 +310,5 @@ export default function Projects() {
     </SectionLayout>
   );
 }
+
 
