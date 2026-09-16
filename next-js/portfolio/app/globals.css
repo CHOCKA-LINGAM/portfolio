@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Design Tokens & System Variables ────────────────────────────────────── */
+/* ── Theme 1: Midnight Slate (Default) ── */
 :root {
-  /* Surface Color Hierarchy (3 Tiers) */
   --bg: #06080f;
   --surface-1: #0d1117;
   --surface-2: #161b22;
@@ -12,12 +11,11 @@
   --border-strong: rgba(255, 255, 255, 0.22);
   --bs: rgba(255, 255, 255, 0.05);
 
-  /* Typography & Accents */
   --text: #f0f4f8;
   --muted: #94a3b8;
   --muted2: #cbd5e1;
-  --accent: #38bdf8; /* Vibrant Sky Accent */
-  --accent-emerald: #34d399; /* Interactive Emerald Accent */
+  --accent: #38bdf8;
+  --accent-emerald: #34d399;
   --ar: 56, 189, 248;
   --ag: rgba(56, 189, 248, 0.14);
   --green: #4ade80;
@@ -26,15 +24,117 @@
   --t1: #f0f4f8;
   --t3: #475569;
 
-  /* Transitions & Animations */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 280ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 380ms var(--ease-out-expo);
-
-  /* Layout */
   --header-height: 3.5rem;
   --max-width: 1440px;
+}
+
+/* ── Theme 2: Emerald Tech Lead ── */
+[data-theme="emerald"] {
+  --bg: #080d0a;
+  --surface-1: #101712;
+  --surface-2: #18221b;
+  --border: rgba(52, 211, 153, 0.18);
+  --border-strong: rgba(52, 211, 153, 0.35);
+  --text: #f0fdf4;
+  --muted: #86efac;
+  --muted2: #bbf7d0;
+  --accent: #34d399;
+  --ar: 52, 211, 153;
+  --ag: rgba(52, 211, 153, 0.16);
+}
+
+/* ── Theme 3: Studio Light Mode ── */
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --surface-1: #ffffff;
+  --surface-2: #f1f5f9;
+  --border: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(15, 23, 42, 0.25);
+  --text: #0f172a;
+  --muted: #475569;
+  --muted2: #334155;
+  --accent: #0284c7;
+  --ar: 2, 132, 199;
+  --ag: rgba(2, 132, 199, 0.12);
+}
+
+/* ── Theme 4: Executive Noir ── */
+[data-theme="noir"] {
+  --bg: #09090b;
+  --surface-1: #141417;
+  --surface-2: #1f1f23;
+  --border: rgba(255, 255, 255, 0.15);
+  --border-strong: rgba(255, 255, 255, 0.3);
+  --text: #fafafa;
+  --muted: #a1a1aa;
+  --muted2: #d4d4d8;
+  --accent: #f4f4f5;
+  --ar: 244, 244, 245;
+  --ag: rgba(244, 244, 245, 0.15);
+}
+
+/* ── Theme 5: Tokyo Cyberpunk ── */
+[data-theme="cyberpunk"] {
+  --bg: #0b0e14;
+  --surface-1: #131722;
+  --surface-2: #1c2234;
+  --border: rgba(192, 132, 252, 0.22);
+  --border-strong: rgba(6, 182, 212, 0.4);
+  --text: #f3e8ff;
+  --muted: #c084fc;
+  --muted2: #e9d5ff;
+  --accent: #06b6d4;
+  --ar: 6, 182, 212;
+  --ag: rgba(6, 182, 212, 0.18);
+}
+
+/* ── Theme 6: Amber Sunset ── */
+[data-theme="amber"] {
+  --bg: #0f0c08;
+  --surface-1: #1a150e;
+  --surface-2: #261f15;
+  --border: rgba(251, 191, 36, 0.2);
+  --border-strong: rgba(251, 191, 36, 0.38);
+  --text: #fffbeb;
+  --muted: #fde68a;
+  --muted2: #fef3c7;
+  --accent: #fbbf24;
+  --ar: 251, 191, 36;
+  --ag: rgba(251, 191, 36, 0.16);
+}
+
+/* ── Theme 7: Nordic Polar ── */
+[data-theme="nordic"] {
+  --bg: #0b1320;
+  --surface-1: #111d30;
+  --surface-2: #182740;
+  --border: rgba(56, 189, 248, 0.2);
+  --border-strong: rgba(147, 197, 253, 0.35);
+  --text: #f0f9ff;
+  --muted: #7dd3fc;
+  --muted2: #bae6fd;
+  --accent: #38bdf8;
+  --ar: 56, 189, 248;
+  --ag: rgba(56, 189, 248, 0.16);
+}
+
+/* ── Theme 8: Synthwave 80s ── */
+[data-theme="synthwave"] {
+  --bg: #12091f;
+  --surface-1: #1b0e2d;
+  --surface-2: #26143e;
+  --border: rgba(236, 72, 153, 0.25);
+  --border-strong: rgba(34, 211, 238, 0.4);
+  --text: #fdf2f8;
+  --muted: #f472b6;
+  --muted2: #fbcfe8;
+  --accent: #22d3ee;
+  --ar: 34, 211, 238;
+  --ag: rgba(34, 211, 238, 0.18);
 }
 
 /* ─── Base Styles ─────────────────────────────────────────────────────────── */

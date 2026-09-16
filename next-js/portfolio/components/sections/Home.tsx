@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Mail, ArrowRight, ShieldCheck, Zap, Terminal, Database, Cpu, Box, Flame, Download, Globe } from "lucide-react";
+import { Mail, ArrowRight, ShieldCheck, Zap, Terminal, Database, Cpu, Box, Flame, Download, Globe, Play } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 import { Page } from "@/hooks/useNav";
 import { NarratorStrip } from "@/components/ui/NarratorStrip";
+import { InteractiveAvatar } from "@/components/ui/InteractiveAvatar";
 
 const HOME_TECH_STACK = [
   { name: "Python", icon: <Terminal className="w-3.5 h-3.5 text-yellow-400" /> },
@@ -19,7 +20,7 @@ const HOME_TECH_STACK = [
   { name: "PostgreSQL", icon: <Database className="w-3.5 h-3.5 text-blue-400" /> },
 ];
 
-export default function Home({ goTo }: { goTo: (p: Page) => void }) {
+export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; onOpenStory?: () => void }) {
   const [titleIdx, setTitleIdx] = useState(0);
   const titles = ["Senior Software Engineer", "Backend & AI Architect", "Data Systems Specialist"];
 
@@ -42,12 +43,11 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
       <div className="w-full grid grid-cols-1 lg:grid-cols-[1.15fr_.85fr] gap-6 lg:gap-10 items-center justify-center py-2 sm:py-3">
         {/* ── LEFT HERO COLUMN: Identity & Vision ── */}
         <div className="flex flex-col gap-4 max-w-full">
-          <div className="flex items-center gap-3.5">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-sky-500/40 ring-4 ring-sky-500/20 shadow-xl flex-shrink-0 bg-slate-900 transition-all duration-300">
-              <Image src="/avatars/in-workspace.png" alt={PERSONAL.name} fill className="object-cover rounded-full" priority />
-            </div>
+          <div className="flex items-center gap-4">
+            {/* INSTAGRAM / SNAPCHAT STYLE INTERACTIVE STORY AVATAR */}
+            <InteractiveAvatar size="lg" onClick={onOpenStory} showBadge />
 
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1 pl-1">
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 text-emerald-400 text-xs font-semibold tracking-wide w-max backdrop-blur-xl"
                 style={{ background: "rgba(52, 211, 153, 0.12)" }}
@@ -55,7 +55,14 @@ export default function Home({ goTo }: { goTo: (p: Page) => void }) {
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 {PERSONAL.role}
               </div>
-              <span className="text-xs text-slate-300 font-sans mt-1">Based in Chennai, India</span>
+              <span className="text-xs text-slate-300 font-sans">Based in Chennai, India</span>
+              <button
+                onClick={onOpenStory}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors pt-0.5"
+              >
+                <Play className="w-3 h-3 fill-sky-400 text-sky-400" />
+                <span>Tap to Play Story Highlights</span>
+              </button>
             </div>
           </div>
 

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { PAGES, type Page } from "@/hooks/useNav";
+import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 
 interface NavProps {
   current: Page;
@@ -29,9 +30,9 @@ export default function Nav({ current, goTo }: NavProps) {
                    flex items-center gap-2 sm:gap-3 lg:gap-4
                    px-3 sm:px-4 py-1.5 rounded-full
                    shadow-[0_20px_48px_-12px_rgba(0,0,0,.75)]
-                   transition-all duration-300 max-w-[94vw] sm:max-w-none"
+                   transition-all duration-300 max-w-[96vw] sm:max-w-none"
         style={{
-          background: "rgba(13, 17, 23, 0.94)",
+          background: "var(--surface-1)",
           border: "1px solid var(--border-strong)",
           backdropFilter: "blur(28px)",
         }}
@@ -47,8 +48,8 @@ export default function Nav({ current, goTo }: NavProps) {
               role="tab"
               aria-selected={current === p}
               aria-controls="portfolio-main-panel"
-              className={`relative text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1.5 rounded-full capitalize tracking-wide transition-colors duration-200 z-10 whitespace-nowrap ${
-                current === p ? "text-white font-bold" : "text-[var(--muted)] hover:text-white"
+              className={`relative text-xs sm:text-sm font-semibold px-2.5 sm:px-4 py-1.5 rounded-full capitalize tracking-wide transition-colors duration-200 z-10 whitespace-nowrap ${
+                current === p ? "text-[var(--text)] font-bold" : "text-[var(--muted)] hover:text-[var(--text)]"
               }`}
             >
               {current === p && (
@@ -56,9 +57,9 @@ export default function Nav({ current, goTo }: NavProps) {
                   layoutId="unified-nav-pill"
                   className="absolute inset-0 rounded-full z-[-1]"
                   style={{
-                    background: "rgba(56, 189, 248, 0.16)",
-                    border: "1px solid rgba(56, 189, 248, 0.35)",
-                    boxShadow: "0 0 16px rgba(56, 189, 248, 0.25)",
+                    background: "var(--ag)",
+                    border: "1px solid var(--border-strong)",
+                    boxShadow: "0 0 16px var(--ag)",
                   }}
                   transition={{ type: "spring", stiffness: 450, damping: 32 }}
                 />
@@ -68,16 +69,11 @@ export default function Nav({ current, goTo }: NavProps) {
           ))}
         </div>
 
-        {/* Status Indicator & Page Counter */}
-        <div className="flex items-center gap-2 sm:gap-2.5 pl-2 sm:pl-3 border-l border-white/15">
-          <span
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wider text-[var(--green)] whitespace-nowrap"
-            style={{ background: "rgba(74, 222, 128, 0.12)", border: "1px solid rgba(74, 222, 128, 0.3)" }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring flex-shrink-0" />
-            OPEN TO WORK
-          </span>
-          <span className="font-mono text-xs font-bold text-[var(--accent)] tabular-nums whitespace-nowrap">
+        {/* Theme Switcher & Status Indicator */}
+        <div className="flex items-center gap-2 sm:gap-2.5 pl-2 sm:pl-3 border-l border-[var(--border)]">
+          <ThemeSwitcher />
+          
+          <span className="font-mono text-xs font-bold text-[var(--accent)] tabular-nums whitespace-nowrap hidden sm:inline">
             {num}/{String(PAGES.length).padStart(2, "0")}
           </span>
         </div>
@@ -85,4 +81,3 @@ export default function Nav({ current, goTo }: NavProps) {
     </>
   );
 }
-

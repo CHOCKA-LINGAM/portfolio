@@ -1,8 +1,7 @@
 "use client";
+
 import { useState, useCallback, useEffect } from "react";
 
-// Optimal HR & Hiring Manager Navigation Flow:
-// 1. Home -> 2. Experience -> 3. Skills -> 4. Projects -> 5. Contact
 export const PAGES = ["home", "experience", "skills", "projects", "contact"] as const;
 export type Page = (typeof PAGES)[number];
 
@@ -13,14 +12,40 @@ export function useNav() {
     setCurrent(page);
     if (typeof window !== "undefined") {
       const targetEl = document.getElementById(`section-${page}`);
-      if (targetEl && window.innerWidth < 1024) {
+      if (targetEl) {
         targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        const panel = document.getElementById("portfolio-main-panel");
-        if (panel) panel.scrollTop = 0;
       }
     }
+  }, []);
+
+  // IntersectionObserver to auto-update active nav tab as user scrolls down document
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id.replace("section-", "") as Page;
+            if (PAGES.includes(id)) {
+              setCurrent(id);
+            }
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "-25% 0px -45% 0px",
+        threshold: 0.1,
+      }
+    );
+
+    PAGES.forEach((p) => {
+      const el = document.getElementById(`section-${p}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   // Keyboard navigation (ArrowLeft / ArrowRight)
