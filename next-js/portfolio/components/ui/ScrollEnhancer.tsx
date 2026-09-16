@@ -5,20 +5,28 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
 export const ScrollEnhancer: React.FC = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const progressBarRef = React.useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalHeight > 0) {
-        const currentProgress = (window.scrollY / totalHeight) * 100;
-        setScrollProgress(Math.min(100, Math.max(0, currentProgress)));
-      } else {
-        setScrollProgress(0);
-      }
+    let ticking = false;
 
-      setShowBackToTop(window.scrollY > 240);
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+          if (totalHeight > 0) {
+            const currentProgress = (window.scrollY / totalHeight) * 100;
+            const progress = Math.min(100, Math.max(0, currentProgress));
+            if (progressBarRef.current) {
+              progressBarRef.current.style.width = `${progress}%`;
+            }
+          }
+          setShowBackToTop(window.scrollY > 240);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -34,10 +42,10 @@ export const ScrollEnhancer: React.FC = () => {
     <>
       {/* ── TOP SCROLL PROGRESS BAR ── */}
       <div className="fixed top-0 left-0 right-0 h-1 z-[1000] bg-slate-950/40 pointer-events-none">
-        <motion.div
-          className="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-indigo-400 shadow-[0_0_10px_rgba(56,189,248,0.5)]"
-          style={{ width: `${scrollProgress}%` }}
-          transition={{ duration: 0.1, ease: "linear" }}
+        <div
+          ref={progressBarRef}
+          className="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-indigo-400 shadow-[0_0_10px_rgba(56,189,248,0.5)] transition-all duration-75 ease-out"
+          style={{ width: "0%" }}
         />
       </div>
 

@@ -38,26 +38,34 @@ export default function Page() {
         />
       </div>
 
-      <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] 2xl:max-w-[1920px]">
-        {/* UNIFIED CONTINUOUS VERTICAL SECTION STACK */}
-        <div className="flex flex-col gap-16 sm:gap-24 w-full pt-1 pb-24">
-          <div id="section-home" className="w-full scroll-mt-20">
+      <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] 2xl:max-w-[1920px] px-3 sm:px-6">
+        {/* UNIFIED CONTINUOUS VERTICAL SECTION STACK WITH STUDIO SECTION SEPARATORS */}
+        <div className="flex flex-col gap-12 sm:gap-16 w-full pt-2 pb-24">
+          <div id="section-home" className="w-full scroll-mt-24">
             <Home goTo={goTo} onOpenStory={() => setIsStoryOpen(true)} />
           </div>
+
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
           
-          <div id="section-experience" className="w-full scroll-mt-20">
+          <div id="section-experience" className="w-full scroll-mt-24">
             <Experience />
           </div>
+
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
           
-          <div id="section-skills" className="w-full scroll-mt-20">
+          <div id="section-skills" className="w-full scroll-mt-24">
             <Skills />
           </div>
+
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
           
-          <div id="section-projects" className="w-full scroll-mt-20">
+          <div id="section-projects" className="w-full scroll-mt-24">
             <Projects />
           </div>
+
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
           
-          <div id="section-contact" className="w-full scroll-mt-20">
+          <div id="section-contact" className="w-full scroll-mt-24">
             <Contact />
           </div>
         </div>

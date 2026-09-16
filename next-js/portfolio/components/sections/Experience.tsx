@@ -24,48 +24,52 @@ export default function Experience() {
   const activeExp = experiences.find((e) => e.id === selectedId) || experiences[0];
 
   return (
-    <SectionLayout label="Career History" title="Professional Experience" scrollable={false}>
+    <SectionLayout label="Career History" title="Professional Experience" scrollable={false} sectionNumber="02 / 05">
       <div className="w-full flex-1 flex flex-col gap-3 max-w-full">
-        {/* ── NARRATOR STRIP ── */}
+        {/* ── NARRATOR STRIP (EXPERIENCE TAILORED) ── */}
         <NarratorStrip
-          quote="Here's my career journey — 5+ years driving engineering across enterprise tech stacks, building resilient systems that handle high production scale."
+          quote="My 5+ year career journey across enterprise tech leaders — building resilient data engines at iLink Digital & Standard Chartered."
           details={[
             { label: "Track Record", text: "Tech Specialist @ iLink Digital • Former Lead Software Engineer @ Standard Chartered" },
-            { label: "Proven Impact", text: "Reduced ETL pipeline runtime by 40%, built automated QA frameworks with 90%+ coverage" }
+            { label: "Enterprise Win", text: "Reduced Databricks ingestion latency by 40% & achieved 90%+ QA automation coverage" }
+          ]}
+          qaPairs={[
+            { question: "What was your biggest impact at iLink Digital?", answer: "Engineered multi-tenant PySpark/Databricks ETL ingestion pipelines cutting processing latency by 40%." },
+            { question: "How do you approach team leadership?", answer: "I lead sprint execution, mentor junior engineers, and enforce clean decoupled microservice standards." }
           ]}
         />
         
         {/* ─── Top Career Metrics Bar ─── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-[var(--surface-1)] border border-[var(--border-strong)] backdrop-blur-md shadow-lg max-w-full flex-shrink-0">
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
-            <Award className="w-4.5 h-4.5 text-sky-400 flex-shrink-0" />
+            <Award className="w-4.5 h-4.5 text-[var(--accent)] flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-slate-300 uppercase font-bold truncate">Total Exp.</span>
-              <span className="text-xs sm:text-sm font-bold text-white font-sans truncate">5+ Years</span>
+              <span className="text-xs font-sans text-[var(--muted)] uppercase font-bold truncate">Total Exp.</span>
+              <span className="text-xs sm:text-sm font-bold text-[var(--text)] font-sans truncate">5+ Years</span>
             </div>
           </div>
 
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
             <Building2 className="w-4.5 h-4.5 text-emerald-400 flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-slate-300 uppercase font-bold truncate">Companies</span>
-              <span className="text-xs sm:text-sm font-bold text-white font-sans truncate">3 Tech Enterprises</span>
+              <span className="text-xs font-sans text-[var(--muted)] uppercase font-bold truncate">Companies</span>
+              <span className="text-xs sm:text-sm font-bold text-[var(--text)] font-sans truncate">3 Tech Enterprises</span>
             </div>
           </div>
 
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
-            <TrendingUp className="w-4.5 h-4.5 text-amber-400 flex-shrink-0" />
+            <TrendingUp className="w-4.5 h-4.5 text-amber-500 flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-slate-300 uppercase font-bold truncate">Impact</span>
-              <span className="text-xs sm:text-sm font-bold text-emerald-400 font-sans truncate">40% Latency Cut</span>
+              <span className="text-xs font-sans text-[var(--muted)] uppercase font-bold truncate">Impact</span>
+              <span className="text-xs sm:text-sm font-bold text-emerald-500 font-sans truncate">40% Latency Cut</span>
             </div>
           </div>
 
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
             <Zap className="w-4.5 h-4.5 text-purple-400 flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-slate-300 uppercase font-bold truncate">Primary Domain</span>
-              <span className="text-xs sm:text-sm font-bold text-slate-200 truncate font-sans">Backend, Data & AI</span>
+              <span className="text-xs font-sans text-[var(--text-muted)] uppercase font-bold truncate">Primary Domain</span>
+              <span className="text-xs sm:text-sm font-bold text-[var(--text)] truncate font-sans">Backend, Data & AI</span>
             </div>
           </div>
         </div>
@@ -75,7 +79,7 @@ export default function Experience() {
           
           {/* LEFT PANEL: Interactive Timeline Role Navigator */}
           <div className="w-full lg:w-[320px] xl:w-[350px] flex flex-col gap-2 flex-shrink-0">
-            <div className="px-1 py-0.5 flex items-center justify-between border-b border-white/10 pb-2">
+            <div className="px-1 py-0.5 flex items-center justify-between border-b border-[var(--border)] pb-2">
               <span className="text-xs font-sans text-sky-400 uppercase tracking-widest font-bold flex items-center gap-1.5">
                 <Briefcase className="w-3.5 h-3.5 text-sky-400" />
                 Career Timeline ({experiences.length})
@@ -117,7 +121,7 @@ export default function Experience() {
                           {isCurrent ? "ACTIVE ROLE" : exp.period.split("—")[1]?.trim() || "PREVIOUS"}
                         </span>
                       </div>
-                      <h4 className={`text-xs sm:text-sm font-bold truncate ${isSelected ? "text-white" : "text-slate-200 group-hover:text-white"}`}>
+                      <h4 className={`text-xs sm:text-sm font-bold truncate ${isSelected ? "text-[var(--text)]" : "text-[var(--text-muted)] group-hover:text-[var(--text)]"}`}>
                         {exp.role}
                       </h4>
                       <p className="text-xs text-sky-400 font-semibold truncate font-sans">
@@ -144,18 +148,18 @@ export default function Experience() {
                 className="flex flex-col gap-4"
               >
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 font-sans text-xs font-bold border border-sky-500/30">
                         {activeExp.period}
                       </span>
-                      <span className="text-xs font-sans text-slate-300 flex items-center gap-1">
+                      <span className="text-xs font-sans text-[var(--text-muted)] flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5 text-slate-400" />
                         {activeExp.location}
                       </span>
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight mt-1">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-[var(--text)] tracking-tight mt-1">
                       {activeExp.role}
                     </h3>
                     <span className="text-xs sm:text-sm font-bold text-sky-400 flex items-center gap-1.5 font-sans">
@@ -171,7 +175,7 @@ export default function Experience() {
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                     Role Summary & Architectural Impact
                   </h4>
-                  <p className="text-sm sm:text-base text-slate-200 leading-relaxed bg-[var(--surface-2)] p-4 rounded-xl border border-[var(--border)] font-sans">
+                  <p className="text-sm sm:text-base text-[var(--text)] leading-relaxed bg-[var(--surface-2)] p-4 rounded-xl border border-[var(--border)] font-sans">
                     {activeExp.description}
                   </p>
                 </div>

@@ -143,13 +143,18 @@ export default function Skills() {
       label="Skills & Expertise"
       title="System Architecture Pipeline"
       scrollable={false}
+      sectionNumber="03 / 05"
     >
-      {/* ── NARRATOR STRIP ── */}
+      {/* ── NARRATOR STRIP (SKILLS TAILORED) ── */}
       <NarratorStrip
-        quote="This is my technology pipeline — structured from raw data ingestion engines down to cloud orchestration and web interfaces."
+        quote="This is my technology pipeline — structured across 5 distinct architectural layers from raw data processing to cloud orchestration & frontend APIs."
         details={[
-          { label: "5 Layer Pipeline", text: "Data Processing → Backend Microservices → AI Orchestration → Cloud & DevOps → Frontend" },
-          { label: "Production Stack", text: "Python, PySpark, Databricks, FastAPI, PostgreSQL, AWS Bedrock, Azure AKS" }
+          { label: "5 Layer Stack", text: "Data Processing → Backend Microservices → AI Orchestration → Cloud & DevOps → Frontend" },
+          { label: "Core Arsenal", text: "Python, PySpark, Databricks, PostgreSQL, FastAPI, Kafka, AWS Bedrock, Azure AKS" }
+        ]}
+        qaPairs={[
+          { question: "Why PySpark & Databricks over traditional SQL?", answer: "PySpark enables distributed parallel memory execution over multi-terabyte datasets where traditional SQL bottlenecks." },
+          { question: "How do you handle backend API scalability?", answer: "Using FastAPI with AsyncIO event loops, Redis caching layers, and Kubernetes pod auto-scaling." }
         ]}
       />
 
@@ -164,7 +169,7 @@ export default function Skills() {
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Filter skills (e.g. Python, Databricks, Docker, Bedrock)..."
-              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs sm:text-sm text-white placeholder-slate-400 outline-none focus:border-sky-500/60 transition-all font-sans"
+              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs sm:text-sm text-[var(--text)] placeholder-[var(--text-muted)] outline-none focus:border-sky-500/60 transition-all font-sans"
             />
             {searchQuery && (
               <button
@@ -235,11 +240,11 @@ export default function Skills() {
                   }}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
-                      <div className="p-1.5 rounded-lg bg-white/[0.05] border border-white/10">
+                    <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[var(--border)]">
+                      <div className="p-1.5 rounded-lg bg-[var(--surface-2)] border border-[var(--border)]">
                         {STAGE_ICONS[node.icon] || <Database className="w-4 h-4 text-sky-400" />}
                       </div>
-                      <span className="text-xs font-sans font-bold text-slate-300">
+                      <span className="text-xs font-sans font-bold text-[var(--text-muted)]">
                         0{idx + 1}
                       </span>
                     </div>
@@ -249,7 +254,7 @@ export default function Skills() {
                     >
                       {node.category}
                     </span>
-                    <h3 className="text-sm font-bold text-white mt-1.5 leading-snug">
+                    <h3 className="text-sm font-bold text-[var(--text)] mt-1.5 leading-snug">
                       {node.label}
                     </h3>
                   </div>
@@ -265,8 +270,8 @@ export default function Skills() {
                             q && matched
                               ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
                               : q && !matched
-                              ? "opacity-30 bg-white/[0.02] text-slate-400 border-white/5"
-                              : "bg-[var(--surface-2)] text-slate-200 border-[var(--border)]"
+                              ? "opacity-30 bg-white/[0.02] text-[var(--text-muted)] border-white/5"
+                              : "bg-[var(--surface-2)] text-[var(--text)] border-[var(--border)]"
                           }`}
                         >
                           {getSkillIcon(skill)}
@@ -278,7 +283,7 @@ export default function Skills() {
 
                   {/* Flow Arrow */}
                   {idx < authenticNodes.length - 1 && (
-                    <div className="hidden lg:flex items-center justify-between mt-3 pt-2 border-t border-white/[0.08] text-xs font-sans text-slate-400">
+                    <div className="hidden lg:flex items-center justify-between mt-3 pt-2 border-t border-[var(--border)] text-xs font-sans text-[var(--text-muted)]">
                       <span>Pipeline</span>
                       <ArrowRight className="w-3.5 h-3.5 text-sky-400" />
                     </div>
@@ -304,17 +309,17 @@ export default function Skills() {
                   <span className={`text-xs font-sans font-bold px-2.5 py-0.5 rounded border ${activeTheme.badge}`}>
                     {activeData.category}
                   </span>
-                  <h4 className="text-sm sm:text-base font-bold text-white">
+                  <h4 className="text-sm sm:text-base font-bold text-[var(--text)]">
                     {activeData.label}
                   </h4>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed font-sans">
                   {activeData.desc}
                 </p>
               </div>
 
               {/* Skillset Matrix */}
-              <div className="flex-1 flex flex-wrap gap-2 justify-start md:justify-end border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-5">
+              <div className="flex-1 flex flex-wrap gap-2 justify-start md:justify-end border-t md:border-t-0 md:border-l border-[var(--border)] pt-3 md:pt-0 md:pl-5">
                 {activeData.skills.map((skill) => {
                   const matched = isMatch(skill);
                   return (
@@ -324,12 +329,12 @@ export default function Skills() {
                         q && matched
                           ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
                           : q && !matched
-                          ? "opacity-30 bg-white/[0.03] text-slate-400 border-white/5"
-                          : "bg-[var(--surface-1)] text-slate-100 border-[var(--border-strong)]"
+                          ? "opacity-30 bg-white/[0.03] text-[var(--text-muted)] border-white/5"
+                          : "bg-[var(--surface-1)] text-[var(--text)] border-[var(--border-strong)]"
                       }`}
                     >
                       {getSkillIcon(skill)}
-                      <span className="font-semibold text-white">{skill}</span>
+                      <span className="font-semibold text-[var(--text)]">{skill}</span>
                     </span>
                   );
                 })}

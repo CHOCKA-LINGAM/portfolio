@@ -72,16 +72,16 @@ export const NarratorStrip: React.FC<NarratorStripProps> = ({
       <div className="flex items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
         <div className="flex items-center gap-3">
           {/* Avatar Photo */}
-          <div className="relative w-11 h-11 rounded-full border border-sky-500/40 ring-2 ring-sky-500/20 overflow-hidden shrink-0 shadow-md bg-slate-900">
+          <div className="relative w-11 h-11 rounded-full border border-[var(--accent)]/40 ring-2 ring-[var(--accent)]/20 overflow-hidden shrink-0 shadow-md bg-[var(--surface-2)]">
             <Image
-              src="/avatars/in-workspace.png"
-              alt="Chockalingam Balan"
+              src="/avatars/developer-themed.png"
+              alt="Chockalingam Balan - Developer Workspace"
               fill
-              sizes="44px"
+              unoptimized={true}
               className="object-cover rounded-full"
+              style={{ imageRendering: "-webkit-optimize-contrast" }}
               priority
             />
-            <div className="absolute inset-0 rounded-full shadow-[inset_0_0_8px_rgba(6,8,15,0.6)] pointer-events-none" />
           </div>
 
           <div className="flex flex-col">

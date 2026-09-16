@@ -44,7 +44,7 @@ export default function Projects() {
   const gridProjects = visibleProjects.filter((p) => p.id !== featured?.id);
 
   return (
-    <SectionLayout label="Engineering Portfolio" title="Featured Projects & Systems" scrollable={false}>
+    <SectionLayout label="Engineering Portfolio" title="Featured Projects & Systems" scrollable={false} sectionNumber="04 / 05">
       <div className="w-full flex-1 flex flex-col gap-3 max-w-full">
         {/* ── NARRATOR STRIP ── */}
         <NarratorStrip
@@ -52,6 +52,16 @@ export default function Projects() {
           details={[
             { label: "Featured Work", text: "databricks-bundle (PyPI), Multi-Agent AI Workflow, Enterprise RAG Pipeline" },
             { label: "Design Philosophy", text: "Zero single-points-of-failure, async concurrency, clean decoupled architecture" }
+          ]}
+          qaPairs={[
+            {
+              question: "What is databricks-bundle on PyPI?",
+              answer: "It's an open-source CLI & Python SDK package I built and published to PyPI to streamline Databricks asset bundling, deployment automation, and CI/CD pipelines."
+            },
+            {
+              question: "How do your multi-agent AI workflows work?",
+              answer: "I leverage LangChain, LangGraph, and async Python orchestrators to manage specialized agent roles (planner, code generator, validator, memory manager) with human-in-the-loop controls."
+            }
           ]}
         />
 
@@ -126,11 +136,11 @@ export default function Projects() {
                       </span>
                     </div>
 
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-[var(--text)] tracking-tight">
                       {featured.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                    <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed font-sans">
                       {featured.desc}
                     </p>
 
@@ -138,7 +148,7 @@ export default function Projects() {
                       {featured.stack.map((s) => (
                         <span
                           key={s}
-                          className="px-2.5 py-1 rounded-lg bg-[var(--surface-1)] text-slate-100 border border-[var(--border-strong)] text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm"
+                          className="px-2.5 py-1 rounded-lg bg-[var(--surface-1)] text-[var(--text)] border border-[var(--border-strong)] text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm"
                         >
                           {getStackBadgeIcon(s)}
                           {s}
@@ -153,9 +163,9 @@ export default function Projects() {
                         href={featured.github}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-4 py-2.5 rounded-xl bg-[var(--surface-1)] border border-[var(--border-strong)] text-xs font-sans font-semibold text-slate-200 hover:text-white hover:border-sky-400 transition-all flex items-center gap-2"
+                        className="px-4 py-2.5 rounded-xl bg-[var(--surface-1)] border border-[var(--border-strong)] text-xs font-sans font-semibold text-[var(--text)] hover:text-sky-400 transition-all flex items-center gap-2"
                       >
-                        <Github className="w-4 h-4 text-slate-300" />
+                        <Github className="w-4 h-4 text-sky-400" />
                         Source Code
                       </a>
                     )}
@@ -190,8 +200,8 @@ export default function Projects() {
                       className="flex flex-col rounded-2xl p-5 border border-[var(--border-strong)] bg-[var(--surface-1)] backdrop-blur-xl transition-all duration-300 hover:border-sky-500/50 shadow-lg group justify-between"
                     >
                       <div>
-                        <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-white/10">
-                          <span className="text-xs font-sans text-slate-300 font-bold uppercase">
+                        <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-[var(--border)]">
+                          <span className="text-xs font-sans text-[var(--text-muted)] font-bold uppercase">
                             {p.tags.includes("ai") ? "AI System" : p.tags.includes("data") ? "Data Engine" : "Fullstack API"}
                           </span>
                           <span className="px-2.5 py-0.5 rounded bg-sky-500/15 text-sky-400 font-sans text-xs font-bold border border-sky-500/30">
@@ -199,8 +209,8 @@ export default function Projects() {
                           </span>
                         </div>
 
-                        <h4 className="text-base font-bold text-white mb-1.5 group-hover:text-sky-400 transition-colors font-sans">{p.title}</h4>
-                        <p className="text-xs text-slate-300 leading-relaxed mb-4 font-sans">{p.desc}</p>
+                        <h4 className="text-base font-bold text-[var(--text)] mb-1.5 group-hover:text-sky-400 transition-colors font-sans">{p.title}</h4>
+                        <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-4 font-sans">{p.desc}</p>
                       </div>
 
                       <div>
@@ -208,7 +218,7 @@ export default function Projects() {
                           {p.stack.map((s) => (
                             <span
                               key={s}
-                              className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-slate-100 border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
+                              className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-[var(--text)] border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
                             >
                               {getStackBadgeIcon(s)}
                               {s}
@@ -216,15 +226,15 @@ export default function Projects() {
                           ))}
                         </div>
 
-                        <div className="flex items-center justify-between pt-2.5 border-t border-white/10">
+                        <div className="flex items-center justify-between pt-2.5 border-t border-[var(--border)]">
                           {p.github && (
                             <a
                               href={p.github}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-xs font-sans font-semibold text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
+                              className="text-xs font-sans font-semibold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors flex items-center gap-1.5"
                             >
-                              <Github className="w-3.5 h-3.5" />
+                              <Github className="w-3.5 h-3.5 text-sky-400" />
                               Code
                             </a>
                           )}

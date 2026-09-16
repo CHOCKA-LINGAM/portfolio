@@ -47,9 +47,8 @@ export default function ParticleCanvas() {
         }
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(143,178,255,0.5)";
-        ctx.shadowBlur = 7; ctx.shadowColor = "rgba(143,178,255,.18)";
-        ctx.fill(); ctx.shadowBlur = 0;
+        ctx.fillStyle = "rgba(143,178,255,0.45)";
+        ctx.fill();
       });
       for (let a = 0; a < particles.length; a++) {
         for (let b = a+1; b < particles.length; b++) {

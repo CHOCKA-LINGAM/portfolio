@@ -31,12 +31,16 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
 
   return (
     <div className="w-full flex flex-col gap-4 py-1">
-      {/* ── NARRATOR STRIP ── */}
+      {/* ── NARRATOR STRIP (HOME TAILORED) ── */}
       <NarratorStrip
-        quote="Hey, I'm Chockalingam — I architect high-throughput backend engines, distributed architectures, and AI-powered data pipelines."
+        quote="Welcome to my engineering portfolio! I architect resilient backend microservices, PySpark ETL ingestion engines, and production AI workflow automation."
         details={[
-          { label: "Core Architecture", text: "Microservices, Distributed Data Processing, AI Workflow Automation" },
-          { label: "Production Impact", text: "40% latency reduction across data pipelines, 90%+ automated test coverage" }
+          { label: "Core Vision", text: "Building high-concurrency, fault-tolerant backend systems with enterprise business impact." },
+          { label: "Key Strengths", text: "Python, PySpark, Databricks, FastAPI, Apache Kafka, AWS Bedrock & Kubernetes" }
+        ]}
+        qaPairs={[
+          { question: "What is your main engineering role?", answer: "Senior Software Engineer & Backend AI Architect with 5+ years shipping high-throughput systems." },
+          { question: "What is your current availability?", answer: "Based in Chennai, India and open for Senior Backend, Tech Lead & Systems Architect roles globally." }
         ]}
       />
 
@@ -66,7 +70,7 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
             </div>
           </div>
 
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.05] break-words">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[var(--text)] leading-[1.05] break-words">
           {PERSONAL.name}
         </h1>
 
@@ -75,7 +79,7 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
           <span className="w-2.5 h-5 bg-sky-400 animate-pulse" />
         </div>
 
-        <p className="text-base text-slate-200 leading-relaxed max-w-xl font-sans font-normal">
+        <p className="text-base text-[var(--text-muted)] leading-relaxed max-w-xl font-sans font-normal">
           Architecting resilient backend microservices, distributed data ingestion engines, and production AI workflow automation. 5+ years shipping high-performance systems with measurable enterprise business impact.
         </p>
 
@@ -91,13 +95,13 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-white border border-sky-500/40 bg-sky-500/15 hover:bg-sky-500/25 hover:border-sky-400 transition-all shadow-md"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-[var(--text)] border border-sky-500/40 bg-sky-500/15 hover:bg-sky-500/25 hover:border-sky-400 transition-all shadow-md"
           >
             Download Resume <Download size={16} className="text-sky-400" />
           </a>
           <button
             onClick={() => goTo("experience")}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm text-slate-200 border border-white/15 bg-white/[0.05] hover:bg-white/[0.1] hover:border-sky-400/40 transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm text-[var(--text-muted)] border border-[var(--border)] bg-[var(--surface-2)] hover:bg-[var(--surface-1)] hover:border-sky-400/40 transition-all"
           >
             View Career History <ArrowRight size={16} />
           </button>
@@ -108,10 +112,10 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
       <div className="rounded-2xl p-5 sm:p-6 border border-[var(--border-strong)] bg-[var(--surface-1)] shadow-2xl backdrop-blur-xl flex flex-col gap-4 max-w-full overflow-hidden">
         
         {/* Status Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-3.5">
+        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3.5">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-sky-400" />
-            <span className="text-xs font-semibold text-white uppercase tracking-wider font-sans">
+            <span className="text-xs font-semibold text-[var(--text)] uppercase tracking-wider font-sans">
               Executive Profile
             </span>
           </div>
@@ -123,8 +127,8 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
         {/* 3 Impact Metrics */}
         <div className="grid grid-cols-3 gap-3">
           <div className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex flex-col min-w-0">
-            <span className="text-lg sm:text-2xl font-black text-white font-mono truncate">5+ Yrs</span>
-            <span className="text-xs text-slate-300 uppercase tracking-wider mt-0.5 truncate font-sans">Experience</span>
+            <span className="text-lg sm:text-2xl font-black text-[var(--text)] font-mono truncate">5+ Yrs</span>
+            <span className="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-0.5 truncate font-sans">Experience</span>
           </div>
           <div className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex flex-col min-w-0">
             <span className="text-lg sm:text-2xl font-black text-emerald-400 font-mono truncate">40%</span>

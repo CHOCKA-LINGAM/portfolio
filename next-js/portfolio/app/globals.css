@@ -52,11 +52,11 @@
   --bg: #f8fafc;
   --surface-1: #ffffff;
   --surface-2: #f1f5f9;
-  --border: rgba(15, 23, 42, 0.12);
-  --border-strong: rgba(15, 23, 42, 0.25);
+  --border: rgba(15, 23, 42, 0.14);
+  --border-strong: rgba(15, 23, 42, 0.28);
   --text: #0f172a;
-  --muted: #475569;
-  --muted2: #334155;
+  --muted: #334155;
+  --muted2: #1e293b;
   --accent: #0284c7;
   --ar: 2, 132, 199;
   --ag: rgba(2, 132, 199, 0.12);
@@ -135,6 +135,118 @@
   --accent: #22d3ee;
   --ar: 34, 211, 238;
   --ag: rgba(34, 211, 238, 0.18);
+}
+
+/* ── Theme 9: Nordic Snow White (Ultra Crisp Light) ── */
+[data-theme="snow"] {
+  --bg: #ffffff;
+  --surface-1: #f8fafc;
+  --surface-2: #f1f5f9;
+  --border: rgba(15, 23, 42, 0.15);
+  --border-strong: rgba(15, 23, 42, 0.3);
+  --text: #0f172a;
+  --muted: #334155;
+  --muted2: #1e293b;
+  --accent: #2563eb;
+  --ar: 37, 99, 235;
+  --ag: rgba(37, 99, 235, 0.14);
+}
+
+/* ── Theme 10: Emerald Mint Light (Subtle Mint) ── */
+[data-theme="mint-light"] {
+  --bg: #f4fbf7;
+  --surface-1: #ffffff;
+  --surface-2: #e6f4ed;
+  --border: rgba(6, 78, 59, 0.15);
+  --border-strong: rgba(6, 78, 59, 0.3);
+  --text: #064e3b;
+  --muted: #047857;
+  --muted2: #065f46;
+  --accent: #059669;
+  --ar: 5, 150, 105;
+  --ag: rgba(5, 150, 105, 0.14);
+}
+
+/* ── Theme 11: Warm Sand Linen (Subtle Linen) ── */
+[data-theme="sand-light"] {
+  --bg: #faf8f5;
+  --surface-1: #ffffff;
+  --surface-2: #f5f0eb;
+  --border: rgba(68, 64, 60, 0.15);
+  --border-strong: rgba(68, 64, 60, 0.3);
+  --text: #1c1917;
+  --muted: #44403c;
+  --muted2: #292524;
+  --accent: #b45309;
+  --ar: 180, 83, 9;
+  --ag: rgba(180, 83, 9, 0.14);
+}
+
+/* ── Theme 12: Rose Pastel Light ── */
+[data-theme="rose-light"] {
+  --bg: #fff9fa;
+  --surface-1: #ffffff;
+  --surface-2: #ffe4e6;
+  --border: rgba(136, 19, 55, 0.15);
+  --border-strong: rgba(136, 19, 55, 0.3);
+  --text: #4c0519;
+  --muted: #881337;
+  --muted2: #9f1239;
+  --accent: #e11d48;
+  --ar: 225, 29, 72;
+  --ag: rgba(225, 29, 72, 0.14);
+}
+
+/* ── Theme 13: Porcelain Studio ── */
+[data-theme="porcelain"] {
+  --bg: #fcfbf9;
+  --surface-1: #ffffff;
+  --surface-2: #f5f3ef;
+  --border: rgba(28, 25, 23, 0.15);
+  --border-strong: rgba(28, 25, 23, 0.3);
+  --text: #1c1917;
+  --muted: #44403c;
+  --muted2: #292524;
+  --accent: #2563eb;
+  --ar: 37, 99, 235;
+  --ag: rgba(37, 99, 235, 0.14);
+}
+
+/* ── Theme 14: Newsprint Minimalist ── */
+[data-theme="newsprint"] {
+  --bg: #fcfcfc;
+  --surface-1: #ffffff;
+  --surface-2: #f4f4f5;
+  --border: rgba(9, 9, 11, 0.18);
+  --border-strong: rgba(9, 9, 11, 0.35);
+  --text: #09090b;
+  --muted: #27272a;
+  --muted2: #18181b;
+  --accent: #18181b;
+  --ar: 24, 24, 27;
+  --ag: rgba(24, 24, 27, 0.14);
+}
+
+/* ─── GLOBAL LIGHT MODE READABILITY OVERRIDES ─── */
+[data-theme="light"],
+[data-theme="snow"],
+[data-theme="mint-light"],
+[data-theme="sand-light"],
+[data-theme="rose-light"],
+[data-theme="porcelain"],
+[data-theme="newsprint"] {
+  .text-white {
+    color: var(--text) !important;
+  }
+  .text-slate-100 {
+    color: var(--text) !important;
+  }
+  .text-slate-200 {
+    color: var(--muted2) !important;
+  }
+  .text-slate-300 {
+    color: var(--muted) !important;
+  }
 }
 
 /* ─── Base Styles ─────────────────────────────────────────────────────────── */
