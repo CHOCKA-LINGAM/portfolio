@@ -9,16 +9,19 @@ import { DeveloperStoryModal } from "@/components/ui/DeveloperStoryModal";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { ResumeModal } from "@/components/ui/ResumeModal";
 import { AvatarCompanionGuide } from "@/components/ui/AvatarCompanionGuide";
-import { TopNavHeader } from "@/components/chocka/TopNavHeader";
-import { LandingWorkstation } from "@/components/chocka/LandingWorkstation";
-import { AboutInteractive } from "@/components/chocka/AboutInteractive";
-import { ProjectsShowcase } from "@/components/chocka/ProjectsShowcase";
-import { ExperienceJourneyMap } from "@/components/chocka/ExperienceJourneyMap";
-import { SkillsGalaxy } from "@/components/chocka/SkillsGalaxy";
-import { PlayLabModule } from "@/components/chocka/PlayLabModule";
-import { ContactLetBuild } from "@/components/chocka/ContactLetBuild";
-import { EasterEggModal } from "@/components/chocka/EasterEggModal";
-import { Sparkles, Moon } from "lucide-react";
+
+import { MonographNavHeader } from "@/components/monograph/MonographNavHeader";
+import { MonographHomeSignal } from "@/components/monograph/MonographHomeSignal";
+import { MonographAboutCore } from "@/components/monograph/MonographAboutCore";
+import { MonographProjectsTopology } from "@/components/monograph/MonographProjectsTopology";
+import { MonographProjectDetail } from "@/components/monograph/MonographProjectDetail";
+import { MonographExperienceJourney } from "@/components/monograph/MonographExperienceJourney";
+import { MonographSkillsCapability } from "@/components/monograph/MonographSkillsCapability";
+import { MonographPlayLabExperiments } from "@/components/monograph/MonographPlayLabExperiments";
+import { MonographContactConnect } from "@/components/monograph/MonographContactConnect";
+import { MonographEasterEggs } from "@/components/monograph/MonographEasterEggs";
+import { Project } from "@/data/index";
+import { Moon } from "lucide-react";
 
 export default function Page() {
   const { current, goTo } = useNav();
@@ -26,6 +29,7 @@ export default function Page() {
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
   const [isEasterEggOpen, setIsEasterEggOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -45,14 +49,15 @@ export default function Page() {
       <ParticleCanvas />
       <MouseGlow />
       
-      {/* ── CHOCKA.dev TOP NAVIGATION HEADER ── */}
-      <TopNavHeader
-        current={current}
-        goTo={goTo}
+      {/* ── SPATIAL MONOGRAPH TOP NAV HEADER ── */}
+      <MonographNavHeader
+        currentSection={current}
+        onNavigate={goTo}
         onOpenCmdPalette={() => setIsCmdPaletteOpen(true)}
+        onTriggerEasterEgg={() => setIsEasterEggOpen(true)}
       />
 
-      {/* ── FULL-SCREEN INSTAGRAM / SNAPCHAT STORY REEL MODAL ── */}
+      {/* ── FULL-SCREEN DEVELOPER STORY REEL MODAL ── */}
       <DeveloperStoryModal isOpen={isStoryOpen} onClose={() => setIsStoryOpen(false)} />
 
       {/* ── GLOBAL DEVELOPER COMMAND PALETTE (CMD + K) ── */}
@@ -70,12 +75,6 @@ export default function Page() {
         onClose={() => setIsResumeModalOpen(false)}
       />
 
-      {/* ── 09. EASTER EGG SECRET DISCOVERY MODAL (MOCKUP 09) ── */}
-      <EasterEggModal
-        isOpen={isEasterEggOpen}
-        onClose={() => setIsEasterEggOpen(false)}
-      />
-
       {/* ── FLOATING COMPANION AVATAR WALKTHROUGH GUIDE ── */}
       <AvatarCompanionGuide
         currentSection={current}
@@ -83,60 +82,68 @@ export default function Page() {
         goTo={goTo}
       />
 
-      {/* ── CHOCKA.dev MAIN INTERACTIVE STORYBOARD SECTIONS ── */}
-      <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] 2xl:max-w-[1920px] px-4 sm:px-8 pt-16 pb-20">
+      {/* ── SPATIAL MONOGRAPH 10-PANEL SYSTEM ── */}
+      <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] 2xl:max-w-[1920px] px-4 sm:px-8 pt-20 pb-20">
         <div className="flex flex-col gap-12 sm:gap-16 w-full">
-          {/* 01. Landing Workstation */}
+          {/* Panel 01: Homepage — The Signal */}
           <div id="section-home" className="w-full scroll-mt-24">
-            <LandingWorkstation
-              onExplore={() => goTo("projects")}
-              onOpenStory={() => setIsStoryOpen(true)}
-            />
+            <MonographHomeSignal onExplore={() => goTo("projects")} />
           </div>
 
-          {/* 02. About Interactive Story */}
-          <AboutInteractive />
+          {/* Panel 02: About — The Core */}
+          <MonographAboutCore onOpenStory={() => setIsStoryOpen(true)} />
 
-          {/* 03 & 04. Projects Interactive System Showcase & Architecture Deep Dive */}
-          <ProjectsShowcase />
+          {/* Panel 03: Projects — System Topology */}
+          <MonographProjectsTopology onSelectProject={(p) => setSelectedProject(p)} />
 
-          {/* 05. Experience Visual Journey Map */}
-          <ExperienceJourneyMap />
+          {/* Panel 04: Project Detail — Architecture in Action */}
+          <MonographProjectDetail
+            project={selectedProject}
+            onBack={() => goTo("projects")}
+          />
 
-          {/* 06. Skills Orbital Galaxy */}
-          <SkillsGalaxy />
+          {/* Panel 05: Experience — The Journey */}
+          <MonographExperienceJourney />
 
-          {/* 07. PlayLab Hands-on Experiments */}
-          <PlayLabModule />
+          {/* Panel 06: Skills — Capability Map */}
+          <MonographSkillsCapability />
 
-          {/* 08. Contact Section */}
-          <ContactLetBuild />
+          {/* Panel 07: PlayLab — Experiments & Ideas */}
+          <MonographPlayLabExperiments />
+
+          {/* Panel 08: Contact — Let's Connect */}
+          <MonographContactConnect />
+
+          {/* Panel 09: Easter Eggs — Hidden Delights */}
+          <MonographEasterEggs
+            isOpen={isEasterEggOpen}
+            onClose={() => setIsEasterEggOpen(false)}
+          />
         </div>
 
-        {/* 09. Footer with Easter Egg Trigger */}
-        <footer className="w-full pt-16 pb-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-400">
+        {/* Panel 10: Footer & Responsive Bar */}
+        <footer className="w-full pt-16 pb-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500 mt-12">
           <div className="flex items-center gap-2">
-            <span className="font-display font-extrabold text-white">CHOCKA<span className="text-emerald-400">.dev</span></span>
+            <span className="font-display font-extrabold text-slate-950">CHOCKA<span className="text-cyan-600">.dev</span></span>
             <span>| Senior Software Engineer</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <span>Build · Learn · Solve · Repeat</span>
+            <span>Good ideas travel far.</span>
             <button
               onClick={() => setIsEasterEggOpen(true)}
-              className="px-3 py-1 rounded-full bg-purple-950/80 border border-purple-500/40 text-purple-300 hover:text-white transition-all cursor-pointer flex items-center gap-1.5"
+              className="px-3.5 py-1 rounded-full bg-slate-900 border border-white/20 text-cyan-300 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 shadow-md"
             >
-              <Moon className="w-3 h-3 text-amber-300" />
-              <span>404 / Secret</span>
+              <Moon className="w-3.5 h-3.5 text-amber-300" />
+              <span>Secret Moon 🌙</span>
             </button>
           </div>
 
-          <div className="text-right">
-            Designed & Built with <span className="text-red-400">❤️</span> for a better tomorrow
+          <div className="text-right font-serif-italic">
+            Thanks for exploring — C B
           </div>
         </footer>
       </main>
     </>
   );
 }
-
