@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Manrope } from "next/font/google";
+import { JetBrains_Mono, Manrope, Space_Grotesk, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -12,6 +12,19 @@ const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   weight: ["400", "500", "700"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["500", "600", "700"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["400"],
+  style: ["italic", "normal"],
 });
 
 export const metadata: Metadata = {
@@ -53,7 +66,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="blue" suppressHydrationWarning>
-      <body className={`${manrope.variable} ${jetbrains.variable}`}>
+      <body className={`${manrope.variable} ${jetbrains.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable}`}>
         {children}
       </body>
     </html>

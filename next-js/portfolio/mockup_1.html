@@ -1,126 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio Redesign Concepts Review</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #05070a;
-      color: #f1f5f9;
-      font-family: 'Manrope', sans-serif;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    
-    /* Top Bar Navigation */
-    header {
-      background: #0d1117;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 0.75rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .brand {
-      font-weight: 800;
-      font-size: 1rem;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .brand span { color: #94a3b8; font-weight: 500; font-size: 0.85rem; }
-
-    .tabs {
-      display: flex;
-      gap: 0.5rem;
-      background: #161b22;
-      padding: 0.3rem;
-      border-radius: 0.75rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-family: 'Manrope', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .tab-btn:hover { color: #f1f5f9; }
-    .tab-btn.active {
-      background: #38bdf8;
-      color: #040914;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-    }
-
-    .open-btn {
-      background: rgba(52, 211, 153, 0.12);
-      border: 1px solid rgba(52, 211, 153, 0.3);
-      color: #34d399;
-      font-weight: 700;
-      font-size: 0.8rem;
-      padding: 0.45rem 0.9rem;
-      border-radius: 0.5rem;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .open-btn:hover { background: rgba(52, 211, 153, 0.25); }
-
-    /* Main iframe preview */
-    iframe {
-      flex: 1;
-      width: 100%;
-      height: calc(100vh - 60px);
-      border: none;
-      background: #07090e;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chockalingam Balan - Systems Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F7; /* Subtle off-white/grey */
+            color: #111111;
+        }
+        
+        /* Smooth, non-boxy transitions */
+        .hover-node {
+            transition: all 0.3s ease;
+        }
+        .hover-node:hover {
+            r: 6;
+            fill: #000;
+        }
+    </style>
 </head>
-<body>
+<body class="antialiased selection:bg-black selection:text-white">
 
-  <header>
-    <div class="brand">
-      CHOCKALINGAM <span>/// Portfolio Concept Showcase</span>
-    </div>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full p-8 flex justify-between items-center z-50 bg-[#F5F5F7]/80 backdrop-blur-sm">
+        <div class="font-bold tracking-widest text-sm">C B</div>
+        <div class="hidden md:flex gap-8 text-xs font-medium text-gray-500 uppercase tracking-widest">
+            <a href="#" class="text-black border-b border-black pb-1">Home</a>
+            <a href="#" class="hover:text-black transition-colors">About</a>
+            <a href="#" class="hover:text-black transition-colors">Work</a>
+            <a href="#" class="hover:text-black transition-colors">Experience</a>
+            <a href="#" class="hover:text-black transition-colors">PlayLab</a>
+            <a href="#" class="hover:text-black transition-colors">Contact</a>
+        </div>
+        <div class="w-2 h-2 bg-black rounded-full"></div>
+    </nav>
 
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchConcept('concept1_ops_center.html', this)">
-        1. Live Ops Center
-      </button>
-      <button class="tab-btn" onclick="switchConcept('concept2_swiss_monograph.html', this)">
-        2. Swiss Monograph
-      </button>
-      <button class="tab-btn" onclick="switchConcept('concept3_ai_copilot.html', this)">
-        3. AI Co-Pilot
-      </button>
-    </div>
+    <!-- 01. Homepage: The Invisible Interface -->
+    <section class="min-h-screen flex flex-col justify-center px-8 md:px-24 relative overflow-hidden">
+        <div class="max-w-4xl z-10">
+            <p class="text-xs font-medium tracking-widest text-gray-500 uppercase mb-8">Chockalingam Balan</p>
+            <h1 class="text-6xl md:text-8xl font-light tracking-tight leading-[1.1] mb-12">
+                I build systems <br/> for complex <br/> problems.
+            </h1>
+            
+            <div class="flex gap-16 text-sm font-medium text-gray-600">
+                <div class="w-8 border-t border-black mt-2"></div>
+                <div>
+                    <p>Data.</p>
+                    <p>Software.</p>
+                    <p>AI.</p>
+                    <p class="text-black mt-1">Real impact.</p>
+                </div>
+            </div>
+        </div>
 
-    <a id="externalLink" href="concept1_ops_center.html" target="_blank" class="open-btn">
-      Open Full Page ↗
-    </a>
-  </header>
+        <!-- Interactive SVG Sine Wave -->
+        <div class="absolute bottom-20 left-0 w-full h-64 pointer-events-none md:pointer-events-auto">
+            <svg viewBox="0 0 1000 200" class="w-full h-full stroke-gray-300 fill-none">
+                <path d="M -100 100 Q 150 200 300 100 T 700 100 T 1100 100" stroke-width="1.5" />
+                
+                <!-- Nodes -->
+                <g class="hover-node cursor-pointer group" transform="translate(100, 150)">
+                    <circle cx="0" cy="0" r="4" class="fill-gray-400 group-hover:fill-black transition-all" />
+                    <text x="-20" y="25" class="fill-gray-500 text-[10px] tracking-wider stroke-none uppercase">Data</text>
+                </g>
 
-  <iframe id="previewFrame" src="concept1_ops_center.html"></iframe>
+                <g class="hover-node cursor-pointer group" transform="translate(300, 50)">
+                    <circle cx="0" cy="0" r="4" class="fill-gray-400 group-hover:fill-black transition-all" />
+                    <text x="-35" y="-15" class="fill-gray-500 text-[10px] tracking-wider stroke-none uppercase">Backend</text>
+                </g>
 
-  <script>
-    function switchConcept(url, btn) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('previewFrame').src = url;
-      document.getElementById('externalLink').href = url;
-    }
-  </script>
+                <g class="hover-node cursor-pointer group" transform="translate(500, 150)">
+                    <circle cx="0" cy="0" r="4" class="fill-black group-hover:fill-black transition-all" />
+                    <text x="-30" y="25" class="fill-black text-[10px] font-bold tracking-wider stroke-none uppercase">Systems</text>
+                </g>
+
+                <g class="hover-node cursor-pointer group" transform="translate(700, 50)">
+                    <circle cx="0" cy="0" r="4" class="fill-gray-400 group-hover:fill-black transition-all" />
+                    <text x="-10" y="-15" class="fill-gray-500 text-[10px] tracking-wider stroke-none uppercase">AI</text>
+                </g>
+                
+                <g class="hover-node cursor-pointer group" transform="translate(900, 100)">
+                    <circle cx="0" cy="0" r="4" class="fill-gray-400 group-hover:fill-black transition-all" />
+                    <text x="-25" y="25" class="fill-gray-500 text-[10px] tracking-wider stroke-none uppercase">Impact</text>
+                </g>
+            </svg>
+        </div>
+
+        <div class="absolute bottom-8 right-8 text-xs text-gray-400 flex flex-col items-end gap-2">
+            <span class="animate-bounce">↓</span>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- 03. Projects: Systems in Action -->
+    <section class="min-h-screen bg-white flex flex-col justify-center px-8 md:px-24 py-24 relative">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 z-10">
+            <div>
+                <p class="text-xs font-medium tracking-widest text-gray-500 uppercase mb-8">Projects</p>
+                <h2 class="text-5xl md:text-7xl font-light tracking-tight mb-8">Systems <br/> in action.</h2>
+                <ul class="text-sm text-gray-500 space-y-3 mt-12">
+                    <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-black"></span> Data</li>
+                    <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> AI / ML</li>
+                    <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-gray-300"></span> Backend</li>
+                </ul>
+            </div>
+            <div class="flex items-center text-sm text-gray-600 max-w-xs">
+                A collection of real-world projects across data, AI, and backend systems. Click a system to explore.
+            </div>
+        </div>
+
+        <!-- Orbital Nodes SVG -->
+        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-70 pointer-events-none md:pointer-events-auto">
+            <svg viewBox="0 0 800 800" class="w-full h-full stroke-gray-200 fill-none">
+                <!-- Orbits -->
+                <circle cx="400" cy="400" r="150" stroke-width="1" stroke-dasharray="4 4" />
+                <circle cx="400" cy="400" r="280" stroke-width="1" stroke-dasharray="4 4" />
+                
+                <!-- Center Core -->
+                <text x="400" y="390" text-anchor="middle" class="fill-black text-[10px] tracking-[0.2em] font-medium stroke-none uppercase">Real</text>
+                <text x="400" y="405" text-anchor="middle" class="fill-black text-[10px] tracking-[0.2em] font-medium stroke-none uppercase">Problems.</text>
+                <text x="400" y="420" text-anchor="middle" class="fill-black text-[10px] tracking-[0.2em] font-medium stroke-none uppercase">Scalable</text>
+                <text x="400" y="435" text-anchor="middle" class="fill-black text-[10px] tracking-[0.2em] font-medium stroke-none uppercase">Solutions.</text>
+
+                <!-- Project Nodes -->
+                <g class="hover-node cursor-pointer group" transform="translate(250, 400)">
+                    <circle cx="0" cy="0" r="4" class="fill-black group-hover:fill-black transition-all" />
+                    <text x="-120" y="5" class="fill-gray-600 text-[11px] stroke-none">Enterprise BI Migration</text>
+                </g>
+
+                <g class="hover-node cursor-pointer group" transform="translate(600, 250)">
+                    <circle cx="0" cy="0" r="4" class="fill-gray-400 group-hover:fill-black transition-all" />
+                    <text x="15" y="5" class="fill-gray-600 text-[11px] stroke-none">AI Claims Adjudication</text>
+                </g>
+
+                <g class="hover-node cursor-pointer group" transform="translate(650, 450)">
+                    <circle cx="0" cy="0" r="4" class="fill-gray-400 group-hover:fill-black transition-all" />
+                    <text x="15" y="5" class="fill-gray-600 text-[11px] stroke-none">Model Builder</text>
+                </g>
+                
+                <g class="hover-node cursor-pointer group" transform="translate(280, 580)">
+                    <circle cx="0" cy="0" r="4" class="fill-gray-400 group-hover:fill-black transition-all" />
+                    <text x="-100" y="5" class="fill-gray-600 text-[11px] stroke-none">Scenario Builder</text>
+                </g>
+            </svg>
+        </div>
+    </section>
+
 </body>
 </html>

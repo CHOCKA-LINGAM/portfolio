@@ -1,46 +1,46 @@
 [
   {
     "id": "ilink",
-    "status": "Active",
+    "status": "ACTIVE_PROD",
     "statusColor": "accent",
     "period": "Dec 2025 — Present",
     "role": "Technical Specialist",
     "company": "iLink Digital Inc",
     "location": "Chennai, India",
-    "description": "Architect and lead development of high-performance workflow automation and AI pipelines. Designed an custom asynchronous Python-based DAG execution engine reducing ETL latency by 40%. Engineered context management strategies and evaluation mechanisms utilizing AWS Bedrock and OpenAI for enterprise task automation, deploying scalable services on Azure Kubernetes Service (AKS).",
-    "tags": ["Workflow Automation","AI Powered Pipelines","FastAPI", "DAG Engine", "Azure Databricks", "Docker", "AKS", "PySpark","AWS Bedrock", "Prompt Engineering", "Context Engineering", "LLM Evaluation", "AI Workflow Automation", "Semantic Translation Systems", "Multi-Model Orchestration"]
+    "description": "Architecting enterprise BI migration platform converting Tableau Prep workflows into distributed DAG-based ETL pipelines. Built FastAPI orchestration service achieving <5s API response time. Engineered OpenAI-based fallback execution engine. Reduced AI Claims Adjudication response time from 25s → 10s.",
+    "tags": ["FastAPI", "DAG Engine", "OpenAI", "Azure Databricks", "Docker", "AKS", "PySpark", "AWS Bedrock", "LLM Workflows"]
   },
   {
     "id": "tiger-ml",
-    "status": "Previous",
+    "status": "STABLE_NODE",
     "statusColor": "muted",
     "period": "Jan 2025 — Nov 2025",
     "role": "Machine Learning Engineer",
     "company": "Tiger Analytics",
     "location": "Chennai, India",
-    "description": "Developed robust multi-tenant web platforms powered by Django and Celery for scheduled ML operations. Optimized large-scale analytical databases using Databricks Hive and PySpark. Packaged and containerized machine learning pipelines into production-ready API services deployed on Azure.",
-    "tags": ["Django", "Multi-tenant", "Celery", "PySpark", "Azure Databricks", "ML Deploy"]
+    "description": "Designed and built Django-based multi-tenant backend deployed across 10–12 international markets for the PepIris retail CV platform. Automated ML model deployment pipeline, reduced QA validation cycle by 90%+. Migrated legacy Pandas pipelines to PySpark on Azure Databricks.",
+    "tags": ["Django", "Multi-tenant", "Celery", "PySpark", "Azure Databricks", "ML Deploy", "Computer Vision"]
   },
   {
     "id": "tiger-analyst",
-    "status": "Previous",
+    "status": "STABLE_NODE",
     "statusColor": "muted",
     "period": "Oct 2023 — Dec 2024",
     "role": "Senior Analyst",
     "company": "Tiger Analytics",
     "location": "Chennai, India",
-    "description": "Built and versioned robust RESTful API endpoints using Django REST Framework and SQLAlchemy. Integrated and optimized relational database schemas on SQL Server, implementing high-throughput Pandas ETL processing scripts to clean and ingestion enterprise transactional data.",
+    "description": "Developed Django REST APIs for analytics, KPI retrieval, and reporting. Designed SQL Server schema for scalable multi-market architecture. Built ETL pipelines using Pandas and SQLAlchemy, implemented API versioning, optimised database connection pooling.",
     "tags": ["Django REST", "SQL Server", "Pandas", "SQLAlchemy", "ETL", "API Versioning"]
   },
   {
     "id": "kaar",
-    "status": "Previous",
+    "status": "CORE_INIT",
     "statusColor": "muted",
     "period": "Nov 2020 — Oct 2023",
     "role": "Fullstack & AI Application Developer",
     "company": "KAAR Technologies",
     "location": "Chennai, India",
-    "description": "Engineered responsive full-stack dashboards using React and Flask. Formulated predictive ML models (XGBoost, AutoML) utilizing H2O.ai, orchestrating data pipeline runs via Apache Airflow DAGs. Managed cloud assets and object storage buckets on Google Cloud Platform (GCP).",
+    "description": "Built Model Builder ML training platform (React + Flask) integrating H2O.ai AutoML, XGBoost, LightGBM and Airflow DAGs. Developed Scenario Builder forecasting platform with Databricks Hive and GCP backends.",
     "tags": ["React", "Flask", "Airflow", "H2O.ai", "XGBoost", "GCP", "Databricks"]
   }
 ]

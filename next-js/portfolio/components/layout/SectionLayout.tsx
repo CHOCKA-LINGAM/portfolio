@@ -28,16 +28,16 @@ export default function SectionLayout({
       <div className="flex flex-col items-center text-center w-full max-w-full mb-6 sm:mb-8">
         {sectionNumber && (
           <div className="mb-2.5">
-            <span className="text-[11px] font-mono tracking-[0.2em] text-[var(--accent)] uppercase font-bold bg-[var(--surface-2)] px-3.5 py-1 rounded-full border border-[var(--border-strong)] shadow-sm">
-              SECTION {sectionNumber}
+            <span className="text-[11px] font-mono tracking-[0.2em] text-[var(--accent)] uppercase font-bold bg-[var(--surface-2)] px-3.5 py-1 rounded-full border border-[var(--border-strong)] shadow-sm -rotate-[0.5deg] inline-block">
+              {sectionNumber}
             </span>
           </div>
         )}
-        <div className="mb-1.5 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-[var(--accent)] font-sans w-full">
+        <div className="mb-1.5 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-[var(--accent)] font-mono w-full">
           <span className="h-2 w-2 rounded-full bg-[var(--green)] animate-pulse-ring" />
           {label}
         </div>
-        <h2 id={headingId} className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-[var(--text)] text-center">
+        <h2 id={headingId} className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold leading-tight tracking-tight text-[var(--text)] text-center max-w-3xl">
           {title}
         </h2>
       </div>

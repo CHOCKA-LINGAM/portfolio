@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 
-export const PAGES = ["home", "experience", "skills", "projects", "contact"] as const;
+export const PAGES = ["home", "about", "projects", "experience", "skills", "playlab", "contact"] as const;
 export type Page = (typeof PAGES)[number];
 
 export function useNav() {

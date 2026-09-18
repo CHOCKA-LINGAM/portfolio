@@ -16,6 +16,7 @@ import {
 import { EXPERIENCE, type ExperienceItem } from "@/data/index";
 import SectionLayout from "@/components/layout/SectionLayout";
 import { SectionInsightBar } from "@/components/ui/NarratorStrip";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 
 export default function Experience() {
   const experiences = EXPERIENCE as ExperienceItem[];
@@ -34,15 +35,15 @@ export default function Experience() {
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
             <Award className="w-4.5 h-4.5 text-[var(--accent)] flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-[var(--muted)] uppercase font-bold truncate">Total Exp.</span>
-              <span className="text-xs sm:text-sm font-bold text-[var(--text)] font-sans truncate">5+ Years</span>
+              <span className="text-xs font-mono text-[var(--muted)] uppercase font-bold truncate">Total Exp.</span>
+              <span className="text-xs sm:text-sm font-bold text-[var(--text)] font-mono truncate">5+ Years</span>
             </div>
           </div>
 
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
             <Building2 className="w-4.5 h-4.5 text-emerald-400 flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-[var(--muted)] uppercase font-bold truncate">Companies</span>
+              <span className="text-xs font-mono text-[var(--muted)] uppercase font-bold truncate">Companies</span>
               <span className="text-xs sm:text-sm font-bold text-[var(--text)] font-sans truncate">3 Tech Enterprises</span>
             </div>
           </div>
@@ -50,15 +51,15 @@ export default function Experience() {
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
             <TrendingUp className="w-4.5 h-4.5 text-amber-500 flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-[var(--muted)] uppercase font-bold truncate">Impact</span>
-              <span className="text-xs sm:text-sm font-bold text-emerald-500 font-sans truncate">40% Latency Cut</span>
+              <span className="text-xs font-mono text-[var(--muted)] uppercase font-bold truncate">Impact</span>
+              <span className="text-xs sm:text-sm font-bold text-emerald-500 font-mono truncate">40% Latency Cut</span>
             </div>
           </div>
 
           <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center gap-2.5 min-w-0">
             <Zap className="w-4.5 h-4.5 text-purple-400 flex-shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-sans text-[var(--text-muted)] uppercase font-bold truncate">Primary Domain</span>
+              <span className="text-xs font-mono text-[var(--text-muted)] uppercase font-bold truncate">Primary Domain</span>
               <span className="text-xs sm:text-sm font-bold text-[var(--text)] truncate font-sans">Backend, Data & AI</span>
             </div>
           </div>
@@ -66,33 +67,30 @@ export default function Experience() {
 
         {/* ─── CONTINUOUS CAREER TIMELINE CARDS ─── */}
         <div className="flex flex-col gap-4 w-full">
-          {experiences.map((exp) => {
+          {experiences.map((exp, idx) => {
             const isCurrent = exp.status?.toLowerCase().includes("active") || exp.period.toLowerCase().includes("present");
 
             return (
-              <motion.div
+              <SpotlightCard
                 key={exp.id}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3 }}
-                className="w-full rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-1)] p-5 sm:p-6 shadow-xl flex flex-col gap-3.5 relative hover:border-sky-500/40 transition-all"
+                tilt={idx % 2 === 0 ? "left" : "right"}
+                className="w-full p-5 sm:p-6 flex flex-col gap-3.5 relative"
               >
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border)] pb-3.5">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold font-sans border ${
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold font-mono border ${
                         isCurrent ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : "bg-sky-500/20 text-sky-300 border-sky-500/30"
                       }`}>
                         {exp.period}
                       </span>
-                      <span className="text-xs font-sans text-[var(--text-muted)] flex items-center gap-1">
+                      <span className="text-xs font-mono text-[var(--text-muted)] flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5 text-[var(--muted)]" />
                         {exp.location}
                       </span>
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-extrabold text-[var(--text)] tracking-tight mt-1 font-sans">
+                    <h3 className="text-xl sm:text-2xl font-display font-extrabold text-[var(--text)] tracking-tight mt-1">
                       {exp.role}
                     </h3>
                     <span className="text-xs sm:text-sm font-bold text-sky-400 flex items-center gap-1.5 font-sans">
@@ -130,7 +128,7 @@ export default function Experience() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </SpotlightCard>
             );
           })}
         </div>

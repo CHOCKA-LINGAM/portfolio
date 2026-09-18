@@ -408,6 +408,23 @@ textarea {
   .animate-card-in {
     animation: card-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
   }
+
+  .font-display {
+    font-family: var(--font-display), var(--font-manrope), sans-serif;
+  }
+  .font-serif-italic {
+    font-family: var(--font-serif), Georgia, serif;
+    font-style: italic;
+  }
+  .dot-grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: radial-gradient(rgba(var(--ar), 0.15) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 85%);
+  }
 }
 
 /* ─── Responsive Media Queries ────────────────────────────────────────────── */
