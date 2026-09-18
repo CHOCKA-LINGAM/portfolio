@@ -35,9 +35,14 @@ export default function ParticleCanvas() {
       }));
     }
 
+    let isVisible = true;
+
     function draw() {
+      if (!isVisible || document.hidden) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
+      const ar = (getComputedStyle(document.documentElement).getPropertyValue("--ar") || "56, 189, 248").trim();
+
+      particles.forEach((p) => {
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
@@ -47,18 +52,19 @@ export default function ParticleCanvas() {
         }
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(143,178,255,0.45)";
+        ctx.fillStyle = `rgba(${ar}, 0.45)`;
         ctx.fill();
       });
+
       for (let a = 0; a < particles.length; a++) {
-        for (let b = a+1; b < particles.length; b++) {
+        for (let b = a + 1; b < particles.length; b++) {
           const dx = particles[a].x - particles[b].x;
           const dy = particles[a].y - particles[b].y;
-          const d2 = dx*dx + dy*dy;
+          const d2 = dx * dx + dy * dy;
           if (d2 < 15000) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(143,178,255,${(1-d2/15000)*.06})`;
-            ctx.lineWidth = .7;
+            ctx.strokeStyle = `rgba(${ar}, ${(1 - d2 / 15000) * 0.12})`;
+            ctx.lineWidth = 0.7;
             ctx.moveTo(particles[a].x, particles[a].y);
             ctx.lineTo(particles[b].x, particles[b].y);
             ctx.stroke();
@@ -68,6 +74,26 @@ export default function ParticleCanvas() {
       raf = requestAnimationFrame(draw);
     }
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden && isVisible) {
+        cancelAnimationFrame(raf);
+        draw();
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !document.hidden) {
+          cancelAnimationFrame(raf);
+          draw();
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     const onMove = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; };
     const onOut = () => { mouse.x = null; mouse.y = null; };
 
@@ -76,7 +102,14 @@ export default function ParticleCanvas() {
     window.addEventListener("mouseout", onOut);
     resize();
     draw();
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseout", onOut); };
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseout", onOut);
+    };
   }, []);
 
   return (

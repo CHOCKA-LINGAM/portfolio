@@ -50,6 +50,7 @@ export const themeOptions: ThemeOption[] = [
 export const ThemeSwitcher: React.FC = () => {
   const [currentTheme, setCurrentTheme] = useState<ThemeId>("midnight");
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("portfolio_theme") as ThemeId;
@@ -62,6 +63,27 @@ export const ThemeSwitcher: React.FC = () => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const changeTheme = (theme: ThemeId) => {
     setCurrentTheme(theme);
@@ -80,10 +102,12 @@ export const ThemeSwitcher: React.FC = () => {
   const lightThemes = themeOptions.filter((t) => t.category === "light");
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[var(--surface-2)] text-[var(--text)] border border-[var(--border)] hover:border-sky-400/50 transition-all shadow-sm active:scale-95"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[var(--surface-2)] text-[var(--text)] border border-[var(--border)] hover:border-sky-400/50 transition-all shadow-sm active:scale-95 cursor-pointer"
         title="Change Portfolio Theme"
         aria-label="Change Portfolio Theme"
       >
@@ -99,6 +123,8 @@ export const ThemeSwitcher: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 6 }}
             transition={{ duration: 0.15 }}
+            role="listbox"
+            aria-label="Portfolio themes"
             className="absolute right-0 top-full mt-2 w-56 max-h-[400px] overflow-y-auto rounded-xl bg-[var(--surface-1)] border border-[var(--border-strong)] p-2 shadow-2xl z-[1000] backdrop-blur-2xl"
           >
             {/* Dark Themes */}
@@ -110,9 +136,11 @@ export const ThemeSwitcher: React.FC = () => {
               <button
                 key={t.id}
                 onClick={() => changeTheme(t.id)}
-                className={`w-full flex items-center justify-between px-2.5 py-1.5 my-0.5 rounded-lg text-xs font-semibold transition-colors ${
+                role="option"
+                aria-selected={currentTheme === t.id}
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 my-0.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                   currentTheme === t.id
-                    ? "bg-[var(--surface-2)] text-white border border-sky-500/30"
+                    ? "bg-[var(--surface-2)] text-[var(--text)] border border-sky-500/30"
                     : "text-[var(--text)] hover:bg-[var(--surface-2)]/60"
                 }`}
               >
@@ -133,9 +161,11 @@ export const ThemeSwitcher: React.FC = () => {
               <button
                 key={t.id}
                 onClick={() => changeTheme(t.id)}
-                className={`w-full flex items-center justify-between px-2.5 py-1.5 my-0.5 rounded-lg text-xs font-semibold transition-colors ${
+                role="option"
+                aria-selected={currentTheme === t.id}
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 my-0.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                   currentTheme === t.id
-                    ? "bg-[var(--surface-2)] text-white border border-sky-500/30"
+                    ? "bg-[var(--surface-2)] text-[var(--text)] border border-sky-500/30"
                     : "text-[var(--text)] hover:bg-[var(--surface-2)]/60"
                 }`}
               >

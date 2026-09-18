@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 import SectionLayout from "@/components/layout/SectionLayout";
-import { NarratorStrip } from "@/components/ui/NarratorStrip";
+import { SectionInsightBar } from "@/components/ui/NarratorStrip";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -70,23 +70,10 @@ export default function Contact() {
   return (
     <SectionLayout label="Let's Connect" title="Get in Touch" scrollable={false} sectionNumber="05 / 05">
       <div className="w-full flex-1 max-w-4xl mx-auto pt-1">
-        {/* ── NARRATOR STRIP ── */}
-        <NarratorStrip
-          quote="I'm exploring Senior Backend Engineer, Systems Architect, and Tech Lead opportunities. Let me know how I can help bring your engineering roadmap to life."
-          details={[
-            { label: "Target Opportunities", text: "Senior Backend Engineer, Systems Architect, Technical Lead" },
-            { label: "Location & Flexibility", text: "Based in Chennai, India • Open to Remote & Worldwide Relocation" }
-          ]}
-          qaPairs={[
-            {
-              question: "What roles are you looking for?",
-              answer: "I am actively targeting Senior Backend Engineer, Distributed Systems Architect, and Technical Lead positions where I can own backend infrastructure and high-throughput services."
-            },
-            {
-              question: "Are you willing to relocate or work remotely?",
-              answer: "Yes, I am based in Chennai, India and open to full-time remote roles globally, as well as worldwide relocation for high-impact opportunities."
-            }
-          ]}
+        {/* ── SECTION INSIGHT BAR ── */}
+        <SectionInsightBar
+          tag="OUTREACH & ROLES"
+          quote="Open to Senior Backend Engineer, Distributed Systems Architect, and Tech Lead opportunities worldwide."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4.5 rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-1)] p-4 sm:p-5 shadow-2xl backdrop-blur-xl">
@@ -120,8 +107,9 @@ export default function Contact() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs text-[var(--text-muted)] font-semibold font-sans">Your Name *</label>
+                    <label htmlFor="contact-name" className="text-xs text-[var(--text-muted)] font-semibold font-sans">Your Name *</label>
                     <input
+                      id="contact-name"
                       type="text"
                       required
                       value={name}
@@ -131,8 +119,9 @@ export default function Contact() {
                     />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs text-[var(--text-muted)] font-semibold font-sans">Your Email *</label>
+                    <label htmlFor="contact-email" className="text-xs text-[var(--text-muted)] font-semibold font-sans">Your Email *</label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
                       value={email}
@@ -143,20 +132,44 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs text-[var(--text-muted)] font-semibold font-sans">Subject</label>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="contact-subject" className="text-xs text-[var(--text-muted)] font-semibold font-sans">Subject</label>
                   <input
+                    id="contact-subject"
                     type="text"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="Engineering Role / Project Opportunity"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs sm:text-sm text-[var(--text)] placeholder-[var(--text-muted)] outline-none focus:border-sky-500/60 transition-all font-sans"
                   />
+                  {/* Quick Preset Subject Badges */}
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {[
+                      "Senior Backend Engineer Role",
+                      "Lead AI & Systems Architect Position",
+                      "Global / Remote Relocation Role",
+                      "Technical Project Inquiry",
+                    ].map((preset) => (
+                      <button
+                        key={preset}
+                        type="button"
+                        onClick={() => setSubject(preset)}
+                        className={`text-[10px] font-sans px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                          subject === preset
+                            ? "bg-sky-500/25 text-sky-300 border-sky-400 font-bold"
+                            : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:border-sky-400/40 hover:text-[var(--text)]"
+                        }`}
+                      >
+                        + {preset}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-[var(--text-muted)] font-semibold font-sans">Message *</label>
+                  <label htmlFor="contact-message" className="text-xs text-[var(--text-muted)] font-semibold font-sans">Message *</label>
                   <textarea
+                    id="contact-message"
                     required
                     rows={3}
                     value={message}
@@ -169,7 +182,8 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="mt-1 px-6 py-3 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-sky-500/20 disabled:opacity-50 font-sans"
+                  className="mt-1 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-slate-950 flex items-center justify-center gap-2 transition-all shadow-lg hover:opacity-90 disabled:opacity-50 font-sans cursor-pointer"
+                  style={{ backgroundColor: "var(--accent)" }}
                 >
                   {status === "sending" ? (
                     <>
@@ -196,9 +210,11 @@ export default function Contact() {
               </span>
 
               {/* Email Card */}
-              <div
+              <button
+                type="button"
                 onClick={copyEmail}
-                className="p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-sky-500/50 transition-all cursor-pointer group flex items-center justify-between min-w-0"
+                aria-label="Copy direct email address to clipboard"
+                className="p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-sky-500/50 transition-all cursor-pointer group flex items-center justify-between min-w-0 text-left w-full"
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className="p-2 rounded-lg bg-sky-500/15 text-sky-400 flex-shrink-0">
@@ -212,7 +228,7 @@ export default function Contact() {
                   </div>
                 </div>
                 {copiedEmail ? <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 ml-1" /> : <Copy className="w-4 h-4 text-[var(--text-muted)] group-hover:text-sky-400 flex-shrink-0 ml-1" />}
-              </div>
+              </button>
 
               {/* LinkedIn Link */}
               <a
@@ -242,7 +258,7 @@ export default function Contact() {
                 className="p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-sky-500/50 transition-all group flex items-center justify-between min-w-0"
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="p-2 rounded-lg bg-slate-800 text-slate-200 flex-shrink-0">
+                  <div className="p-2 rounded-lg bg-[var(--surface-1)] text-[var(--text)] flex-shrink-0">
                     <Github className="w-4 h-4" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -257,7 +273,7 @@ export default function Contact() {
 
             {/* Location & Work Availability */}
             <div className="p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex flex-col gap-1.5 font-sans text-xs sm:text-sm">
-              <div className="flex items-center gap-2 text-slate-200">
+              <div className="flex items-center gap-2 text-[var(--text)]">
                 <MapPin className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                 <span>Chennai, India (IST / UTC+5:30)</span>
               </div>

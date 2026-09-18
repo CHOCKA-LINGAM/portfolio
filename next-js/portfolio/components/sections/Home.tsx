@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Mail, ArrowRight, ShieldCheck, Zap, Terminal, Database, Cpu, Box, Flame, Download, Globe, Play } from "lucide-react";
+import { Mail, ArrowRight, ShieldCheck, Zap, Terminal, Database, Cpu, Box, Flame, Download, Globe, Play, Eye } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 import { Page } from "@/hooks/useNav";
 import { NarratorStrip } from "@/components/ui/NarratorStrip";
@@ -20,7 +20,15 @@ const HOME_TECH_STACK = [
   { name: "PostgreSQL", icon: <Database className="w-3.5 h-3.5 text-blue-400" /> },
 ];
 
-export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; onOpenStory?: () => void }) {
+export default function Home({
+  goTo,
+  onOpenStory,
+  onOpenResume,
+}: {
+  goTo: (p: Page) => void;
+  onOpenStory?: () => void;
+  onOpenResume?: () => void;
+}) {
   const [titleIdx, setTitleIdx] = useState(0);
   const titles = ["Senior Software Engineer", "Backend & AI Architect", "Data Systems Specialist"];
 
@@ -59,7 +67,7 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 {PERSONAL.role}
               </div>
-              <span className="text-xs text-slate-300 font-sans">Based in Chennai, India</span>
+              <span className="text-xs text-[var(--muted)] font-sans">Based in Chennai, India</span>
               <button
                 onClick={onOpenStory}
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors pt-0.5"
@@ -87,21 +95,29 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
         <div className="flex gap-3 flex-wrap mt-2">
           <a
             href={`mailto:${PERSONAL.email}`}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-slate-950 bg-sky-400 hover:bg-sky-300 transition-all shadow-lg shadow-sky-400/20"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-slate-950 transition-all shadow-lg hover:opacity-90 cursor-pointer"
+            style={{ backgroundColor: "var(--accent)" }}
           >
             Get in Touch <Mail size={16} />
           </a>
+          <button
+            onClick={onOpenResume}
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-[var(--text)] border border-[var(--border-strong)] bg-[var(--surface-2)] hover:bg-[var(--surface-1)] hover:border-[var(--accent)] transition-all shadow-md cursor-pointer"
+          >
+            <Eye size={16} className="text-[var(--accent)]" />
+            Preview Resume
+          </button>
           <a
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-[var(--text)] border border-sky-500/40 bg-sky-500/15 hover:bg-sky-500/25 hover:border-sky-400 transition-all shadow-md"
           >
-            Download Resume <Download size={16} className="text-sky-400" />
+            Download <Download size={16} className="text-sky-400" />
           </a>
           <button
             onClick={() => goTo("experience")}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm text-[var(--text-muted)] border border-[var(--border)] bg-[var(--surface-2)] hover:bg-[var(--surface-1)] hover:border-sky-400/40 transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm text-[var(--text-muted)] border border-[var(--border)] bg-[var(--surface-2)] hover:bg-[var(--surface-1)] hover:border-sky-400/40 transition-all cursor-pointer"
           >
             View Career History <ArrowRight size={16} />
           </button>
@@ -132,17 +148,17 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
           </div>
           <div className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex flex-col min-w-0">
             <span className="text-lg sm:text-2xl font-black text-emerald-400 font-mono truncate">40%</span>
-            <span className="text-xs text-slate-300 uppercase tracking-wider mt-0.5 truncate font-sans">ETL Speedup</span>
+            <span className="text-xs text-[var(--muted)] uppercase tracking-wider mt-0.5 truncate font-sans">ETL Speedup</span>
           </div>
           <div className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex flex-col min-w-0">
             <span className="text-lg sm:text-2xl font-black text-sky-400 font-mono truncate">90%+</span>
-            <span className="text-xs text-slate-300 uppercase tracking-wider mt-0.5 truncate font-sans">QA Automation</span>
+            <span className="text-xs text-[var(--muted)] uppercase tracking-wider mt-0.5 truncate font-sans">QA Automation</span>
           </div>
         </div>
 
         {/* Primary Technology Chips Panel */}
         <div className="flex flex-col gap-2 pt-1">
-          <span className="text-xs text-slate-300 uppercase tracking-wider font-semibold flex items-center gap-1.5 font-sans">
+          <span className="text-xs text-[var(--muted)] uppercase tracking-wider font-semibold flex items-center gap-1.5 font-sans">
             <Zap className="w-3.5 h-3.5 text-amber-400" />
             Primary Technology Stack
           </span>
@@ -151,7 +167,7 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
             {HOME_TECH_STACK.map((tech) => (
               <span
                 key={tech.name}
-                className="px-3 py-1 rounded-lg bg-[var(--surface-2)] text-slate-100 border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm hover:border-sky-400/50 transition-colors"
+                className="px-3 py-1 rounded-lg bg-[var(--surface-2)] text-[var(--text)] border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm hover:border-sky-400/50 transition-colors"
               >
                 {tech.icon}
                 {tech.name}
@@ -162,7 +178,7 @@ export default function Home({ goTo, onOpenStory }: { goTo: (p: Page) => void; o
 
         {/* Current Role Info */}
         <div className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs sm:text-sm gap-1.5 font-sans">
-          <span className="text-slate-400">Current Role:</span>
+          <span className="text-[var(--muted)]">Current Role:</span>
           <span className="text-sky-400 font-bold truncate">Tech Specialist @ iLink Digital</span>
         </div>
       </div>

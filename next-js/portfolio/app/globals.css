@@ -14,6 +14,7 @@
   --text: #f0f4f8;
   --muted: #94a3b8;
   --muted2: #cbd5e1;
+  --text-muted: #94a3b8;
   --accent: #38bdf8;
   --accent-emerald: #34d399;
   --ar: 56, 189, 248;
@@ -42,6 +43,7 @@
   --text: #f0fdf4;
   --muted: #86efac;
   --muted2: #bbf7d0;
+  --text-muted: #86efac;
   --accent: #34d399;
   --ar: 52, 211, 153;
   --ag: rgba(52, 211, 153, 0.16);
@@ -57,6 +59,7 @@
   --text: #0f172a;
   --muted: #334155;
   --muted2: #1e293b;
+  --text-muted: #475569;
   --accent: #0284c7;
   --ar: 2, 132, 199;
   --ag: rgba(2, 132, 199, 0.12);
@@ -72,6 +75,7 @@
   --text: #fafafa;
   --muted: #a1a1aa;
   --muted2: #d4d4d8;
+  --text-muted: #a1a1aa;
   --accent: #f4f4f5;
   --ar: 244, 244, 245;
   --ag: rgba(244, 244, 245, 0.15);
@@ -87,6 +91,7 @@
   --text: #f3e8ff;
   --muted: #c084fc;
   --muted2: #e9d5ff;
+  --text-muted: #c084fc;
   --accent: #06b6d4;
   --ar: 6, 182, 212;
   --ag: rgba(6, 182, 212, 0.18);
@@ -102,6 +107,7 @@
   --text: #fffbeb;
   --muted: #fde68a;
   --muted2: #fef3c7;
+  --text-muted: #fde68a;
   --accent: #fbbf24;
   --ar: 251, 191, 36;
   --ag: rgba(251, 191, 36, 0.16);
@@ -117,6 +123,7 @@
   --text: #f0f9ff;
   --muted: #7dd3fc;
   --muted2: #bae6fd;
+  --text-muted: #7dd3fc;
   --accent: #38bdf8;
   --ar: 56, 189, 248;
   --ag: rgba(56, 189, 248, 0.16);
@@ -132,6 +139,7 @@
   --text: #fdf2f8;
   --muted: #f472b6;
   --muted2: #fbcfe8;
+  --text-muted: #f472b6;
   --accent: #22d3ee;
   --ar: 34, 211, 238;
   --ag: rgba(34, 211, 238, 0.18);
@@ -147,6 +155,7 @@
   --text: #0f172a;
   --muted: #334155;
   --muted2: #1e293b;
+  --text-muted: #475569;
   --accent: #2563eb;
   --ar: 37, 99, 235;
   --ag: rgba(37, 99, 235, 0.14);
@@ -162,6 +171,7 @@
   --text: #064e3b;
   --muted: #047857;
   --muted2: #065f46;
+  --text-muted: #047857;
   --accent: #059669;
   --ar: 5, 150, 105;
   --ag: rgba(5, 150, 105, 0.14);
@@ -177,6 +187,7 @@
   --text: #1c1917;
   --muted: #44403c;
   --muted2: #292524;
+  --text-muted: #57534e;
   --accent: #b45309;
   --ar: 180, 83, 9;
   --ag: rgba(180, 83, 9, 0.14);
@@ -192,6 +203,7 @@
   --text: #4c0519;
   --muted: #881337;
   --muted2: #9f1239;
+  --text-muted: #9f1239;
   --accent: #e11d48;
   --ar: 225, 29, 72;
   --ag: rgba(225, 29, 72, 0.14);
@@ -207,6 +219,7 @@
   --text: #1c1917;
   --muted: #44403c;
   --muted2: #292524;
+  --text-muted: #57534e;
   --accent: #2563eb;
   --ar: 37, 99, 235;
   --ag: rgba(37, 99, 235, 0.14);
@@ -222,31 +235,10 @@
   --text: #09090b;
   --muted: #27272a;
   --muted2: #18181b;
+  --text-muted: #3f3f46;
   --accent: #18181b;
   --ar: 24, 24, 27;
   --ag: rgba(24, 24, 27, 0.14);
-}
-
-/* ─── GLOBAL LIGHT MODE READABILITY OVERRIDES ─── */
-[data-theme="light"],
-[data-theme="snow"],
-[data-theme="mint-light"],
-[data-theme="sand-light"],
-[data-theme="rose-light"],
-[data-theme="porcelain"],
-[data-theme="newsprint"] {
-  .text-white {
-    color: var(--text) !important;
-  }
-  .text-slate-100 {
-    color: var(--text) !important;
-  }
-  .text-slate-200 {
-    color: var(--muted2) !important;
-  }
-  .text-slate-300 {
-    color: var(--muted) !important;
-  }
 }
 
 /* ─── Base Styles ─────────────────────────────────────────────────────────── */
@@ -256,7 +248,7 @@
   padding: 0;
   /* W3C Standard Scrollbar styles */
   scrollbar-width: thin;
-  scrollbar-color: rgba(56, 189, 248, 0.3) transparent;
+  scrollbar-color: rgba(var(--ar), 0.35) transparent;
 }
 
 html,
@@ -267,13 +259,15 @@ body {
   color: var(--text);
   font-family: var(--font-manrope), sans-serif;
   background: var(--bg);
+  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease;
 }
 
 body {
   background:
-    radial-gradient(circle at 14% 12%, rgba(56, 189, 248, 0.12), transparent 35%),
+    radial-gradient(circle at 14% 12%, rgba(var(--ar), 0.12), transparent 35%),
     radial-gradient(circle at 85% 78%, rgba(52, 211, 153, 0.08), transparent 32%),
     var(--bg);
+  transition: background-color 280ms ease;
 }
 
 /* Disable tap highlight on mobile browsers */
@@ -297,12 +291,12 @@ textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.35);
+  background: rgba(var(--ar), 0.35);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 189, 248, 0.6);
+  background: rgba(var(--ar), 0.6);
 }
 
 /* ─── Tailwind Layer Components ───────────────────────────────────────────── */
@@ -321,11 +315,12 @@ textarea {
     overflow: visible;
   }
 
-  /* Glassmorphism panel base */
+  /* Glassmorphism panel base - theme aware */
   .glass-panel {
-    background: rgba(13, 17, 23, 0.92);
+    background: var(--surface-1);
     border: 1px solid var(--border);
     backdrop-filter: blur(12px);
+    transition: background-color 280ms ease, border-color 280ms ease, box-shadow 280ms ease;
   }
 }
 

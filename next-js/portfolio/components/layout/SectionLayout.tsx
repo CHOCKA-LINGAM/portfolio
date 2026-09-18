@@ -17,28 +17,33 @@ export default function SectionLayout({
   className = "",
   sectionNumber,
 }: SectionLayoutProps) {
+  const headingId = `heading-${label.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+
   return (
-    <section className={`relative w-full flex flex-col justify-start items-stretch py-1 ${className}`}>
-      {/* ─── SECTION HEADER ─── */}
-      <div className="flex-shrink-0 mb-3 sm:mb-4 text-center w-full max-w-full">
+    <section 
+      aria-labelledby={headingId}
+      className={`relative w-full flex flex-col justify-start items-stretch py-4 sm:py-6 ${className}`}
+    >
+      {/* ─── STUDIO SECTION HEADER ─── */}
+      <div className="flex flex-col items-center text-center w-full max-w-full mb-6 sm:mb-8">
         {sectionNumber && (
-          <div className="mb-2">
-            <span className="text-[10px] font-mono tracking-widest text-[var(--accent)] uppercase font-bold bg-[var(--surface-2)] px-3 py-1 rounded-full border border-[var(--border-strong)] shadow-sm">
+          <div className="mb-2.5">
+            <span className="text-[11px] font-mono tracking-[0.2em] text-[var(--accent)] uppercase font-bold bg-[var(--surface-2)] px-3.5 py-1 rounded-full border border-[var(--border-strong)] shadow-sm">
               SECTION {sectionNumber}
             </span>
           </div>
         )}
-        <div className="mb-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold uppercase tracking-[2px] text-[var(--accent)] font-sans w-full">
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
+        <div className="mb-1.5 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[2.5px] text-[var(--accent)] font-sans w-full">
+          <span className="h-2 w-2 rounded-full bg-[var(--green)] animate-pulse-ring" />
           {label}
         </div>
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold leading-tight tracking-tight text-[var(--text)] text-center">
+        <h2 id={headingId} className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-[var(--text)] text-center">
           {title}
         </h2>
       </div>
 
       {/* ─── NATURAL FLOW CONTENT CONTAINER ─── */}
-      <div className="w-full flex flex-col justify-start items-stretch pb-4 sm:pb-6">
+      <div className="w-full flex flex-col justify-start items-stretch">
         {children}
       </div>
     </section>

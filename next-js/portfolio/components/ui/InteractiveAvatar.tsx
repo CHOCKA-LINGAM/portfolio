@@ -22,8 +22,8 @@ export const InteractiveAvatar: React.FC<InteractiveAvatarProps> = ({
 
   const sizeClasses = {
     sm: "w-11 h-11 border-2",
-    md: "w-16 h-16 border-2 sm:w-18 sm:h-18",
-    lg: "w-24 h-24 sm:w-28 sm:h-28 border-3",
+    md: "w-16 h-16 border-2 sm:w-20 sm:h-20",
+    lg: "w-24 h-24 sm:w-28 sm:h-28 border-[3px]",
   }[size];
 
   return (

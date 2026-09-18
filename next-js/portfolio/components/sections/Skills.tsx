@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import skillsData from "@/data/skills.json";
 import SectionLayout from "@/components/layout/SectionLayout";
-import { NarratorStrip } from "@/components/ui/NarratorStrip";
+import { SectionInsightBar } from "@/components/ui/NarratorStrip";
 
 function getSkillIcon(skill: string) {
   const s = skill.toLowerCase();
@@ -91,11 +91,28 @@ const STAGE_THEMES: Record<string, { border: string; glow: string; text: string;
   },
 };
 
+const CORE_SKILLS = new Set(["Python", "PySpark", "Databricks", "FastAPI", "OpenAI API", "AWS Bedrock", "Docker", "PostgreSQL", "Kafka", "Azure AKS"]);
+
+const SKILL_DETAILS: Record<string, { usage: string; impact: string }> = {
+  Python: { usage: "Core language for backend microservices, PySpark ETL scripts, & GenAI agents", impact: "5+ years enterprise production code" },
+  FastAPI: { usage: "High-performance async REST & GraphQL microservice APIs with Pydantic v2 validation", impact: "Sub-50ms latency endpoints" },
+  Databricks: { usage: "Multi-tenant cloud lakehouse infrastructure & automated notebook workflow deployments", impact: "Built PyPI package databricks-bundle" },
+  PySpark: { usage: "Distributed data frame transformation & ETL ingestion over multi-terabyte datasets", impact: "40% processing speedup" },
+  PostgreSQL: { usage: "Relational data modeling, connection pooling, and indexing optimization", impact: "Zero query bottlenecks under high concurrency" },
+  "OpenAI API": { usage: "GPT-4 multi-step reasoning, prompt guardrails, and tool calling workflows", impact: "Production GenAI orchestration" },
+  "AWS Bedrock": { usage: "Enterprise foundation model API integration & multi-agent failover fallbacks", impact: "99.99% system availability" },
+  "Azure AKS": { usage: "Kubernetes container cluster deployment, pod autoscaling, & Azure DevOps pipelines", impact: "Automated zero-downtime rollouts" },
+  Docker: { usage: "Containerized microservice packaging with multi-stage production Dockerfiles", impact: "Standardized dev & prod environments" },
+  Kafka: { usage: "Real-time event-driven message queuing & stream processing pipelines", impact: "High-concurrency async event bus" },
+  LangChain: { usage: "Agent memory vector integration, retrieval guardrails, & tool orchestration", impact: "Autonomous multi-agent workflows" },
+};
+
 export default function Skills() {
   const authenticNodes = skillsData.nodes;
   const [selectedLayer, setSelectedLayer] = useState<string>("layer-backend");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("Core Services");
+  const [activeSkillDetail, setActiveSkillDetail] = useState<string | null>(null);
 
   const activeData = authenticNodes.find((l) => l.id === selectedLayer) || authenticNodes[1];
   const activeTheme = STAGE_THEMES[activeData.id] || STAGE_THEMES["layer-backend"];
@@ -110,10 +127,12 @@ export default function Skills() {
   const handleCardClick = (node: (typeof authenticNodes)[0]) => {
     setSelectedLayer(node.id);
     setSelectedCategoryFilter(node.category);
+    setActiveSkillDetail(null);
   };
 
   const handleCategoryChipClick = (cat: string) => {
     setSelectedCategoryFilter(cat);
+    setActiveSkillDetail(null);
     if (cat === "All") return;
     const matchingLayer = authenticNodes.find((l) => l.category.includes(cat) || cat.includes(l.category));
     if (matchingLayer) {
@@ -123,6 +142,7 @@ export default function Skills() {
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
+    setActiveSkillDetail(null);
     const val = value.toLowerCase().trim();
 
     if (val) {
@@ -145,17 +165,10 @@ export default function Skills() {
       scrollable={false}
       sectionNumber="03 / 05"
     >
-      {/* ── NARRATOR STRIP (SKILLS TAILORED) ── */}
-      <NarratorStrip
-        quote="This is my technology pipeline — structured across 5 distinct architectural layers from raw data processing to cloud orchestration & frontend APIs."
-        details={[
-          { label: "5 Layer Stack", text: "Data Processing → Backend Microservices → AI Orchestration → Cloud & DevOps → Frontend" },
-          { label: "Core Arsenal", text: "Python, PySpark, Databricks, PostgreSQL, FastAPI, Kafka, AWS Bedrock, Azure AKS" }
-        ]}
-        qaPairs={[
-          { question: "Why PySpark & Databricks over traditional SQL?", answer: "PySpark enables distributed parallel memory execution over multi-terabyte datasets where traditional SQL bottlenecks." },
-          { question: "How do you handle backend API scalability?", answer: "Using FastAPI with AsyncIO event loops, Redis caching layers, and Kubernetes pod auto-scaling." }
-        ]}
+      {/* ── SECTION INSIGHT BAR ── */}
+      <SectionInsightBar
+        tag="PIPELINE STACK"
+        quote="Structured across 5 distinct architectural layers — from raw data ingestion to cloud orchestration & production AI APIs."
       />
 
       <div className="w-full flex-1 flex flex-col gap-3 max-w-full">
@@ -163,9 +176,10 @@ export default function Skills() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 bg-[var(--surface-1)] p-2.5 sm:p-3 rounded-2xl border border-[var(--border-strong)] backdrop-blur-md shadow-lg max-w-full flex-shrink-0">
           {/* Search Bar */}
           <div className="relative flex-1 min-w-0">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[var(--muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
+              aria-label="Filter skills"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Filter skills (e.g. Python, Databricks, Docker, Bedrock)..."
@@ -174,7 +188,7 @@ export default function Skills() {
             {searchQuery && (
               <button
                 onClick={() => handleSearchChange("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -192,7 +206,7 @@ export default function Skills() {
                   className={`px-3 py-1 rounded-xl text-xs whitespace-nowrap transition-all border font-semibold font-sans ${
                     isActive
                       ? "bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-md ring-1 ring-sky-500/30"
-                      : "bg-[var(--surface-2)] text-slate-300 border-[var(--border)] hover:text-white hover:bg-white/10"
+                      : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:bg-[var(--surface-1)]"
                   }`}
                 >
                   {cat}
@@ -263,6 +277,7 @@ export default function Skills() {
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     {node.skills.map((skill) => {
                       const matched = isMatch(skill);
+                      const isCore = CORE_SKILLS.has(skill);
                       return (
                         <span
                           key={skill}
@@ -271,11 +286,14 @@ export default function Skills() {
                               ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
                               : q && !matched
                               ? "opacity-30 bg-white/[0.02] text-[var(--text-muted)] border-white/5"
+                              : isCore
+                              ? "bg-[var(--surface-2)] text-[var(--text)] border-sky-400/40"
                               : "bg-[var(--surface-2)] text-[var(--text)] border-[var(--border)]"
                           }`}
                         >
                           {getSkillIcon(skill)}
                           <span>{skill}</span>
+                          {isCore && <span className="w-1 h-1 rounded-full bg-sky-400 ml-0.5" title="Core Stack Competency" />}
                         </span>
                       );
                     })}
@@ -322,24 +340,57 @@ export default function Skills() {
               <div className="flex-1 flex flex-wrap gap-2 justify-start md:justify-end border-t md:border-t-0 md:border-l border-[var(--border)] pt-3 md:pt-0 md:pl-5">
                 {activeData.skills.map((skill) => {
                   const matched = isMatch(skill);
+                  const isSelectedSkill = activeSkillDetail === skill;
+
                   return (
-                    <span
+                    <button
                       key={skill}
-                      className={`text-xs font-mono px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 font-medium border shadow-sm ${
-                        q && matched
+                      onClick={() => setActiveSkillDetail(isSelectedSkill ? null : skill)}
+                      title={`Click to inspect ${skill} production architecture`}
+                      className={`text-xs font-mono px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 font-medium border shadow-sm cursor-pointer ${
+                        isSelectedSkill
+                          ? "bg-sky-500/30 text-sky-200 border-sky-400 ring-2 ring-sky-400/50 scale-105"
+                          : q && matched
                           ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
                           : q && !matched
                           ? "opacity-30 bg-white/[0.03] text-[var(--text-muted)] border-white/5"
-                          : "bg-[var(--surface-1)] text-[var(--text)] border-[var(--border-strong)]"
+                          : "bg-[var(--surface-1)] text-[var(--text)] border-[var(--border-strong)] hover:border-sky-400/50"
                       }`}
                     >
                       {getSkillIcon(skill)}
                       <span className="font-semibold text-[var(--text)]">{skill}</span>
-                    </span>
+                    </button>
                   );
                 })}
               </div>
             </motion.div>
+          </AnimatePresence>
+
+          {/* ─── Production Skill Architecture Detail Popover ─── */}
+          <AnimatePresence>
+            {activeSkillDetail && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, y: 4 }}
+                animate={{ opacity: 1, height: "auto", y: 0 }}
+                exit={{ opacity: 0, height: 0, y: 4 }}
+                className="relative z-10 rounded-xl p-4 border border-sky-500/40 bg-[var(--surface-2)] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-sky-400 flex items-center gap-1.5 font-sans text-sm">
+                    ⚡ {activeSkillDetail} Architecture Snapshot:
+                  </span>
+                  <p className="text-[var(--text)] font-sans leading-relaxed">
+                    {SKILL_DETAILS[activeSkillDetail]?.usage || `Production technology integrated across ${activeData.label} pipeline microservices.`}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center bg-[var(--surface-1)] px-3 py-2 rounded-lg border border-[var(--border)]">
+                  <span className="font-semibold text-[var(--muted)] font-sans">Metrics & Impact:</span>
+                  <span className="font-mono font-bold text-emerald-400">
+                    {SKILL_DETAILS[activeSkillDetail]?.impact || "High-Throughput Production Node"}
+                  </span>
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       </div>

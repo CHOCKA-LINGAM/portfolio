@@ -105,7 +105,7 @@ export const NarratorStrip: React.FC<NarratorStripProps> = ({
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
               isPlayingAudio
                 ? "bg-sky-500/20 text-sky-300 border-sky-400 animate-pulse"
-                : "bg-[var(--surface-2)] text-slate-300 border-[var(--border)] hover:border-sky-400/40 hover:text-white"
+                : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:border-sky-400/40 hover:text-[var(--text)]"
             }`}
             title="Listen to audio narration"
           >
@@ -224,7 +224,7 @@ export const NarratorStrip: React.FC<NarratorStripProps> = ({
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all text-left ${
                     selectedQAIdx === idx
                       ? "bg-sky-500/20 text-sky-300 border-sky-400 shadow-sm"
-                      : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:text-white"
+                      : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)]"
                   }`}
                 >
                   ❓ {pair.question}
@@ -239,7 +239,7 @@ export const NarratorStrip: React.FC<NarratorStripProps> = ({
                 <span className="font-bold text-emerald-400 block mb-1">
                   Chockalingam&apos;s Answer:
                 </span>
-                <p className="font-sans font-normal text-slate-200">
+                <p className="font-sans font-normal text-[var(--text)]">
                   {qaPairs[selectedQAIdx].answer}
                 </p>
               </div>
@@ -248,5 +248,30 @@ export const NarratorStrip: React.FC<NarratorStripProps> = ({
         )}
       </AnimatePresence>
     </motion.div>
+  );
+};
+
+export interface SectionInsightBarProps {
+  quote: string;
+  tag?: string;
+  className?: string;
+}
+
+export const SectionInsightBar: React.FC<SectionInsightBarProps> = ({
+  quote,
+  tag = "SECTION INSIGHT",
+  className = "",
+}) => {
+  return (
+    <div className={`w-full mb-4 px-4 py-2.5 rounded-xl bg-[var(--surface-1)] border border-[var(--border)] flex items-center justify-between gap-3 text-xs shadow-sm ${className}`}>
+      <div className="flex items-center gap-2.5 min-w-0">
+        <span className="px-2 py-0.5 rounded bg-sky-500/15 text-sky-400 font-mono text-[10px] font-bold border border-sky-500/30 uppercase tracking-wider shrink-0">
+          {tag}
+        </span>
+        <p className="text-[var(--text-muted)] italic font-sans truncate">
+          &ldquo;{quote}&rdquo;
+        </p>
+      </div>
+    </div>
   );
 };

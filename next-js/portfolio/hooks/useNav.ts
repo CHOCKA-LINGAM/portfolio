@@ -57,7 +57,9 @@ export function useNav() {
         target.isContentEditable ||
         target.getAttribute("role") === "textbox" ||
         target.closest(".monaco-editor") ||
-        target.closest("[contenteditable='true']")
+        target.closest("[contenteditable='true']") ||
+        document.querySelector(".story-modal-dark") ||
+        document.querySelector('[role="dialog"]')
       ) {
         return;
       }

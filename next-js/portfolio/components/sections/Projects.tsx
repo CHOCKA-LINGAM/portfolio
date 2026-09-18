@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ExternalLink, Github, Sparkles, Terminal, Flame, Database, Cpu, Globe, Box, LayoutGrid, List } from "lucide-react";
+import { ExternalLink, Github, Sparkles, Terminal, Flame, Database, Cpu, Globe, Box, LayoutGrid, List, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PROJECTS, type Project } from "@/data/index";
 import SectionLayout from "@/components/layout/SectionLayout";
-import { NarratorStrip } from "@/components/ui/NarratorStrip";
+import { SectionInsightBar } from "@/components/ui/NarratorStrip";
 
 const DOMAIN_TABS = [
   { id: "all", label: "All Systems", count: 6 },
@@ -34,10 +34,19 @@ function getLinkText(url: string) {
 
 export default function Projects() {
   const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const visibleProjects = (PROJECTS as Project[]).filter((p) => {
-    return activeTab === "all" || p.tags.includes(activeTab);
+    const matchesTab = activeTab === "all" || p.tags.includes(activeTab);
+    if (!matchesTab) return false;
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase().trim();
+    return (
+      p.title.toLowerCase().includes(q) ||
+      p.desc.toLowerCase().includes(q) ||
+      p.stack.some((s) => s.toLowerCase().includes(q))
+    );
   });
 
   const featured = visibleProjects.find((p) => p.featured) || visibleProjects[0];
@@ -46,73 +55,83 @@ export default function Projects() {
   return (
     <SectionLayout label="Engineering Portfolio" title="Featured Projects & Systems" scrollable={false} sectionNumber="04 / 05">
       <div className="w-full flex-1 flex flex-col gap-3 max-w-full">
-        {/* ── NARRATOR STRIP ── */}
-        <NarratorStrip
-          quote="These are real production systems I've architected — open-source PyPI packages, multi-agent AI frameworks, and distributed data engines."
-          details={[
-            { label: "Featured Work", text: "databricks-bundle (PyPI), Multi-Agent AI Workflow, Enterprise RAG Pipeline" },
-            { label: "Design Philosophy", text: "Zero single-points-of-failure, async concurrency, clean decoupled architecture" }
-          ]}
-          qaPairs={[
-            {
-              question: "What is databricks-bundle on PyPI?",
-              answer: "It's an open-source CLI & Python SDK package I built and published to PyPI to streamline Databricks asset bundling, deployment automation, and CI/CD pipelines."
-            },
-            {
-              question: "How do your multi-agent AI workflows work?",
-              answer: "I leverage LangChain, LangGraph, and async Python orchestrators to manage specialized agent roles (planner, code generator, validator, memory manager) with human-in-the-loop controls."
-            }
-          ]}
+        {/* ── SECTION INSIGHT BAR ── */}
+        <SectionInsightBar
+          tag="SYSTEMS SHOWCASE"
+          quote="Open-source PyPI packages, multi-agent AI frameworks, and high-concurrency data ingestion engines."
         />
 
-        {/* ─── Segmented Domain Selector & Layout Switcher ─── */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-[var(--surface-1)] p-2.5 sm:p-3 rounded-2xl border border-[var(--border-strong)] backdrop-blur-md shadow-lg flex-shrink-0">
-          {/* Domain Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-            {DOMAIN_TABS.map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center gap-2 font-sans ${
-                    isActive
-                      ? "bg-sky-500/20 text-sky-300 border-sky-500/50 font-bold shadow-md ring-1 ring-sky-500/30"
-                      : "bg-[var(--surface-2)] text-slate-300 border-[var(--border)] hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
+        {/* ─── Search & Domain Filter Controls ─── */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 bg-[var(--surface-1)] p-2.5 sm:p-3 rounded-2xl border border-[var(--border-strong)] backdrop-blur-md shadow-lg flex-shrink-0">
+          {/* Search Input Bar */}
+          <div className="relative flex-1 min-w-0">
+            <Search className="w-4 h-4 text-[var(--muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              aria-label="Filter projects by technology or keyword"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search systems by tech (e.g. PyPI, Kafka, FastAPI, Bedrock, LangChain)..."
+              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs sm:text-sm text-[var(--text)] placeholder-[var(--text-muted)] outline-none focus:border-sky-500/60 transition-all font-sans"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)]"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
-          {/* View Mode Switcher */}
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] self-end sm:self-auto text-xs font-semibold font-sans">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
-                viewMode === "grid" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-slate-400 hover:text-white"
-              }`}
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              Grid
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
-                viewMode === "list" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-slate-400 hover:text-white"
-              }`}
-            >
-              <List className="w-3.5 h-3.5" />
-              List
-            </button>
+          {/* Domain Tabs & View Switcher */}
+          <div className="flex items-center justify-between gap-2.5 overflow-x-auto pb-1 md:pb-0">
+            <div className="flex items-center gap-1.5 shrink-0">
+              {DOMAIN_TABS.map((tab) => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center gap-2 font-sans ${
+                      isActive
+                        ? "bg-sky-500/20 text-sky-300 border-sky-500/50 font-bold shadow-md ring-1 ring-sky-500/30"
+                        : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:bg-[var(--surface-1)]"
+                    }`}
+                  >
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* View Mode Switcher */}
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs font-semibold font-sans shrink-0">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                  viewMode === "grid" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-[var(--muted)] hover:text-[var(--text)]"
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+                Grid
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                  viewMode === "list" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-[var(--muted)] hover:text-[var(--text)]"
+                }`}
+              >
+                <List className="w-3.5 h-3.5" />
+                List
+              </button>
+            </div>
           </div>
         </div>
 
         {/* ─── Projects Display ─── */}
         {visibleProjects.length === 0 ? (
-          <div className="text-slate-400 text-xs sm:text-sm py-12 text-center font-sans rounded-2xl bg-[var(--surface-1)] border border-[var(--border)]">
+          <div className="text-[var(--muted)] text-xs sm:text-sm py-12 text-center font-sans rounded-2xl bg-[var(--surface-1)] border border-[var(--border)]">
             No projects found in this domain. Select another category above.
           </div>
         ) : viewMode === "grid" ? (
@@ -266,21 +285,21 @@ export default function Projects() {
               >
                 <div className="flex flex-col gap-1.5 max-w-2xl">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-sans text-slate-300 font-bold uppercase">
+                    <span className="text-xs font-sans text-[var(--muted)] font-bold uppercase">
                       {p.tags.includes("ai") ? "AI System" : p.tags.includes("data") ? "Data Engine" : "Fullstack API"}
                     </span>
                     <span className="px-2 py-0.5 rounded bg-sky-500/15 text-sky-400 font-sans text-xs font-bold border border-sky-500/30">
                       {p.status}
                     </span>
                   </div>
-                  <h4 className="text-base font-bold text-white font-sans">{p.title}</h4>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">{p.desc}</p>
+                  <h4 className="text-base font-bold text-[var(--text)] font-sans">{p.title}</h4>
+                  <p className="text-xs sm:text-sm text-[var(--muted)] leading-relaxed font-sans">{p.desc}</p>
                   
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {p.stack.map((s) => (
                       <span
                         key={s}
-                        className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-slate-100 border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
+                        className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-[var(--text)] border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
                       >
                         {getStackBadgeIcon(s)}
                         {s}
@@ -295,7 +314,7 @@ export default function Projects() {
                       href={p.github}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3.5 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs font-sans font-semibold text-slate-200 hover:text-white flex items-center gap-1.5"
+                      className="px-3.5 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs font-sans font-semibold text-[var(--muted2)] hover:text-[var(--text)] flex items-center gap-1.5"
                     >
                       <Github className="w-3.5 h-3.5" /> Code
                     </a>

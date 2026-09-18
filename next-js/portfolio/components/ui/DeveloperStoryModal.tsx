@@ -265,6 +265,23 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
   };
 
   useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      } else if (e.key === "ArrowRight") {
+        nextSlide();
+      } else if (e.key === "ArrowLeft") {
+        prevSlide();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, currentIdx, onClose]);
+
+  useEffect(() => {
     if (!isOpen) {
       stopAudio();
       setCurrentIdx(0);
@@ -278,7 +295,12 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-2xl overflow-hidden">
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="story-modal-title"
+        className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-2xl overflow-hidden"
+      >
         {/* Story Modal Container */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -289,7 +311,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
           onMouseUp={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
-          className={`relative w-full max-w-[460px] h-[88vh] max-h-[760px] rounded-3xl overflow-hidden border border-white/25 shadow-2xl flex flex-col justify-between p-5 bg-gradient-to-b ${currentSlide.gradient}`}
+          className={`story-modal-dark relative w-full max-w-[460px] h-[88vh] max-h-[760px] rounded-3xl overflow-y-auto overflow-x-hidden border border-white/25 shadow-2xl flex flex-col justify-between p-4 sm:p-5 bg-gradient-to-b ${currentSlide.gradient}`}
         >
           {/* ── FLOATING EMOJI REACTION PARTICLES ── */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-50">
@@ -423,7 +445,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                   </div>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">
+                <h3 id="story-modal-title" className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">
                   {currentSlide.title}
                 </h3>
 

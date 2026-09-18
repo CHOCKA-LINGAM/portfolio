@@ -59,12 +59,12 @@ export const ScrollEnhancer: React.FC = () => {
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 z-[900] flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[var(--surface-1)]/90 backdrop-blur-xl border border-[var(--border-strong)] text-sky-400 text-xs font-semibold shadow-2xl hover:border-sky-400/50 hover:bg-slate-900 transition-all cursor-pointer group"
+            className="fixed bottom-6 right-6 z-[900] flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[var(--surface-1)]/90 backdrop-blur-xl border border-[var(--border-strong)] text-sky-400 text-xs font-semibold shadow-2xl hover:border-sky-400/50 hover:bg-[var(--surface-2)] transition-all cursor-pointer group"
             aria-label="Scroll to top"
             title="Scroll back to top"
           >
             <ArrowUp className="w-4 h-4 text-sky-400 group-hover:-translate-y-0.5 transition-transform" />
-            <span className="hidden sm:inline text-slate-200">Top</span>
+            <span className="hidden sm:inline text-[var(--text)]">Top</span>
           </motion.button>
         )}
       </AnimatePresence>
