@@ -1,248 +1,401 @@
 "use client";
 
-import { useState } from "react";
-import { DAG_NODES, type DagNode } from "@/data/index";
-// DAG_EDGES imported below inside commented-out DagView — kept for future reuse
-// import { DAG_EDGES, type DagEdge } from "@/data/index";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Database,
+  Server,
+  Cpu,
+  Cloud,
+  Layout,
+  ArrowRight,
+  Terminal,
+  Code2,
+  Box,
+  Flame,
+  Globe,
+  GitBranch,
+  ShieldCheck,
+  Workflow,
+  LineChart,
+  Search,
+  X,
+} from "lucide-react";
+import skillsData from "@/data/skills.json";
+import SectionLayout from "@/components/layout/SectionLayout";
+import { SectionInsightBar } from "@/components/ui/NarratorStrip";
 
-const nodes = DAG_NODES as DagNode[];
-
-function displayLabel(label: string) {
-  return label.replaceAll("_", " ");
+function getSkillIcon(skill: string) {
+  const s = skill.toLowerCase();
+  if (s.includes("python")) return <Terminal className="w-3.5 h-3.5 text-yellow-400" />;
+  if (s.includes("fastapi") || s.includes("django") || s.includes("flask"))
+    return <Server className="w-3.5 h-3.5 text-emerald-400" />;
+  if (s.includes("databricks") || s.includes("pyspark"))
+    return <Flame className="w-3.5 h-3.5 text-orange-400" />;
+  if (s.includes("postgresql") || s.includes("sql"))
+    return <Database className="w-3.5 h-3.5 text-sky-400" />;
+  if (s.includes("openai") || s.includes("bedrock") || s.includes("langchain"))
+    return <Cpu className="w-3.5 h-3.5 text-purple-400" />;
+  if (s.includes("azure") || s.includes("docker") || s.includes("kubernetes"))
+    return <Box className="w-3.5 h-3.5 text-amber-400" />;
+  if (s.includes("github") || s.includes("ci/cd"))
+    return <GitBranch className="w-3.5 h-3.5 text-slate-300" />;
+  if (s.includes("next.js") || s.includes("react"))
+    return <Globe className="w-3.5 h-3.5 text-cyan-400" />;
+  if (s.includes("typescript")) return <Code2 className="w-3.5 h-3.5 text-blue-400" />;
+  if (s.includes("power bi") || s.includes("analytics"))
+    return <LineChart className="w-3.5 h-3.5 text-yellow-400" />;
+  if (s.includes("guardrails") || s.includes("fallback"))
+    return <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />;
+  return <Workflow className="w-3.5 h-3.5 text-indigo-400" />;
 }
 
-const ICONS: Record<string, string> = {
-  core:  "⚙",
-  ai:    "🤖",
-  data:  "📊",
-  infra: "☁",
-  ui:    "🎨",
-  db:    "🗄",
+const STAGE_ICONS: Record<string, React.ReactNode> = {
+  Database: <Database className="w-4 h-4 text-emerald-400" />,
+  Server: <Server className="w-4 h-4 text-sky-400" />,
+  Cpu: <Cpu className="w-4 h-4 text-purple-400" />,
+  Cloud: <Cloud className="w-4 h-4 text-amber-400" />,
+  Layout: <Layout className="w-4 h-4 text-indigo-400" />,
 };
 
-const ACCENT_COLORS: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  core:  { bg: "rgba(139,92,246,.08)",  border: "rgba(139,92,246,.25)",  text: "#a78bfa", glow: "rgba(139,92,246,.15)" },
-  ai:    { bg: "rgba(59,130,246,.08)",  border: "rgba(59,130,246,.25)",  text: "#60a5fa", glow: "rgba(59,130,246,.15)" },
-  data:  { bg: "rgba(16,185,129,.08)",  border: "rgba(16,185,129,.25)",  text: "#34d399", glow: "rgba(16,185,129,.15)" },
-  infra: { bg: "rgba(245,158,11,.08)",  border: "rgba(245,158,11,.25)",  text: "#fbbf24", glow: "rgba(245,158,11,.15)" },
-  ui:    { bg: "rgba(236,72,153,.08)",  border: "rgba(236,72,153,.25)",  text: "#f472b6", glow: "rgba(236,72,153,.15)" },
-  db:    { bg: "rgba(20,184,166,.08)",  border: "rgba(20,184,166,.25)",  text: "#2dd4bf", glow: "rgba(20,184,166,.15)" },
+const STAGE_THEMES: Record<string, { border: string; glow: string; text: string; badge: string }> = {
+  "layer-data": {
+    border: "border-emerald-500/40 hover:border-emerald-500/70",
+    glow: "rgba(52, 211, 153, 0.15)",
+    text: "#34d399",
+    badge: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  },
+  "layer-backend": {
+    border: "border-sky-500/40 hover:border-sky-500/70",
+    glow: "rgba(56, 189, 248, 0.15)",
+    text: "#38bdf8",
+    badge: "bg-sky-500/15 text-sky-400 border-sky-500/30",
+  },
+  "layer-ai": {
+    border: "border-purple-500/40 hover:border-purple-500/70",
+    glow: "rgba(192, 132, 252, 0.15)",
+    text: "#c084fc",
+    badge: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+  },
+  "layer-infra": {
+    border: "border-amber-500/40 hover:border-amber-500/70",
+    glow: "rgba(251, 191, 36, 0.15)",
+    text: "#fbbf24",
+    badge: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  },
+  "layer-ui": {
+    border: "border-indigo-500/40 hover:border-indigo-500/70",
+    glow: "rgba(129, 140, 248, 0.15)",
+    text: "#818cf8",
+    badge: "bg-indigo-500/15 text-indigo-400 border-indigo-500/30",
+  },
 };
 
-// ─── DAG View (commented out — reserved for future reuse) ──────────────────
-/*
-import { useEffect, useRef } from "react";
-import { DAG_EDGES, type DagEdge } from "@/data/index";
-const edges = DAG_EDGES as DagEdge[];
+const CORE_SKILLS = new Set(["Python", "PySpark", "Databricks", "FastAPI", "OpenAI API", "AWS Bedrock", "Docker", "PostgreSQL", "Kafka", "Azure AKS"]);
 
-function DagView() {
-  const [activeId, setActiveId] = useState(nodes[0]?.id ?? "");
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [svgWidth, setSvgWidth] = useState(0);
-  const outerRef = useRef<HTMLDivElement>(null);
+const SKILL_DETAILS: Record<string, { usage: string; impact: string }> = {
+  Python: { usage: "Core language for backend microservices, PySpark ETL scripts, & GenAI agents", impact: "5+ years enterprise production code" },
+  FastAPI: { usage: "High-performance async REST & GraphQL microservice APIs with Pydantic v2 validation", impact: "Sub-50ms latency endpoints" },
+  Databricks: { usage: "Multi-tenant cloud lakehouse infrastructure & automated notebook workflow deployments", impact: "Built PyPI package databricks-bundle" },
+  PySpark: { usage: "Distributed data frame transformation & ETL ingestion over multi-terabyte datasets", impact: "40% processing speedup" },
+  PostgreSQL: { usage: "Relational data modeling, connection pooling, and indexing optimization", impact: "Zero query bottlenecks under high concurrency" },
+  "OpenAI API": { usage: "GPT-4 multi-step reasoning, prompt guardrails, and tool calling workflows", impact: "Production GenAI orchestration" },
+  "AWS Bedrock": { usage: "Enterprise foundation model API integration & multi-agent failover fallbacks", impact: "99.99% system availability" },
+  "Azure AKS": { usage: "Kubernetes container cluster deployment, pod autoscaling, & Azure DevOps pipelines", impact: "Automated zero-downtime rollouts" },
+  Docker: { usage: "Containerized microservice packaging with multi-stage production Dockerfiles", impact: "Standardized dev & prod environments" },
+  Kafka: { usage: "Real-time event-driven message queuing & stream processing pipelines", impact: "High-concurrency async event bus" },
+  LangChain: { usage: "Agent memory vector integration, retrieval guardrails, & tool orchestration", impact: "Autonomous multi-agent workflows" },
+};
 
-  useEffect(() => {
-    if (!outerRef.current) return;
-    const obs = new ResizeObserver(([entry]) => {
-      setSvgWidth(Math.floor(entry.contentRect.width));
-    });
-    obs.observe(outerRef.current);
-    setSvgWidth(outerRef.current.clientWidth);
-    return () => obs.disconnect();
-  }, []);
-
-  const accent = "#8fb2ff";
-  const W = svgWidth;
-  const nodeW = W > 0 ? Math.min(Math.max(Math.floor(W * 0.175), 130), 200) : 160;
-  const nodeH = Math.min(Math.max(Math.floor(nodeW * 0.68), 88), 132);
-  const pad   = Math.max(16, Math.floor(W * 0.025));
-  const svgH  = W > 0 ? Math.floor(nodeH * 3.2 + pad * 2) : 320;
-
-  const pos: Record<string, { x: number; y: number }> = {};
-  if (W > 0) {
-    nodes.forEach((n) => {
-      pos[n.id] = {
-        x: pad + n.x * (W - pad * 2 - nodeW),
-        y: pad + n.y * (svgH - pad * 2 - nodeH),
-      };
-    });
-  }
-
-  const activeNode = nodes.find((n) => n.id === activeId) ?? nodes[0];
-
-  return (
-    <div className="flex flex-col gap-4 w-full">
-      // ... Mobile/Tablet fallback and Desktop SVG DAG here
-    </div>
-  );
-}
-*/
-// ─── End DAG View ──────────────────────────────────────────────────────────
-
-// ─── Bento Grid ────────────────────────────────────────────────────────────
-function BentoView() {
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  return (
-    /* On xl (3 cols × 2 rows): h-full + gridAutoRows:1fr makes cards fill the panel.
-       On sm/mobile: natural height, scrollable via the parent overflow-y-auto panel. */
-    <div
-      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full xl:h-full"
-      style={{ gridAutoRows: "minmax(0, 1fr)" }}
-    >
-      {nodes.map((node) => {
-        const col = ACCENT_COLORS[node.id] ?? ACCENT_COLORS.core;
-        const isActive = activeId === node.id;
-        const previewCount = 4; // show more tags since cards are taller
-        const hiddenCount = node.skills.length - previewCount;
-
-        return (
-          <div
-            key={node.id}
-            onClick={() => setActiveId(isActive ? null : node.id)}
-            className="relative group rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden select-none flex flex-col"
-            style={{
-              padding: "clamp(18px, 2vw, 28px)",
-              background: isActive
-                ? `radial-gradient(circle at 0% 0%, ${col.glow}, transparent 55%), rgba(7,8,16,.97)`
-                : "rgba(7,8,16,.9)",
-              borderColor: isActive ? col.border : "rgba(255,255,255,.06)",
-              boxShadow: isActive
-                ? `0 20px 48px -12px ${col.glow}`
-                : "0 4px 16px -4px rgba(0,0,0,.4)",
-              transform: isActive ? "translateY(-2px)" : "translateY(0)",
-            }}
-          >
-            {/* Hover ambient glow */}
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-              style={{ background: `radial-gradient(circle at 0% 0%, ${col.glow}, transparent 55%)` }}
-            />
-
-            {/* Card header */}
-            <div className="flex items-start justify-between mb-4 relative z-10">
-              <div className="flex items-center gap-3">
-                <span
-                  className="flex items-center justify-center rounded-xl text-[20px] flex-shrink-0"
-                  style={{
-                    width: "clamp(36px, 3vw, 44px)",
-                    height: "clamp(36px, 3vw, 44px)",
-                    background: col.bg,
-                    border: `1px solid ${col.border}`,
-                  }}
-                >
-                  {ICONS[node.id]}
-                </span>
-                <div>
-                  <div
-                    className="font-mono font-extrabold uppercase leading-tight"
-                    style={{ fontSize: "clamp(9px, 1vw, 11px)", letterSpacing: "1.5px", color: col.text }}
-                  >
-                    {displayLabel(node.label)}
-                  </div>
-                  <div className="font-mono text-[9px] text-[var(--muted)] opacity-60 mt-0.5">
-                    {node.skills.length} capabilities
-                  </div>
-                </div>
-              </div>
-              <span
-                className="font-mono text-[8px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ml-2 transition-all duration-200"
-                style={{
-                  background: col.bg,
-                  border: `1px solid ${col.border}`,
-                  color: col.text,
-                }}
-              >
-                {isActive ? "▲ HIDE" : "▼ VIEW"}
-              </span>
-            </div>
-
-            {/* Skill tags — more in preview, all when active */}
-            <div className="flex flex-wrap gap-1.5 relative z-10">
-              {(isActive ? node.skills : node.skills.slice(0, previewCount)).map((skill) => (
-                <span
-                  key={skill}
-                  className="font-mono font-bold px-2.5 py-1 rounded-[6px] transition-all duration-200"
-                  style={{
-                    fontSize: "clamp(8px, .85vw, 10px)",
-                    background: isActive ? col.bg : "rgba(255,255,255,.025)",
-                    border: `1px solid ${isActive ? col.border : "rgba(255,255,255,.06)"}`,
-                    color: isActive ? col.text : "var(--muted)",
-                  }}
-                >
-                  {skill}
-                </span>
-              ))}
-              {!isActive && hiddenCount > 0 && (
-                <span
-                  className="font-mono font-bold px-2.5 py-1 rounded-[6px]"
-                  style={{
-                    fontSize: "clamp(8px, .85vw, 10px)",
-                    background: "rgba(255,255,255,.025)",
-                    border: "1px solid rgba(255,255,255,.06)",
-                    color: "var(--muted)",
-                  }}
-                >
-                  +{hiddenCount} more
-                </span>
-              )}
-            </div>
-
-            {/* Spacer — pushes bottom elements down in tall cards */}
-            <div className="flex-1" />
-
-            {/* Bottom: subtle capability dots */}
-            <div className="relative z-10 flex items-center gap-1.5 mt-4">
-              {node.skills.map((_, i) => (
-                <span
-                  key={i}
-                  className="rounded-full transition-all duration-300"
-                  style={{
-                    width: isActive || i < previewCount ? "clamp(5px,0.6vw,7px)" : "clamp(3px,0.4vw,5px)",
-                    height: isActive || i < previewCount ? "clamp(5px,0.6vw,7px)" : "clamp(3px,0.4vw,5px)",
-                    background: isActive || i < previewCount ? col.text : "rgba(255,255,255,.12)",
-                    opacity: isActive ? 1 : i < previewCount ? 0.8 : 0.3,
-                    boxShadow: isActive || i < previewCount ? `0 0 6px ${col.glow}` : "none",
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Bottom accent line */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300"
-              style={{
-                background: `linear-gradient(to right, transparent, ${col.text}, transparent)`,
-                opacity: isActive ? 0.5 : 0.15,
-              }}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-// ─── End Bento Grid ────────────────────────────────────────────────────────
-
-// ─── Main Skills Section ───────────────────────────────────────────────────
 export default function Skills() {
-  return (
-    /* h-full + flex-col so the grid can stretch to fill the panel height */
-    <section className="flex h-full min-h-0 flex-col py-4">
-      {/* Section header */}
-      <div className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[2px] text-[var(--accent)]">
-        <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
-        Skills Overview
-      </div>
-      <h2 className="mb-5 text-[clamp(28px,4.5vw,50px)] font-black leading-none tracking-[-2.5px] text-white">
-        Technical Skills
-      </h2>
+  const authenticNodes = skillsData.nodes;
+  const [selectedLayer, setSelectedLayer] = useState<string>("layer-backend");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("Core Services");
+  const [activeSkillDetail, setActiveSkillDetail] = useState<string | null>(null);
 
-      {/* Bento grid: on xl, overflow hidden so cards fill height without scrolling.
-          On smaller screens, overflow-y auto lets the stack scroll naturally. */}
-      <div className="flex-1 min-h-0 overflow-y-auto xl:overflow-hidden">
-        <BentoView />
+  const activeData = authenticNodes.find((l) => l.id === selectedLayer) || authenticNodes[1];
+  const activeTheme = STAGE_THEMES[activeData.id] || STAGE_THEMES["layer-backend"];
+
+  const q = searchQuery.toLowerCase().trim();
+
+  const isMatch = (skillName: string) => {
+    if (!q) return true;
+    return skillName.toLowerCase().includes(q);
+  };
+
+  const handleCardClick = (node: (typeof authenticNodes)[0]) => {
+    setSelectedLayer(node.id);
+    setSelectedCategoryFilter(node.category);
+    setActiveSkillDetail(null);
+  };
+
+  const handleCategoryChipClick = (cat: string) => {
+    setSelectedCategoryFilter(cat);
+    setActiveSkillDetail(null);
+    if (cat === "All") return;
+    const matchingLayer = authenticNodes.find((l) => l.category.includes(cat) || cat.includes(l.category));
+    if (matchingLayer) {
+      setSelectedLayer(matchingLayer.id);
+    }
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setActiveSkillDetail(null);
+    const val = value.toLowerCase().trim();
+
+    if (val) {
+      const matchingLayer = authenticNodes.find((layer) =>
+        layer.skills.some((skill) => skill.toLowerCase().includes(val))
+      );
+      if (matchingLayer) {
+        setSelectedLayer(matchingLayer.id);
+        setSelectedCategoryFilter(matchingLayer.category);
+      }
+    }
+  };
+
+  const categories = ["All", "Data", "Core Services", "AI Engine", "DevOps & Cloud", "UI"];
+
+  return (
+    <SectionLayout
+      label="Skills & Expertise"
+      title="System Architecture Pipeline"
+      scrollable={false}
+      sectionNumber="03 / 05"
+    >
+      {/* ── SECTION INSIGHT BAR ── */}
+      <SectionInsightBar
+        tag="PIPELINE STACK"
+        quote="Structured across 5 distinct architectural layers — from raw data ingestion to cloud orchestration & production AI APIs."
+      />
+
+      <div className="w-full flex-1 flex flex-col gap-3 max-w-full">
+        {/* ─── Search & Category Filter Bar ─── */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 bg-[var(--surface-1)] p-2.5 sm:p-3 rounded-2xl border border-[var(--border-strong)] backdrop-blur-md shadow-lg max-w-full flex-shrink-0">
+          {/* Search Bar */}
+          <div className="relative flex-1 min-w-0">
+            <Search className="w-4 h-4 text-[var(--muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              aria-label="Filter skills"
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Filter skills (e.g. Python, Databricks, Docker, Bedrock)..."
+              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs sm:text-sm text-[var(--text)] placeholder-[var(--text-muted)] outline-none focus:border-sky-500/60 transition-all font-sans"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => handleSearchChange("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)]"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Quick Filter Badges */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 max-w-full">
+            {categories.map((cat) => {
+              const isActive = selectedCategoryFilter === cat || selectedCategoryFilter.includes(cat);
+              return (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChipClick(cat)}
+                  className={`px-3 py-1 rounded-xl text-xs whitespace-nowrap transition-all border font-semibold font-sans ${
+                    isActive
+                      ? "bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-md ring-1 ring-sky-500/30"
+                      : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:bg-[var(--surface-1)]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ─── Pipeline Grid Container ─── */}
+        <div className="relative w-full rounded-2xl p-3.5 sm:p-4.5 border border-[var(--border-strong)] bg-[var(--surface-1)] shadow-2xl flex flex-col gap-3.5 max-w-full">
+          {/* Ambient Glow */}
+          <div
+            className="absolute inset-0 opacity-20 pointer-events-none transition-all duration-500"
+            style={{
+              background: `radial-gradient(circle at 50% 20%, ${activeTheme.glow}, transparent 70%)`,
+            }}
+          />
+
+          {/* 5 Stage Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10 max-w-full">
+            {authenticNodes.map((node, idx) => {
+              const isSelected = selectedLayer === node.id;
+              const hasMatchingSkill = q && node.skills.some((s) => isMatch(s));
+              const isFiltered =
+                selectedCategoryFilter !== "All" &&
+                !selectedCategoryFilter.includes(node.category) &&
+                !node.category.includes(selectedCategoryFilter);
+              const theme = STAGE_THEMES[node.id] || STAGE_THEMES["layer-backend"];
+
+              return (
+                <motion.div
+                  key={node.id}
+                  onClick={() => handleCardClick(node)}
+                  whileHover={{ y: -3 }}
+                  className={`relative rounded-xl p-4 cursor-pointer border backdrop-blur-xl transition-all duration-300 flex flex-col justify-between select-none max-w-full ${theme.border} ${
+                    isSelected ? "ring-2 ring-sky-400 bg-[var(--surface-2)] shadow-xl" : "bg-[var(--surface-1)]"
+                  } ${hasMatchingSkill ? "!border-amber-400/80 ring-2 ring-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)]" : ""} ${
+                    isFiltered && !isSelected ? "opacity-50" : "opacity-100"
+                  }`}
+                  style={{
+                    boxShadow: isSelected
+                      ? `0 12px 32px -4px ${theme.glow}, inset 0 1px 0 rgba(255,255,255,0.12)`
+                      : "0 4px 16px -4px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[var(--border)]">
+                      <div className="p-1.5 rounded-lg bg-[var(--surface-2)] border border-[var(--border)]">
+                        {STAGE_ICONS[node.icon] || <Database className="w-4 h-4 text-sky-400" />}
+                      </div>
+                      <span className="text-xs font-sans font-bold text-[var(--text-muted)]">
+                        0{idx + 1}
+                      </span>
+                    </div>
+
+                    <span
+                      className={`text-xs font-sans font-bold tracking-wider uppercase px-2 py-0.5 rounded border inline-block truncate max-w-full ${theme.badge}`}
+                    >
+                      {node.category}
+                    </span>
+                    <h3 className="text-sm font-bold text-[var(--text)] mt-1.5 leading-snug">
+                      {node.label}
+                    </h3>
+                  </div>
+
+                  {/* Skills Pills */}
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {node.skills.map((skill) => {
+                      const matched = isMatch(skill);
+                      const isCore = CORE_SKILLS.has(skill);
+                      return (
+                        <span
+                          key={skill}
+                          className={`text-xs font-mono px-2 py-0.5 rounded transition-all flex items-center gap-1 font-medium border ${
+                            q && matched
+                              ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
+                              : q && !matched
+                              ? "opacity-30 bg-white/[0.02] text-[var(--text-muted)] border-white/5"
+                              : isCore
+                              ? "bg-[var(--surface-2)] text-[var(--text)] border-sky-400/40"
+                              : "bg-[var(--surface-2)] text-[var(--text)] border-[var(--border)]"
+                          }`}
+                        >
+                          {getSkillIcon(skill)}
+                          <span>{skill}</span>
+                          {isCore && <span className="w-1 h-1 rounded-full bg-sky-400 ml-0.5" title="Core Stack Competency" />}
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  {/* Flow Arrow */}
+                  {idx < authenticNodes.length - 1 && (
+                    <div className="hidden lg:flex items-center justify-between mt-3 pt-2 border-t border-[var(--border)] text-xs font-sans text-[var(--text-muted)]">
+                      <span>Pipeline</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-sky-400" />
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* ─── Layer Inspector Box ─── */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeData.id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              className="relative z-10 rounded-xl p-4 sm:p-5 border border-[var(--border-strong)] bg-[var(--surface-2)] backdrop-blur-xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 max-w-full"
+            >
+              {/* Layer Title & Badge */}
+              <div className="flex flex-col gap-1 min-w-[220px]">
+                <div className="flex items-center gap-2">
+                  <span className={`text-xs font-sans font-bold px-2.5 py-0.5 rounded border ${activeTheme.badge}`}>
+                    {activeData.category}
+                  </span>
+                  <h4 className="text-sm sm:text-base font-bold text-[var(--text)]">
+                    {activeData.label}
+                  </h4>
+                </div>
+                <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed font-sans">
+                  {activeData.desc}
+                </p>
+              </div>
+
+              {/* Skillset Matrix */}
+              <div className="flex-1 flex flex-wrap gap-2 justify-start md:justify-end border-t md:border-t-0 md:border-l border-[var(--border)] pt-3 md:pt-0 md:pl-5">
+                {activeData.skills.map((skill) => {
+                  const matched = isMatch(skill);
+                  const isSelectedSkill = activeSkillDetail === skill;
+
+                  return (
+                    <button
+                      key={skill}
+                      onClick={() => setActiveSkillDetail(isSelectedSkill ? null : skill)}
+                      title={`Click to inspect ${skill} production architecture`}
+                      className={`text-xs font-mono px-3.5 py-1.5 rounded-xl transition-all flex items-center gap-2 font-medium border shadow-sm cursor-pointer ${
+                        isSelectedSkill
+                          ? "bg-sky-500/30 text-sky-200 border-sky-400 ring-2 ring-sky-400/50 scale-105"
+                          : q && matched
+                          ? "bg-amber-400/20 text-amber-300 border-amber-400/60 font-bold scale-105"
+                          : q && !matched
+                          ? "opacity-30 bg-white/[0.03] text-[var(--text-muted)] border-white/5"
+                          : "bg-[var(--surface-1)] text-[var(--text)] border-[var(--border-strong)] hover:border-sky-400/50"
+                      }`}
+                    >
+                      {getSkillIcon(skill)}
+                      <span className="font-semibold text-[var(--text)]">{skill}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* ─── Production Skill Architecture Detail Popover ─── */}
+          <AnimatePresence>
+            {activeSkillDetail && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, y: 4 }}
+                animate={{ opacity: 1, height: "auto", y: 0 }}
+                exit={{ opacity: 0, height: 0, y: 4 }}
+                className="relative z-10 rounded-xl p-4 border border-sky-500/40 bg-[var(--surface-2)] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-sky-400 flex items-center gap-1.5 font-sans text-sm">
+                    ⚡ {activeSkillDetail} Architecture Snapshot:
+                  </span>
+                  <p className="text-[var(--text)] font-sans leading-relaxed">
+                    {SKILL_DETAILS[activeSkillDetail]?.usage || `Production technology integrated across ${activeData.label} pipeline microservices.`}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center bg-[var(--surface-1)] px-3 py-2 rounded-lg border border-[var(--border)]">
+                  <span className="font-semibold text-[var(--muted)] font-sans">Metrics & Impact:</span>
+                  <span className="font-mono font-bold text-emerald-400">
+                    {SKILL_DETAILS[activeSkillDetail]?.impact || "High-Throughput Production Node"}
+                  </span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </section>
+    </SectionLayout>
   );
 }
+
+

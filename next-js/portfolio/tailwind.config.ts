@@ -13,9 +13,12 @@ const config: Config = {
         sans: ["var(--font-manrope)", "sans-serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
       },
+      spacing: {
+        "4.5": "1.125rem",
+      },
       transitionDuration: { "400": "400ms" },
       backgroundImage: {
-        "radial-": "radial-gradient(var(--tw-gradient-stops))",
+        "radial-glow": "radial-gradient(var(--tw-gradient-stops))",
       },
     },
   },
@@ -23,3 +26,4 @@ const config: Config = {
 };
 
 export default config;
+

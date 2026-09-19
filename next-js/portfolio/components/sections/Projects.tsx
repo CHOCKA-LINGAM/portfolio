@@ -1,108 +1,335 @@
 "use client";
-import { useState } from "react";
-import { ExternalLink } from "lucide-react";
-import { PROJECTS, type Project } from "@/data/index";
 
-// ─── Edit data/projects.json to add / remove / reorder projects ───
-// Tags used for filtering — add new tags here if you add them to JSON
-const FILTERS = [
-  { id: "all", label: "All Projects" },
-  { id: "ai", label: "AI / GenAI" },
-  { id: "data", label: "Data / ETL" },
-  { id: "oss", label: "Open Source" },
-  { id: "fullstack", label: "Fullstack" },
+import { useState } from "react";
+import { ExternalLink, Github, Sparkles, Terminal, Flame, Database, Cpu, Globe, Box, LayoutGrid, List, Search, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { PROJECTS, type Project } from "@/data/index";
+import SectionLayout from "@/components/layout/SectionLayout";
+import { SectionInsightBar } from "@/components/ui/NarratorStrip";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
+
+const DOMAIN_TABS = [
+  { id: "all", label: "All Systems", count: 6 },
+  { id: "ai", label: "AI & GenAI", count: 3 },
+  { id: "data", label: "Data Pipelines & PyPI", count: 3 },
+  { id: "fullstack", label: "Fullstack & APIs", count: 2 },
 ];
 
-const PUBLISHED_PROJECT_STATUSES = new Set(["active"]);
+function getStackBadgeIcon(tech: string) {
+  const t = tech.toLowerCase();
+  if (t.includes("python") || t.includes("asyncio")) return <Terminal className="w-3.5 h-3.5 text-yellow-400" />;
+  if (t.includes("fastapi") || t.includes("django")) return <Globe className="w-3.5 h-3.5 text-emerald-400" />;
+  if (t.includes("databricks") || t.includes("pypi")) return <Flame className="w-3.5 h-3.5 text-orange-400" />;
+  if (t.includes("postgresql") || t.includes("sql")) return <Database className="w-3.5 h-3.5 text-sky-400" />;
+  if (t.includes("rag") || t.includes("ai") || t.includes("langchain")) return <Cpu className="w-3.5 h-3.5 text-purple-400" />;
+  if (t.includes("aks") || t.includes("docker")) return <Box className="w-3.5 h-3.5 text-amber-400" />;
+  return <Sparkles className="w-3.5 h-3.5 text-indigo-400" />;
+}
+
+function getLinkText(url: string) {
+  if (url.includes("pypi.org")) return "PyPI Package";
+  if (url.includes("github.com")) return "GitHub Repository";
+  if (url.includes("linkedin.com")) return "Project Case Study";
+  return "Live Demo";
+}
 
 export default function Projects() {
-  const [filter, setFilter] = useState("all");
-  const [query, setQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const visible = (PROJECTS as Project[]).filter(p => {
-    const matchStatus = PUBLISHED_PROJECT_STATUSES.has(p.project_status);
-    const matchF = filter === "all" || p.tags.includes(filter);
-    const matchQ = !query || [p.title, p.desc, ...p.stack].join(" ").toLowerCase().includes(query.toLowerCase());
-    return matchStatus && matchF && matchQ;
+  const visibleProjects = (PROJECTS as Project[]).filter((p) => {
+    const matchesTab = activeTab === "all" || p.tags.includes(activeTab);
+    if (!matchesTab) return false;
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase().trim();
+    return (
+      p.title.toLowerCase().includes(q) ||
+      p.desc.toLowerCase().includes(q) ||
+      p.stack.some((s) => s.toLowerCase().includes(q))
+    );
   });
 
+  const featured = visibleProjects.find((p) => p.featured) || visibleProjects[0];
+  const gridProjects = visibleProjects.filter((p) => p.id !== featured?.id);
 
   return (
-    <div className="py-4">
-      <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--accent)] uppercase tracking-[2px] mb-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-[var(--green)] animate-pulse-ring" />
-        Project Portfolio
-      </div>
-      <h2 className="text-[clamp(32px,4.5vw,50px)] font-black tracking-[-2.5px] text-white leading-none mb-8">
-      Highlighted Projects
-      </h2>
-
-      {/* ── Filters ── */}
-      <div className="flex flex-wrap items-center gap-3 mb-8">
-        <input
-          value={query} onChange={e => setQuery(e.target.value)}
-          placeholder="Search stack, title, or keyword…"
-          className="flex-1 min-w-[200px] rounded-[11px] px-4 py-2.5 text-white font-mono text-[12px] outline-none transition-all focus:border-[rgba(var(--ar),.3)]"
-          style={{ background: "rgba(255,255,255,.02)", border: "1px solid var(--border)" }}
+    <SectionLayout label="Engineering Portfolio" title="Featured Projects & Systems" scrollable={false} sectionNumber="04 / 05">
+      <div className="w-full flex-1 flex flex-col gap-3 max-w-full">
+        {/* ── SECTION INSIGHT BAR ── */}
+        <SectionInsightBar
+          tag="SYSTEMS SHOWCASE"
+          quote="Open-source PyPI packages, multi-agent AI frameworks, and high-concurrency data ingestion engines."
         />
-        <div className="flex gap-1.5 flex-wrap">
-          {FILTERS.map(f => (
-            <button key={f.id} onClick={() => setFilter(f.id)}
-              className={`px-3.5 py-2 rounded-[9px] text-[10px] font-extrabold uppercase tracking-[.8px] transition-all border ${filter === f.id
-                  ? "text-[var(--accent)] bg-[rgba(var(--ar),.12)] border-[rgba(var(--ar),.3)]"
-                  : "text-[var(--muted)] hover:text-white border-white/[.07] bg-[rgba(255,255,255,.02)]"
-                }`}>
-              {f.label}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      {/* ── Cards ── */}
-      {visible.length === 0 ? (
-        <div className="text-[var(--muted)] text-[14px] py-12 text-center">
-          No projects match — try a different filter or search term.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[18px]">
-          {visible.map((p, i) => (
-            <div key={p.id}
-              className="animate-card-in flex flex-col rounded-[20px] p-6 relative overflow-hidden transition-all duration-[320ms] hover:-translate-y-1 hover:shadow-[0_22px_48px_-10px_rgba(0,0,0,.5)] hover:border-[rgba(var(--ar),.22)] group"
-              style={{ background: "rgba(7,8,16,.9)", border: "1px solid var(--border)", animationDelay: `${i * .05}s` }}>
+        {/* ─── Search & Domain Filter Controls ─── */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 bg-[var(--surface-1)] p-2.5 sm:p-3 rounded-2xl border border-[var(--border-strong)] backdrop-blur-md shadow-lg flex-shrink-0">
+          {/* Search Input Bar */}
+          <div className="relative flex-1 min-w-0">
+            <Search className="w-4 h-4 text-[var(--muted)] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              aria-label="Filter projects by technology or keyword"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search systems by tech (e.g. PyPI, Kafka, FastAPI, Bedrock, LangChain)..."
+              className="w-full pl-10 pr-9 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs sm:text-sm text-[var(--text)] placeholder-[var(--text-muted)] outline-none focus:border-sky-500/60 transition-all font-sans"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--text)]"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
 
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[320ms] pointer-events-none"
-                style={{ background: "radial-gradient(circle at 100% 0%, rgba(var(--ar),.08), transparent)" }} />
-
-              <div className="flex justify-between items-center mb-3">
-                <span className="font-mono text-[9px] text-[var(--muted)] opacity-50">PRJ_{i+1}</span>
-                <span className="font-mono text-[9px] font-extrabold text-[var(--green)] uppercase tracking-[.5px]">{p.status}</span>
-              </div>
-              <div className="text-[18px] font-black tracking-[-0.6px] text-white mb-2">{p.title}</div>
-              <div className="text-[13px] leading-[1.72] text-[var(--muted)] mb-4 flex-1">{p.desc}</div>
-
-              <div className="flex flex-wrap gap-1.5 mb-3.5">
-                {p.stack.map(s => (
-                  <span key={s} className="font-mono text-[9px] font-bold px-2.5 py-[3px] rounded-[6px] uppercase tracking-[.4px] opacity-80"
-                    style={{ background: "rgba(var(--ar),.07)", border: "1px solid rgba(var(--ar),.15)", color: "rgba(var(--ar),1)" }}>
-                    {s}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex gap-3 border-t pt-3.5" style={{ borderColor: "rgba(255,255,255,.04)" }}>
-                {/* <a href={p.github} target="_blank" rel="noreferrer"
-                  className="flex items-center gap-1.5 text-[11px] font-extrabold text-[var(--muted2)] hover:text-[var(--accent)] transition-colors">
-                  <Github size={12} /> GitHub
-                </a> */}
-                <a href={p.link} target="_blank" rel="noreferrer"
-                  className="flex items-center gap-1.5 text-[11px] font-extrabold text-[var(--muted2)] hover:text-[var(--accent)] transition-colors">
-                  <ExternalLink size={12} /> Details
-                </a>
-              </div>
+          {/* Domain Tabs & View Switcher */}
+          <div className="flex items-center justify-between gap-2.5 overflow-x-auto pb-1 md:pb-0">
+            <div className="flex items-center gap-1.5 shrink-0">
+              {DOMAIN_TABS.map((tab) => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border flex items-center gap-2 font-mono ${
+                      isActive
+                        ? "bg-sky-500/20 text-sky-300 border-sky-500/50 font-bold shadow-md ring-1 ring-sky-500/30"
+                        : "bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)] hover:text-[var(--text)] hover:bg-[var(--surface-1)]"
+                    }`}
+                  >
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
             </div>
-          ))}
+
+            {/* View Mode Switcher */}
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs font-semibold font-mono shrink-0">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                  viewMode === "grid" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-[var(--muted)] hover:text-[var(--text)]"
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+                Grid
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className={`px-2.5 py-0.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                  viewMode === "list" ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40" : "text-[var(--muted)] hover:text-[var(--text)]"
+                }`}
+              >
+                <List className="w-3.5 h-3.5" />
+                List
+              </button>
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+
+        {/* ─── Projects Display ─── */}
+        {visibleProjects.length === 0 ? (
+          <div className="text-[var(--muted)] text-xs sm:text-sm py-12 text-center font-sans rounded-2xl bg-[var(--surface-1)] border border-[var(--border)]">
+            No projects found in this domain. Select another category above.
+          </div>
+        ) : viewMode === "grid" ? (
+          <div className="flex flex-col gap-3">
+            {/* HERO FEATURED SHOWCASE CARD */}
+            {featured && (
+              <SpotlightCard tilt="none" className="relative rounded-2xl p-5 border-sky-500/40 overflow-hidden">
+                <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                  <div className="flex flex-col gap-2 max-w-2xl">
+                    <div className="flex items-center gap-3">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/30 tracking-wider">
+                        {featured.status}
+                      </span>
+                      <span className="text-xs font-mono text-sky-400 font-bold flex items-center gap-1">
+                        <Sparkles size={13} className="text-amber-400" /> Featured Architecture
+                      </span>
+                    </div>
+
+                    <h3 className="text-2xl sm:text-3xl font-display font-extrabold text-[var(--text)] tracking-tight">
+                      {featured.title}
+                    </h3>
+
+                    <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed font-sans">
+                      {featured.desc}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {featured.stack.map((s) => (
+                        <span
+                          key={s}
+                          className="px-2.5 py-1 rounded-lg bg-[var(--surface-1)] text-[var(--text)] border border-[var(--border-strong)] text-xs font-mono font-medium flex items-center gap-1.5 shadow-sm"
+                        >
+                          {getStackBadgeIcon(s)}
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 self-start lg:self-center">
+                    {featured.github && (
+                      <a
+                        href={featured.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-4 py-2.5 rounded-xl bg-[var(--surface-1)] border border-[var(--border-strong)] text-xs font-mono font-semibold text-[var(--text)] hover:text-sky-400 transition-all flex items-center gap-2"
+                      >
+                        <Github className="w-4 h-4 text-sky-400" />
+                        Source Code
+                      </a>
+                    )}
+                    {featured.link && (
+                      <a
+                        href={featured.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-sky-500/20 flex items-center gap-2 font-mono"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        {getLinkText(featured.link)}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </SpotlightCard>
+            )}
+
+            {/* Grid Matrix for Remaining Projects */}
+            {gridProjects.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <AnimatePresence mode="popLayout">
+                  {gridProjects.map((p, i) => (
+                    <SpotlightCard
+                      key={p.id}
+                      tilt={i % 2 === 0 ? "left" : "right"}
+                      className="flex flex-col p-5 backdrop-blur-xl transition-all duration-300 shadow-lg justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-[var(--border)]">
+                          <span className="text-xs font-mono text-[var(--text-muted)] font-bold uppercase">
+                            {p.tags.includes("ai") ? "AI System" : p.tags.includes("data") ? "Data Engine" : "Fullstack API"}
+                          </span>
+                          <span className="px-2.5 py-0.5 rounded bg-sky-500/15 text-sky-400 font-mono text-xs font-bold border border-sky-500/30">
+                            {p.status}
+                          </span>
+                        </div>
+
+                        <h4 className="text-lg font-display font-bold text-[var(--text)] mb-1.5 group-hover:text-sky-400 transition-colors">{p.title}</h4>
+                        <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-4 font-sans">{p.desc}</p>
+                      </div>
+
+                      <div>
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {p.stack.map((s) => (
+                            <span
+                              key={s}
+                              className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-[var(--text)] border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
+                            >
+                              {getStackBadgeIcon(s)}
+                              {s}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2.5 border-t border-[var(--border)]">
+                          {p.github && (
+                            <a
+                              href={p.github}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs font-sans font-semibold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors flex items-center gap-1.5"
+                            >
+                              <Github className="w-3.5 h-3.5 text-sky-400" />
+                              Code
+                            </a>
+                          )}
+                          {p.link && (
+                            <a
+                              href={p.link}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs font-sans text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-1 font-bold ml-auto"
+                            >
+                              {getLinkText(p.link)} <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </SpotlightCard>
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </div>
+        ) : (
+          /* List View Mode with Full Tech Pills & Smart Buttons */
+          <div className="flex flex-col gap-3">
+            {visibleProjects.map((p) => (
+              <div
+                key={p.id}
+                className="p-4 sm:p-5 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-1)] flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-sky-500/40 transition-all"
+              >
+                <div className="flex flex-col gap-1.5 max-w-2xl">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-sans text-[var(--muted)] font-bold uppercase">
+                      {p.tags.includes("ai") ? "AI System" : p.tags.includes("data") ? "Data Engine" : "Fullstack API"}
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-sky-500/15 text-sky-400 font-sans text-xs font-bold border border-sky-500/30">
+                      {p.status}
+                    </span>
+                  </div>
+                  <h4 className="text-base font-bold text-[var(--text)] font-sans">{p.title}</h4>
+                  <p className="text-xs sm:text-sm text-[var(--muted)] leading-relaxed font-sans">{p.desc}</p>
+                  
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {p.stack.map((s) => (
+                      <span
+                        key={s}
+                        className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-[var(--text)] border border-[var(--border)] text-xs font-mono font-medium flex items-center gap-1"
+                      >
+                        {getStackBadgeIcon(s)}
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 self-start md:self-center">
+                  {p.github && (
+                    <a
+                      href={p.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-3.5 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs font-sans font-semibold text-[var(--muted2)] hover:text-[var(--text)] flex items-center gap-1.5"
+                    >
+                      <Github className="w-3.5 h-3.5" /> Code
+                    </a>
+                  )}
+                  {p.link && (
+                    <a
+                      href={p.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2 rounded-xl bg-sky-400 text-slate-950 font-bold text-xs font-sans flex items-center gap-1.5 hover:bg-sky-300 transition-all shadow-md"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      {getLinkText(p.link)}
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </SectionLayout>
   );
 }
+
+

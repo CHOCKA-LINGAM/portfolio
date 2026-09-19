@@ -1,18 +1,29 @@
 // ─── Central data exports ─────────────────────────────────────────
-// Edit the JSON files below to update portfolio content.
-// No code changes needed — just update the JSON.
-//
-//  data/personal.json   → name, email, chips, stats, typing titles
-//  data/projects.json   → project cards (add/remove/reorder freely)
-//  data/experience.json → work history timeline
-//  data/skills.json     → DAG nodes and edges
-
 import personal from "./personal.json";
 import projects from "./projects.json";
 import experience from "./experience.json";
 import skills from "./skills.json";
 
-export const PERSONAL = personal;
+// ─── Experience Calculation Utility ────────────────────────────────
+export const CAREER_START_DATE = "2020-11-01";
+
+export function getYearsOfExperience(startDateStr: string = CAREER_START_DATE): number {
+  const start = new Date(startDateStr);
+  const now = new Date();
+  const diffInYears = (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+  return Math.max(1, Math.floor(diffInYears));
+}
+
+export function getExperienceYearsLabel(startDateStr: string = CAREER_START_DATE): string {
+  return `${getYearsOfExperience(startDateStr)}+`;
+}
+
+export const PERSONAL = {
+  ...personal,
+  stats: personal.stats.map((s) =>
+    s.label.toLowerCase().includes("years") ? { ...s, value: getExperienceYearsLabel() } : s
+  ),
+};
 export const PROJECTS = projects;
 export const EXPERIENCE = experience;
 export const DAG_NODES = skills.nodes;
@@ -21,7 +32,7 @@ export const DAG_EDGES = skills.edges;
 // ─── Types ────────────────────────────────────────────────────────
 export interface Project {
   id: string;
-  project_status: string;
+  featured?: boolean;
   title: string;
   tags: string[];
   status: string;
@@ -34,20 +45,21 @@ export interface Project {
 export interface ExperienceItem {
   id: string;
   status: string;
-  statusColor: string;
+  statusColor?: string;
   period: string;
   role: string;
   company: string;
   location: string;
-  description?: string;
+  description: string;
   tags: string[];
 }
 
 export interface DagNode {
   id: string;
+  category: string;
   label: string;
-  x: number;
-  y: number;
+  icon: string;
+  desc: string;
   skills: string[];
 }
 
@@ -70,3 +82,4 @@ export interface PersonalData {
   chips: string[];
   typingTitles: string[];
 }
+
