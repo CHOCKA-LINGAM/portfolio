@@ -13,10 +13,9 @@ interface TopNavHeaderProps {
 const NAV_ITEMS: { id: Page; label: string }[] = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
-  { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
   { id: "skills", label: "Skills" },
-  { id: "playlab", label: "PlayLab" },
+  { id: "projects", label: "Projects" },
   { id: "contact", label: "Contact" },
 ];
 

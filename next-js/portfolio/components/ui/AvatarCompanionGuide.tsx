@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, X, Sparkles, Play, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
+import { X, Play, ArrowRight } from "lucide-react";
 import { Page } from "@/hooks/useNav";
 
 interface AvatarCompanionGuideProps {
@@ -51,14 +51,6 @@ const SECTION_COMMENTARY: Record<Page, { title: string; text: string; chips: { l
     chips: [
       { label: "📦 PyPI Package", action: () => {} },
       { label: "🤖 AI Bedrock Case Study", action: () => {} },
-    ],
-  },
-  playlab: {
-    title: "PlayLab Hands-on Demos",
-    text: "Interactive mini-apps & AI playgrounds! Try out prompt executions, LLM model fallbacks, and live code experiments.",
-    chips: [
-      { label: "🤖 Try GPT-4o Prompt", action: () => {} },
-      { label: "⚡ Code Experiments", action: () => {} },
     ],
   },
   contact: {

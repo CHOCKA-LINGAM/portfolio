@@ -4,7 +4,26 @@ import projects from "./projects.json";
 import experience from "./experience.json";
 import skills from "./skills.json";
 
-export const PERSONAL = personal;
+// ─── Experience Calculation Utility ────────────────────────────────
+export const CAREER_START_DATE = "2020-11-01";
+
+export function getYearsOfExperience(startDateStr: string = CAREER_START_DATE): number {
+  const start = new Date(startDateStr);
+  const now = new Date();
+  const diffInYears = (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+  return Math.max(1, Math.floor(diffInYears));
+}
+
+export function getExperienceYearsLabel(startDateStr: string = CAREER_START_DATE): string {
+  return `${getYearsOfExperience(startDateStr)}+`;
+}
+
+export const PERSONAL = {
+  ...personal,
+  stats: personal.stats.map((s) =>
+    s.label.toLowerCase().includes("years") ? { ...s, value: getExperienceYearsLabel() } : s
+  ),
+};
 export const PROJECTS = projects;
 export const EXPERIENCE = experience;
 export const DAG_NODES = skills.nodes;

@@ -8,16 +8,14 @@ import { ScrollEnhancer } from "@/components/ui/ScrollEnhancer";
 import { DeveloperStoryModal } from "@/components/ui/DeveloperStoryModal";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import { ResumeModal } from "@/components/ui/ResumeModal";
-import { AvatarCompanionGuide } from "@/components/ui/AvatarCompanionGuide";
+import { RecruiterQAModal } from "@/components/ui/RecruiterQAModal";
 
 import { MonographNavHeader } from "@/components/monograph/MonographNavHeader";
 import { MonographHomeSignal } from "@/components/monograph/MonographHomeSignal";
 import { MonographAboutCore } from "@/components/monograph/MonographAboutCore";
 import { MonographProjectsTopology } from "@/components/monograph/MonographProjectsTopology";
-import { MonographProjectDetail } from "@/components/monograph/MonographProjectDetail";
 import { MonographExperienceJourney } from "@/components/monograph/MonographExperienceJourney";
 import { MonographSkillsCapability } from "@/components/monograph/MonographSkillsCapability";
-import { MonographPlayLabExperiments } from "@/components/monograph/MonographPlayLabExperiments";
 import { MonographContactConnect } from "@/components/monograph/MonographContactConnect";
 import { MonographEasterEggs } from "@/components/monograph/MonographEasterEggs";
 import { Project } from "@/data/index";
@@ -28,8 +26,8 @@ export default function Page() {
   const [isStoryOpen, setIsStoryOpen] = useState(false);
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+  const [isRecruiterQAOpen, setIsRecruiterQAOpen] = useState(false);
   const [isEasterEggOpen, setIsEasterEggOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -60,6 +58,13 @@ export default function Page() {
       {/* ── FULL-SCREEN DEVELOPER STORY REEL MODAL ── */}
       <DeveloperStoryModal isOpen={isStoryOpen} onClose={() => setIsStoryOpen(false)} />
 
+      {/* ── RECRUITER FAST Q&A MODAL ── */}
+      <RecruiterQAModal
+        isOpen={isRecruiterQAOpen}
+        onClose={() => setIsRecruiterQAOpen(false)}
+        onOpenResume={() => setIsResumeModalOpen(true)}
+      />
+
       {/* ── GLOBAL DEVELOPER COMMAND PALETTE (CMD + K) ── */}
       <CommandPalette
         isOpen={isCmdPaletteOpen}
@@ -75,53 +80,42 @@ export default function Page() {
         onClose={() => setIsResumeModalOpen(false)}
       />
 
-      {/* ── FLOATING COMPANION AVATAR WALKTHROUGH GUIDE ── */}
-      <AvatarCompanionGuide
-        currentSection={current}
-        onOpenStory={() => setIsStoryOpen(true)}
-        goTo={goTo}
-      />
-
-      {/* ── SPATIAL MONOGRAPH 10-PANEL SYSTEM ── */}
+      {/* ── SPATIAL MONOGRAPH 6-SECTION STREAMLINED SYSTEM ── */}
       <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] 2xl:max-w-[1920px] px-4 sm:px-8 pt-20 pb-20">
         <div className="flex flex-col gap-12 sm:gap-16 w-full">
-          {/* Panel 01: Homepage — The Signal */}
+          {/* Section 01: Homepage — The Signal */}
           <div id="section-home" className="w-full scroll-mt-24">
-            <MonographHomeSignal onExplore={() => goTo("projects")} />
+            <MonographHomeSignal
+              onExplore={() => goTo("about")}
+              onOpenResume={() => setIsResumeModalOpen(true)}
+              onOpenRecruiterQA={() => setIsRecruiterQAOpen(true)}
+            />
           </div>
 
-          {/* Panel 02: About — The Core */}
+          {/* Section 02: About — The Core */}
           <MonographAboutCore onOpenStory={() => setIsStoryOpen(true)} />
 
-          {/* Panel 03: Projects — System Topology */}
-          <MonographProjectsTopology onSelectProject={(p) => setSelectedProject(p)} />
-
-          {/* Panel 04: Project Detail — Architecture in Action */}
-          <MonographProjectDetail
-            project={selectedProject}
-            onBack={() => goTo("projects")}
-          />
-
-          {/* Panel 05: Experience — The Journey */}
+          {/* Section 03: Experience — The Journey */}
           <MonographExperienceJourney />
 
-          {/* Panel 06: Skills — Capability Map */}
+          {/* Section 04: Skills — Capability Map */}
           <MonographSkillsCapability />
 
-          {/* Panel 07: PlayLab — Experiments & Ideas */}
-          <MonographPlayLabExperiments />
+          {/* Section 05: Projects — Featured Open Source Flagship */}
+          <MonographProjectsTopology />
 
-          {/* Panel 08: Contact — Let's Connect */}
+          {/* Section 06: Contact — Let's Connect */}
           <MonographContactConnect />
 
-          {/* Panel 09: Easter Eggs — Hidden Delights */}
+          {/* Easter Eggs — Hidden Delights */}
           <MonographEasterEggs
             isOpen={isEasterEggOpen}
             onClose={() => setIsEasterEggOpen(false)}
+            onNavigate={goTo}
           />
         </div>
 
-        {/* Panel 10: Footer & Responsive Bar */}
+        {/* Footer & Responsive Bar */}
         <footer className="w-full pt-16 pb-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500 mt-12">
           <div className="flex items-center gap-2">
             <span className="font-display font-extrabold text-slate-950">CHOCKA<span className="text-cyan-600">.dev</span></span>
@@ -132,10 +126,12 @@ export default function Page() {
             <span>Good ideas travel far.</span>
             <button
               onClick={() => setIsEasterEggOpen(true)}
-              className="px-3.5 py-1 rounded-full bg-slate-900 border border-white/20 text-cyan-300 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 shadow-md"
+              className="px-3.5 py-1 rounded-full bg-slate-950/80 border border-cyan-500/30 text-cyan-300 hover:border-amber-400 hover:text-amber-300 transition-all cursor-pointer flex items-center gap-2 shadow-inner group"
+              title="Interactive Lunar Mode 🌙"
             >
-              <Moon className="w-3.5 h-3.5 text-amber-300" />
-              <span>Secret Moon 🌙</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse group-hover:scale-125 transition-transform" />
+              <Moon className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
+              <span className="text-[11px] font-mono text-slate-400 group-hover:text-amber-200">Phase 92%</span>
             </button>
           </div>
 

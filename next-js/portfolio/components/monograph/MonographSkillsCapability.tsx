@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Cpu, Server, Database, Cloud, Sparkles, Workflow, CheckCircle2 } from "lucide-react";
+import { Cpu, Server, Database, Cloud, Layout, Workflow, CheckCircle2 } from "lucide-react";
 
 export function MonographSkillsCapability() {
   const categories = [
@@ -25,6 +25,12 @@ export function MonographSkillsCapability() {
       skills: ["OpenAI", "Claude", "AWS Bedrock", "LLM Pipelines", "Model Evaluation", "Computer Vision"],
     },
     {
+      id: "frontend",
+      title: "Frontend & UI",
+      icon: <Layout className="w-4 h-4 text-sky-400" />,
+      skills: ["Next.js 14", "React.js", "TypeScript", "TailwindCSS", "HTML5 / CSS3", "Framer Motion"],
+    },
+    {
       id: "cloud",
       title: "Cloud & DevOps",
       icon: <Cloud className="w-4 h-4 text-amber-400" />,
@@ -35,7 +41,7 @@ export function MonographSkillsCapability() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
 
   return (
-    <section id="section-skills" className="relative w-full min-h-[90vh] rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-6 sm:p-12 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
+    <section id="section-skills" className="relative w-full min-h-[85vh] rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
       {/* Background Orbs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[160px]" />
@@ -46,26 +52,18 @@ export function MonographSkillsCapability() {
       <div className="flex flex-col gap-2 border-b border-white/10 pb-6 relative z-10">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-purple-500/30 bg-purple-950/60 text-purple-300 text-xs font-mono font-bold tracking-widest w-max backdrop-blur-md">
           <Workflow className="w-3.5 h-3.5 text-purple-400" />
-          <span>06 // SKILLS — CAPABILITY MAP</span>
+          <span>04 // SKILLS</span>
         </div>
-        <h2 className="text-4xl sm:text-6xl font-display font-extrabold text-white tracking-tight">
-          A blend that delivers.
+        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-white tracking-tight leading-tight max-w-full break-words">
+          Technical Skills
         </h2>
-        <p className="text-sm font-sans text-slate-400 max-w-xl">
-          Technologies, frameworks and platforms I use to build, scale and ship meaningful solutions.
-        </p>
       </div>
 
-      {/* Main Content: SYSTEMS Root Tree Taxonomy matching Panel 06 */}
+      {/* Main Content */}
       <div className="relative z-10 my-auto py-8 flex flex-col gap-8">
         
-        {/* Top SYSTEMS Root Node */}
-        <div className="self-center px-6 py-2 rounded-full bg-cyan-950/90 border border-cyan-400 text-cyan-300 text-xs font-mono font-bold tracking-widest shadow-[0_0_30px_rgba(34,211,238,0.4)]">
-          SYSTEMS CORE
-        </div>
-
-        {/* Branching Category Columns matching Panel 06 Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Branching Category Columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-5">
           {categories.map((cat) => {
             const isSelected = activeCategory.id === cat.id;
             return (
@@ -73,18 +71,18 @@ export function MonographSkillsCapability() {
                 key={cat.id}
                 onClick={() => setActiveCategory(cat)}
                 whileHover={{ y: -4 }}
-                className={`p-6 rounded-2xl border text-left font-mono transition-all cursor-pointer backdrop-blur-xl flex flex-col gap-4 ${
+                className={`p-4 sm:p-5 xl:p-6 rounded-2xl border text-left font-mono transition-all cursor-pointer backdrop-blur-xl flex flex-col gap-4 ${
                   isSelected
                     ? "bg-slate-900/90 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)]"
                     : "bg-slate-950/60 border-white/10 text-slate-300 hover:border-white/30"
                 }`}
               >
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <span className="font-display font-extrabold text-base text-white flex items-center gap-2">
-                    {cat.icon}
-                    {cat.title}
+                <div className="flex items-start justify-between gap-2 border-b border-white/10 pb-3 min-h-[44px]">
+                  <span className="font-display font-extrabold text-sm sm:text-base text-white flex items-center gap-2 leading-tight">
+                    <span className="p-1 rounded bg-white/5 shrink-0">{cat.icon}</span>
+                    <span className="break-words">{cat.title}</span>
                   </span>
-                  <span className="text-[10px] text-cyan-400 font-bold px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/30">
+                  <span className="text-[10px] text-cyan-400 font-bold px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/30 shrink-0 mt-0.5">
                     {cat.skills.length} TECHS
                   </span>
                 </div>
@@ -93,7 +91,7 @@ export function MonographSkillsCapability() {
                   {cat.skills.map((s) => (
                     <div key={s} className="flex items-center gap-2 text-xs font-sans text-slate-300">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>{s}</span>
+                      <span className="truncate">{s}</span>
                     </div>
                   ))}
                 </div>
@@ -104,12 +102,9 @@ export function MonographSkillsCapability() {
 
       </div>
 
-      {/* Footer Tag matching Panel 06 */}
-      <div className="flex items-center justify-between pt-4 border-t border-white/10 text-xs font-mono text-slate-400 relative z-10">
-        <span className="tracking-widest font-bold text-slate-300">
-          ALWAYS LEARNING. ALWAYS EXPLORING.
-        </span>
-        <span>06 / 09</span>
+      {/* Footer Tag */}
+      <div className="flex items-center justify-end pt-4 border-t border-white/10 text-xs font-mono text-slate-400 relative z-10">
+        <span>04 / 06</span>
       </div>
     </section>
   );
