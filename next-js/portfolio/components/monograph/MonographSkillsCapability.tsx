@@ -2,7 +2,15 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Cpu, Server, Database, Cloud, Layout, Workflow, CheckCircle2 } from "lucide-react";
+import {
+  Cpu,
+  Server,
+  Database,
+  Cloud,
+  Layout,
+  Workflow,
+} from "lucide-react";
+import { getOriginalTechIcon } from "@/components/ui/TechBrandIcons";
 
 export function MonographSkillsCapability() {
   const categories = [
@@ -90,7 +98,7 @@ export function MonographSkillsCapability() {
                 <div className="flex flex-col gap-2">
                   {cat.skills.map((s) => (
                     <div key={s} className="flex items-center gap-2 text-xs font-sans text-slate-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      {getOriginalTechIcon(s, "w-4 h-4 shrink-0")}
                       <span className="truncate">{s}</span>
                     </div>
                   ))}

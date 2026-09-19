@@ -2,8 +2,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Sparkles, Terminal, Activity, FileDown, HelpCircle } from "lucide-react";
+import { ArrowDown, Terminal, Activity, FileDown, HelpCircle } from "lucide-react";
 import { getExperienceYearsLabel } from "@/data/index";
+import {
+  PythonBrandIcon,
+  DatabricksBrandIcon,
+  PySparkBrandIcon,
+} from "@/components/ui/TechBrandIcons";
 
 export function MonographHomeSignal({
   onExplore,
@@ -41,7 +46,19 @@ export function MonographHomeSignal({
           </h1>
 
           <p className="text-xs sm:text-base lg:text-lg font-sans text-slate-700 leading-relaxed font-normal max-w-xl bg-white/90 p-4 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-sm">
-            Senior Software Engineer building automated data pipelines, backend APIs, and intelligent AI microservices — backed by <span className="font-mono text-xs font-bold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">Python</span>, <span className="font-mono text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Databricks</span>, and <span className="font-mono text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">PySpark</span> — with a focus on reliability &amp; performance.
+            Senior Software Engineer building automated data pipelines, backend APIs, and intelligent AI microservices — backed by{" "}
+            <span className="inline-flex items-center gap-1 font-mono text-xs font-bold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
+              <PythonBrandIcon className="w-3.5 h-3.5" /> Python
+            </span>
+            ,{" "}
+            <span className="inline-flex items-center gap-1 font-mono text-xs font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+              <DatabricksBrandIcon className="w-3.5 h-3.5" /> Databricks
+            </span>
+            , and{" "}
+            <span className="inline-flex items-center gap-1 font-mono text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              <PySparkBrandIcon className="w-3.5 h-3.5" /> PySpark
+            </span>{" "}
+            — with a focus on reliability &amp; performance.
           </p>
 
           <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2 font-mono w-full">

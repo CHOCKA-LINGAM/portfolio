@@ -2,8 +2,19 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Milestone, Building2, CheckCircle2, ArrowUpRight, ChevronDown, Layers, ChevronRight } from "lucide-react";
+import {
+  Milestone,
+  ArrowUpRight,
+  ChevronDown,
+  Layers,
+  ChevronRight,
+  MapPin,
+} from "lucide-react";
 import { EXPERIENCE, type ExperienceItem } from "@/data/index";
+import {
+  getOriginalCompanyIcon,
+  getOriginalTechIcon,
+} from "@/components/ui/TechBrandIcons";
 
 function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,11 +29,11 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
     >
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
-          // TECH &amp; CAPABILITIES
+          // TECH STACK &amp; BRAND LOGOS
         </span>
         <span className="text-[10px] font-mono text-emerald-600 font-bold flex items-center gap-1">
           <Layers className="w-3 h-3 text-emerald-500" />
-          Hover to see all ({tags.length})
+          Hover to inspect ({tags.length})
         </span>
       </div>
 
@@ -54,7 +65,7 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
               <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
                 <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                  TECH STACK &amp; CAPABILITIES ({tags.length})
+                  ORIGINAL TECH BRAND LOGOS ({tags.length})
                 </span>
                 <span className="text-[10px] font-mono text-slate-400">
                   Hover to inspect
@@ -65,9 +76,9 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
                 {tags.map((tech) => (
                   <div
                     key={tech}
-                    className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/90 border border-slate-800/90 text-xs font-mono text-slate-200"
+                    className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/90 border border-slate-800/90 text-xs font-mono text-slate-200 hover:border-slate-600 transition-colors"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    {getOriginalTechIcon(tech, "w-4 h-4 shrink-0")}
                     <span className="truncate">{tech}</span>
                   </div>
                 ))}
@@ -130,12 +141,12 @@ export function MonographExperienceJourney() {
                     </span>
 
                     <div className="flex flex-col truncate">
-                      <span className="font-display font-extrabold text-sm sm:text-base text-slate-950 truncate max-w-[260px] sm:max-w-full font-bold group-hover:text-cyan-600" style={{ color: isSelected ? "#ffffff" : undefined }}>
-                        {exp.role}
+                      <span className="font-display font-extrabold text-sm sm:text-base text-slate-950 truncate max-w-[260px] sm:max-w-full font-bold flex items-center gap-2" style={{ color: isSelected ? "#ffffff" : undefined }}>
+                        {getOriginalCompanyIcon(exp.company, "w-5 h-5 shrink-0")}
+                        <span className="truncate">{exp.role}</span>
                       </span>
                       <span className={`text-xs font-sans font-medium flex items-center gap-1.5 ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
-                        <Building2 className="w-3 h-3 text-emerald-500 shrink-0" />
-                        {exp.company}
+                        <span>{exp.company}</span>
                       </span>
                     </div>
                   </div>
@@ -189,12 +200,15 @@ export function MonographExperienceJourney() {
               </span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-display font-extrabold text-slate-950">
-              {activeExp.role}
+            <h3 className="text-2xl sm:text-3xl font-display font-extrabold text-slate-950 flex items-center gap-3">
+              {getOriginalCompanyIcon(activeExp.company, "w-7 h-7 shrink-0")}
+              <span>{activeExp.role}</span>
             </h3>
             <span className="text-xs font-bold text-slate-600 flex items-center gap-2 font-sans">
-              <Building2 className="w-4 h-4 text-slate-700" />
-              {activeExp.company} · {activeExp.location}
+              <span className="font-bold text-slate-950">{activeExp.company}</span>
+              <span>·</span>
+              <MapPin className="w-3.5 h-3.5 text-slate-500" />
+              <span>{activeExp.location}</span>
             </span>
           </div>
 
