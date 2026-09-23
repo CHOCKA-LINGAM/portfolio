@@ -16,33 +16,33 @@ export function MonographSkillsCapability() {
   const categories = [
     {
       id: "backend",
-      title: "Backend",
+      title: "Backend Systems",
       icon: <Server className="w-4 h-4 text-emerald-400" />,
-      skills: ["Python", "FastAPI", "Django", "APIs", "Microservices", "SQL"],
+      skills: ["Python", "FastAPI", "Django", "Async APIs", "Microservices", "SQL"],
     },
     {
       id: "data",
       title: "Data Engineering",
       icon: <Database className="w-4 h-4 text-cyan-400" />,
-      skills: ["Databricks", "PySpark", "ETL", "Data Pipelines", "Airflow", "Delta Lake"],
+      skills: ["Databricks", "PySpark", "ETL Pipelines", "Apache Airflow", "Delta Lake", "SQL Server"],
     },
     {
       id: "ai",
-      title: "AI / ML",
+      title: "AI / ML Systems",
       icon: <Cpu className="w-4 h-4 text-purple-400" />,
-      skills: ["OpenAI", "Claude", "AWS Bedrock", "LLM Pipelines", "Model Evaluation", "Computer Vision"],
+      skills: ["OpenAI API", "Claude Sonnet/Opus", "AWS Bedrock", "LLM Pipelines", "XGBoost", "RAG Search"],
     },
     {
       id: "frontend",
-      title: "Frontend & UI",
+      title: "Frontend & Web",
       icon: <Layout className="w-4 h-4 text-sky-400" />,
-      skills: ["Next.js 14", "React.js", "TypeScript", "TailwindCSS", "HTML5 / CSS3", "Framer Motion"],
+      skills: ["React.js", "Angular", "TypeScript / JS", "HTML5 / CSS3", "REST Integration"],
     },
     {
       id: "cloud",
       title: "Cloud & DevOps",
       icon: <Cloud className="w-4 h-4 text-amber-400" />,
-      skills: ["Azure", "AWS", "Docker", "Kubernetes", "CI/CD", "Scalable Systems"],
+      skills: ["Azure", "Docker", "AKS / Kubernetes", "GCP", "Celery Tasks", "CI/CD"],
     },
   ];
 
@@ -68,9 +68,30 @@ export function MonographSkillsCapability() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 my-auto py-8 flex flex-col gap-8">
+      <div className="relative z-10 my-auto py-8 flex flex-col gap-6">
         
-        {/* Branching Category Columns */}
+        {/* Mobile Horizontal Category Tab Selector Bar */}
+        <div className="flex sm:hidden overflow-x-auto gap-2 pb-2 border-b border-white/10 no-scrollbar font-mono text-xs">
+          {categories.map((cat) => {
+            const isSelected = activeCategory.id === cat.id;
+            return (
+              <button
+                key={`skills-tab-${cat.id}`}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer border ${
+                  isSelected
+                    ? "bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-md"
+                    : "bg-slate-900/80 text-slate-300 border-white/10 hover:border-white/30"
+                }`}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.title}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 5 Category Columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-5">
           {categories.map((cat) => {
             const isSelected = activeCategory.id === cat.id;
@@ -81,7 +102,7 @@ export function MonographSkillsCapability() {
                 whileHover={{ y: -4 }}
                 className={`p-4 sm:p-5 xl:p-6 rounded-2xl border text-left font-mono transition-all cursor-pointer backdrop-blur-xl flex flex-col gap-4 ${
                   isSelected
-                    ? "bg-slate-900/90 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)]"
+                    ? "bg-slate-900/90 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)] ring-1 ring-cyan-400/40"
                     : "bg-slate-950/60 border-white/10 text-slate-300 hover:border-white/30"
                 }`}
               >

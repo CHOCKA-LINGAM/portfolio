@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -11,7 +10,6 @@ import {
   Download,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   ShieldCheck,
   Zap,
   Terminal,
@@ -19,6 +17,9 @@ import {
   Cpu,
   Boxes,
   Info,
+  GraduationCap,
+  Building2,
+  Calendar,
 } from "lucide-react";
 import { PERSONAL, getExperienceYearsLabel } from "@/data/index";
 
@@ -26,126 +27,147 @@ export interface StorySlide {
   id: number;
   category: string;
   title: string;
+  organization: string;
+  period: string;
   subtitle: string;
   quote: string;
   highlights: string[];
+  educationDetail?: {
+    degree: string;
+    institution: string;
+    year: string;
+    focus: string;
+  };
   techChips: { name: string; info: string }[];
-  gradient: string;
   icon: React.ReactNode;
 }
 
 const STORY_SLIDES: StorySlide[] = [
   {
     id: 0,
-    category: "01 // OVERVIEW",
-    title: "Chockalingam Balan",
-    subtitle: "Senior Software Engineer — Data, AI & Backend",
-    quote: `${getExperienceYearsLabel()} years engineering high-throughput backend microservices, PySpark ETL data platforms, and production AI workflow automation.`,
+    category: "01 // GENESIS & EDUCATION",
+    title: "B.E. Computer Science & Engineering",
+    organization: "KLN College of Engineering",
+    period: "2016 – 2020",
+    subtitle: "Solid CS Fundamentals & Distributed Systems",
+    quote: "Graduated with a Bachelor of Engineering in Computer Science from KLN College of Engineering (2020). Built core foundations in data structures, algorithms, RDBMS, and distributed computing principles.",
+    educationDetail: {
+      degree: "B.E. Computer Science & Engineering",
+      institution: "KLN College of Engineering, Sivagangai",
+      year: "Graduated 2020",
+      focus: "Data Structures, Algorithms, Relational DBs & System Architecture",
+    },
     highlights: [
-      "Technical Specialist @ iLink Digital",
-      "Former Lead Software Engineer @ Standard Chartered",
-      "Based in Chennai, IN • Open to Global Roles",
+      "B.E. Computer Science Graduate (2020)",
+      "Strong CS Fundamentals & Data Structures",
+      "RDBMS, OS Memory & Network Protocols",
     ],
     techChips: [
-      { name: "Python", info: "Core language for backend microservices & data processing" },
-      { name: "FastAPI", info: "High-performance async REST & GraphQL APIs" },
-      { name: "Databricks", info: "Multi-tenant cloud lakehouse data infrastructure" },
+      { name: "Python", info: "Core language for backend microservices, async APIs & distributed data processing" },
+      { name: "C / C++", info: "Foundational low-level memory management & object-oriented programming" },
+      { name: "SQL", info: "Relational database schema design, normalization & query optimization" },
     ],
-    gradient: "from-cyan-950/80 via-slate-950 to-slate-950",
-    icon: <Sparkles className="w-5 h-5 text-cyan-400" />,
+    icon: <GraduationCap className="w-4 h-4 text-cyan-400" />,
   },
   {
     id: 1,
-    category: "02 // DATA ENGINE",
-    title: "40% Pipeline Speedup",
-    subtitle: "PySpark & Databricks Scale",
-    quote: "Engineered distributed Databricks ingestion pipelines, cutting processing latency by 40% with 90%+ automated test coverage.",
+    category: "02 // KAAR TECHNOLOGIES",
+    title: "Fullstack & AI Developer",
+    organization: "KAAR Technologies",
+    period: "Nov 2020 – Oct 2023",
+    subtitle: "Model Builder & Scenario Forecast Simulators",
+    quote: "Engineered fullstack ML training and forecasting platforms with React, Flask, and Airflow DAGs. Developed custom XGBoost pipelines reducing dependency on proprietary AutoML tools.",
     highlights: [
-      "40% Processing Latency Speedup",
-      "90%+ Automated QA Coverage",
-      "Fault-Tolerant Distributed Data Pipelines",
+      "Model Builder Platform (React + Flask)",
+      "Custom XGBoost & LightGBM AutoML Engines",
+      "Apache Airflow Retraining & Forecast DAGs",
     ],
     techChips: [
-      { name: "PySpark", info: "Distributed data frame transformation & analytics" },
-      { name: "Delta Lake", info: "ACID transaction storage for streaming data" },
-      { name: "PostgreSQL", info: "Relational query optimization & connection pooling" },
+      { name: "React", info: "Frontend workbench for ML model configuration & scenario metrics" },
+      { name: "Flask", info: "Python REST API backend orchestrating model training runs" },
+      { name: "Apache Airflow", info: "Orchestrating model retraining & prediction workflows" },
+      { name: "XGBoost", info: "Custom AutoML pipelines for automated scenario forecasting" },
     ],
-    gradient: "from-emerald-950/80 via-slate-950 to-slate-950",
-    icon: <Zap className="w-5 h-5 text-emerald-400" />,
+    icon: <Boxes className="w-4 h-4 text-purple-400" />,
   },
   {
     id: 2,
-    category: "03 // BACKEND STACK",
-    title: "Production Systems",
-    subtitle: "Async Microservices & Cloud Native",
-    quote: "Built async Python & FastAPI microservices with event-driven Kafka messaging deployed on Azure Kubernetes Service (AKS).",
+    category: "03 // TIGER ANALYTICS",
+    title: "ML Engineer & Sr. Analyst",
+    organization: "Tiger Analytics",
+    period: "Oct 2023 – Nov 2025",
+    subtitle: "PepIris Retail CV Platform (10–12 Global Markets)",
+    quote: "Architected Django multi-tenant backend operating across 10–12 international markets on a single codebase. Migrated legacy data pipelines to PySpark on Azure Databricks, cutting QA cycle times by >90%.",
     highlights: [
-      "Python, FastAPI & AsyncIO Microservices",
-      "Apache Kafka Event-Driven Messaging",
-      "Docker & Azure Kubernetes Service (AKS)",
+      "10–12 Global International Markets Deployed",
+      ">90% QA Validation Cycle Time Reduction",
+      "Celery Async Workers & PySpark Lakehouse ETL",
     ],
     techChips: [
-      { name: "Apache Kafka", info: "Real-time event streaming & message queueing" },
-      { name: "Azure AKS", info: "Kubernetes container deployment & auto-scaling" },
-      { name: "Docker", info: "Containerized microservice packaging" },
+      { name: "Django", info: "Multi-tenant backend platform with tenant-isolated database architecture" },
+      { name: "Celery", info: "Asynchronous task execution framework for heavy ML inference jobs" },
+      { name: "Azure Databricks", info: "Distributed PySpark DataFrames replacing legacy Pandas pipelines" },
     ],
-    gradient: "from-purple-950/80 via-slate-950 to-slate-950",
-    icon: <Terminal className="w-5 h-5 text-purple-400" />,
+    icon: <Terminal className="w-4 h-4 text-emerald-400" />,
   },
   {
     id: 3,
-    category: "04 // OPEN SOURCE",
-    title: "schema-shield on PyPI",
-    subtitle: "Automated Safety & CI/CD Guardrails",
-    quote: "Authored and published 'schema-shield' & 'databricks-bundle' on PyPI to enforce zero-downtime DDL compatibility guardrails.",
+    category: "04 // iLINK DIGITAL",
+    title: "Technical Specialist",
+    organization: "iLink Digital",
+    period: "Dec 2025 – Present",
+    subtitle: "Tableau DAG Engine & AI Claims Platform",
+    quote: "Architected DAG execution engine converting Tableau Prep flows into PySpark DataFrames with LLM accelerators (OpenAI, Claude, Bedrock). Reduced AI Claims API response latency from 25s to 10s.",
     highlights: [
-      "Published PyPI Package Creator",
-      "Zero-Downtime DDL Safety Guardrail",
-      "Community Open-Source Contributor",
+      "Tableau Prep ➔ Spark DAG Execution Engine",
+      "AI Migration Accelerators (OpenAI / Claude / Bedrock)",
+      "AI Claims Adjudication (25s ➔ 10s Latency)",
     ],
     techChips: [
-      { name: "schema-shield", info: "AST DDL compatibility guardrail for Postgres & Databricks" },
-      { name: "PyPI Package", info: "Published Python package for Databricks CLI automation" },
+      { name: "FastAPI", info: "High-performance async Python service with <5s DAG planning response time" },
+      { name: "PySpark", info: "Distributed execution engine for large-scale enterprise data transformations" },
+      { name: "AWS Bedrock", info: "Enterprise LLM integration interpreting complex Tableau XML logic" },
     ],
-    gradient: "from-amber-950/80 via-slate-950 to-slate-950",
-    icon: <Award className="w-5 h-5 text-amber-400" />,
+    icon: <Zap className="w-4 h-4 text-cyan-400" />,
   },
   {
     id: 4,
-    category: "05 // AI & LLMS",
-    title: "Multi-Agent AI Workflows",
-    subtitle: "AWS Bedrock, OpenAI & RAG Systems",
-    quote: "Architected multi-agent AI orchestration platforms leveraging AWS Bedrock & OpenAI with RAG retrieval and strict prompt guardrails.",
+    category: "05 // OPEN SOURCE",
+    title: "Creator of 'schema-shield'",
+    organization: "PyPI Package Author",
+    period: "Active Open Source",
+    subtitle: "Automated Runtime Schema Assertions & Data Drift Protection",
+    quote: "Authored and published 'schema-shield' on PyPI (pip install schema-shield) to enforce zero-dependency runtime schema validation and data drift protection in data pipelines.",
     highlights: [
-      "AWS Bedrock & OpenAI Integration",
-      "Multi-Agent Workflow Orchestration",
-      "Enterprise RAG & Prompt Guardrails",
+      "Published PyPI Package Creator (pip install schema-shield)",
+      "Automated Runtime Schema & Data Drift Assertions",
+      "Zero-Dependency Lightweight Python Package",
     ],
     techChips: [
-      { name: "AWS Bedrock", info: "Enterprise foundation model API orchestration" },
-      { name: "OpenAI GPT-4", info: "Structured reasoning & multi-step agent execution" },
-      { name: "LangChain", info: "Agent tooling & memory vector integration" },
+      { name: "schema-shield", info: "Open-source Python package for runtime schema validation & assertions" },
+      { name: "PyPI Release", info: "Official Python Package Index release" },
     ],
-    gradient: "from-cyan-950/80 via-slate-950 to-slate-950",
-    icon: <Cpu className="w-5 h-5 text-cyan-400" />,
+    icon: <Award className="w-4 h-4 text-amber-400" />,
   },
   {
     id: 5,
-    category: "06 // LEADERSHIP",
-    title: "Engineering Delivery",
-    subtitle: "Architecture & Mentorship",
-    quote: "Proven leadership designing backend architectures, mentoring teams, and shipping resilient products. Open for Senior & Lead roles.",
+    category: "06 // SUMMARY & IMPACT",
+    title: "Senior Software Engineer",
+    organization: "Backend, Data Platforms & AI",
+    period: `${getExperienceYearsLabel()} Years Experience`,
+    subtitle: "Architecting Microservices, Lakehouses & AI Workflows",
+    quote: `Combining ${getExperienceYearsLabel()} years of production engineering experience across high-scale backend microservices, PySpark distributed data lakes, multi-tenant architectures, and enterprise AI integrations.`,
     highlights: [
-      "Cross-Functional Team Mentorship",
-      "Immediate Availability for Work",
-      "Open to Remote & On-site Relocation",
+      "5+ Years Senior Software Engineering",
+      "Multi-Tenant & Lakehouse Architecture",
+      "Open for Global Remote & Relocation",
     ],
     techChips: [
-      { name: "System Architecture", info: "Scalable microservice & cloud blueprinting" },
-      { name: "Tech Leadership", info: "Sprint planning & cross-functional engineering" },
+      { name: "Backend", info: "Python, FastAPI, Django, Async Microservices, Multi-Tenant Architecture" },
+      { name: "Data Engineering", info: "Azure Databricks, PySpark, Apache Airflow, Lakehouse ETL" },
+      { name: "AI & Cloud", info: "OpenAI API, Claude, AWS Bedrock, Docker, React, TypeScript" },
     ],
-    gradient: "from-indigo-950/80 via-slate-950 to-slate-950",
-    icon: <Boxes className="w-5 h-5 text-indigo-400" />,
+    icon: <Cpu className="w-4 h-4 text-indigo-400" />,
   },
 ];
 
@@ -175,7 +197,6 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
   const currentSlide = STORY_SLIDES[currentIdx];
 
-  // Zero-dependency Web Audio API Sound Synthesizer
   const playTechSound = (freq = 587.33, duration = 0.15) => {
     try {
       if (typeof window === "undefined") return;
@@ -189,7 +210,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
       osc.frequency.setValueAtTime(freq, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(freq * 1.5, ctx.currentTime + duration);
 
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.setValueAtTime(0.06, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
 
       osc.connect(gain);
@@ -202,18 +223,17 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
     }
   };
 
-  // Trigger sound effect on slide change if Sound is ON
   useEffect(() => {
     if (isOpen && soundEnabled) {
-      playTechSound(523.25 + currentIdx * 40, 0.12);
+      playTechSound(523.25 + currentIdx * 45, 0.12);
     }
   }, [currentIdx, soundEnabled, isOpen]);
 
-  // Auto-advance progress timer (5.5s per slide)
+  // Auto-advance progress timer (6s per slide)
   useEffect(() => {
     if (!isOpen || isPaused || selectedTechInfo !== null) return;
 
-    const DURATION = 5500;
+    const DURATION = 6000;
     const STEP = 50;
 
     const interval = setInterval(() => {
@@ -226,7 +246,6 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
     return () => clearInterval(interval);
   }, [isOpen, isPaused, selectedTechInfo]);
 
-  // Handle slide advance when progress reaches 100%
   useEffect(() => {
     if (progress >= 100) {
       const now = Date.now();
@@ -310,6 +329,14 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
     }, 2000);
   };
 
+  const handleCloseModal = (e?: React.SyntheticEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    onClose();
+  };
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -344,26 +371,29 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="story-modal-title"
-        className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-2xl overflow-hidden"
+        className="fixed inset-0 z-[2000] flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-hidden"
       >
-        {/* Story Modal Container — Matched to Spatial Monograph Theme */}
+        {/* Backdrop overlay click handler */}
+        <div className="absolute inset-0 z-0" onClick={handleCloseModal} />
+
+        {/* Story Modal Container — Fully Mobile Fluid & Responsive */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ type: "spring", stiffness: 350, damping: 28 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           onMouseDown={() => setIsPaused(true)}
           onMouseUp={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
-          className={`relative w-full max-w-[440px] h-[86vh] max-h-[720px] rounded-3xl overflow-y-auto overflow-x-hidden border border-cyan-500/30 shadow-2xl flex flex-col justify-between p-4 sm:p-5 bg-gradient-to-b ${currentSlide.gradient}`}
+          className="relative z-10 w-full max-w-[480px] max-h-[90vh] rounded-2xl overflow-y-auto overflow-x-hidden border border-slate-800 bg-slate-950 text-slate-100 shadow-2xl flex flex-col justify-between p-3.5 sm:p-5"
         >
           {/* Floating Emoji Reactions */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-50">
             {reactions.map((r) => (
               <motion.div
                 key={r.id}
-                initial={{ opacity: 1, y: 500, scale: 0.8 }}
+                initial={{ opacity: 1, y: 520, scale: 0.8 }}
                 animate={{ opacity: 0, y: 60, scale: 1.5 }}
                 transition={{ duration: 1.8, ease: "easeOut" }}
                 style={{ left: `${r.x}%` }}
@@ -375,12 +405,13 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
           </div>
 
           {/* Timed Progress Bars */}
-          <div className="flex items-center gap-1 z-20 w-full mb-3">
+          <div className="flex items-center gap-1 z-20 w-full mb-2.5">
             {STORY_SLIDES.map((slide, idx) => (
               <div
                 key={slide.id}
-                onClick={() => goToSlide(idx)}
-                className="h-1 flex-1 rounded-full bg-white/20 overflow-hidden cursor-pointer"
+                onClick={(e) => goToSlide(idx, e)}
+                className="h-1 flex-1 rounded-full bg-slate-800 overflow-hidden cursor-pointer hover:bg-slate-700 transition-colors min-h-[6px]"
+                title={`${slide.category}`}
               >
                 <div
                   className="h-full bg-cyan-400 transition-all duration-75"
@@ -398,58 +429,62 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
           </div>
 
           {/* Top Header Bar */}
-          <div className="flex items-center justify-between z-20 w-full mb-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-900 border border-cyan-400/40 flex items-center justify-center font-display font-extrabold text-xs text-white shadow-md">
+          <div className="flex items-center justify-between w-full border-b border-slate-800 pb-2.5 mb-2 z-20">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center font-display font-extrabold text-xs text-white shrink-0">
                 C B
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-white tracking-wide">
+                <span className="text-xs font-bold text-white font-mono leading-tight">
                   Chockalingam Balan
                 </span>
-                <span className="text-[10px] font-semibold text-cyan-300 font-mono flex items-center gap-1">
+                <span className="text-[10px] font-mono text-cyan-400 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   STORY {currentIdx + 1}/{STORY_SLIDES.length}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              {/* Web Audio Synthesizer Sound Button */}
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={toggleSound}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-mono font-bold transition-all cursor-pointer ${
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  toggleSound();
+                }}
+                className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-mono font-bold transition-all cursor-pointer ${
                   soundEnabled
-                    ? "bg-cyan-950 text-cyan-300 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
-                    : "bg-slate-900/80 text-slate-400 border-white/10 hover:text-white"
+                    ? "bg-cyan-950 text-cyan-300 border-cyan-500/50"
+                    : "bg-slate-900 text-slate-400 border-slate-800 hover:text-white"
                 }`}
                 title="Toggle UI Audio Effects"
               >
                 {soundEnabled ? (
                   <>
-                    <Volume2 className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-                    <span>Sound ON</span>
+                    <Volume2 className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>ON</span>
                   </>
                 ) : (
                   <>
                     <VolumeX className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Sound OFF</span>
+                    <span>OFF</span>
                   </>
                 )}
               </button>
 
               <button
-                onClick={onClose}
-                className="p-1.5 rounded-full bg-slate-900/80 text-slate-300 border border-white/15 hover:bg-slate-800 transition-all cursor-pointer"
-                title="Close Story"
+                onClick={handleCloseModal}
+                onTouchEnd={handleCloseModal}
+                className="p-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center"
+                title="Close Story (ESC)"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4 text-cyan-400" />
               </button>
             </div>
           </div>
 
           {/* Main Story Slide Content */}
-          <div className="relative flex-1 flex flex-col justify-center z-20 my-auto">
+          <div className="relative flex-1 flex flex-col justify-center z-20 my-auto py-1">
             {/* Background Tap Navigation Zones (z-10) */}
             <div
               onClick={(e) => prevSlide(e)}
@@ -463,49 +498,84 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide.id}
-                initial={{ opacity: 0, x: 15, scale: 0.98 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -15, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                className="relative z-30 flex flex-col gap-3 p-4 sm:p-5 rounded-2xl bg-slate-950/95 border border-cyan-500/30 backdrop-blur-xl shadow-2xl pointer-events-auto"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.16 }}
+                className="relative z-30 flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md shadow-xl pointer-events-auto"
               >
-                <div className="flex items-center gap-2">
-                  {currentSlide.icon}
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400">
-                    {currentSlide.category}
+                {/* Header Tag */}
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div className="flex items-center gap-1.5">
+                    {currentSlide.icon}
+                    <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                      {currentSlide.category}
+                    </span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-400 font-medium flex items-center gap-1 shrink-0">
+                    <Calendar className="w-3 h-3 text-slate-500" />
+                    {currentSlide.period}
                   </span>
                 </div>
 
-                <h3 id="story-modal-title" className="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight leading-tight">
-                  {currentSlide.title}
-                </h3>
+                {/* Organization & Title */}
+                <div className="flex flex-col gap-0.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-400">
+                    <Building2 className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    <span>{currentSlide.organization}</span>
+                  </div>
+                  <h3 id="story-modal-title" className="text-base sm:text-lg font-display font-extrabold text-white tracking-tight leading-snug">
+                    {currentSlide.title}
+                  </h3>
+                  <span className="text-[11px] sm:text-xs font-bold text-emerald-400 font-mono">
+                    {currentSlide.subtitle}
+                  </span>
+                </div>
 
-                <span className="text-xs font-bold text-emerald-400 font-mono">
-                  {currentSlide.subtitle}
-                </span>
+                {/* ACADEMIC EDUCATION CARD FOR SLIDE 0 */}
+                {currentSlide.educationDetail && (
+                  <div className="p-2.5 sm:p-3 rounded-lg bg-slate-950 border border-slate-800 flex flex-col gap-1 font-mono text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] sm:text-[11px] font-bold text-cyan-400 flex items-center gap-1.5">
+                        <GraduationCap className="w-4 h-4 text-cyan-400 shrink-0" />
+                        ACADEMIC DEGREE
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-bold">
+                        {currentSlide.educationDetail.year}
+                      </span>
+                    </div>
+                    <span className="font-bold text-white font-sans text-xs">
+                      {currentSlide.educationDetail.degree}
+                    </span>
+                    <span className="text-[10px] sm:text-[11px] text-slate-400">
+                      {currentSlide.educationDetail.institution}
+                    </span>
+                  </div>
+                )}
 
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans bg-slate-900/80 p-3 rounded-xl border border-white/10">
-                  {currentSlide.quote}
+                {/* Narrative Quote Box */}
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans bg-slate-950/60 p-2.5 sm:p-3 rounded-lg border border-slate-800/80">
+                  &quot;{currentSlide.quote}&quot;
                 </p>
 
                 {/* Highlights List */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
+                <div className="flex flex-wrap gap-1.5">
                   {currentSlide.highlights.map((h, i) => (
                     <span
                       key={i}
-                      className="px-2.5 py-1 rounded-lg bg-slate-900 border border-cyan-500/20 text-[11px] font-mono font-semibold text-slate-200 flex items-center gap-1 shadow-sm"
+                      className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-slate-950 border border-slate-800 text-[10px] sm:text-[11px] font-mono font-semibold text-slate-300 flex items-center gap-1.5"
                     >
-                      <ShieldCheck className="w-3 h-3 text-cyan-400" />
-                      {h}
+                      <ShieldCheck className="w-3 h-3 text-cyan-400 shrink-0" />
+                      <span>{h}</span>
                     </span>
                   ))}
                 </div>
 
-                {/* Interactive Tech Chip Inspector inside Story Slide */}
-                <div className="pt-2 border-t border-white/10 relative z-40 pointer-events-auto">
-                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-                    <Info className="w-3 h-3 text-cyan-400" />
-                    Tap tech chip to inspect:
+                {/* Tech Chips */}
+                <div className="pt-2 border-t border-slate-800 relative z-40 pointer-events-auto flex flex-col gap-1.5">
+                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    <Info className="w-3 h-3 text-cyan-400 shrink-0" />
+                    Tech stack architecture:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {currentSlide.techChips.map((chip, idx) => (
@@ -517,10 +587,10 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                           if (soundEnabled) playTechSound(700, 0.08);
                           setSelectedTechInfo(selectedTechInfo?.name === chip.name ? null : chip);
                         }}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all border cursor-pointer relative z-50 ${
+                        className={`px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-mono font-bold transition-all border cursor-pointer relative z-50 ${
                           selectedTechInfo?.name === chip.name
-                            ? "bg-cyan-500/30 text-cyan-200 border-cyan-400 shadow-md scale-105"
-                            : "bg-slate-900 text-slate-300 border-white/15 hover:border-cyan-400/50 hover:text-white"
+                            ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/60"
+                            : "bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-slate-200"
                         }`}
                       >
                         ⚡ {chip.name}
@@ -528,18 +598,17 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                     ))}
                   </div>
 
-                  {/* Popover Inspector Detail */}
+                  {/* Popover Detail */}
                   <AnimatePresence>
                     {selectedTechInfo && (
                       <motion.div
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 4 }}
-                        className="mt-2.5 p-3 rounded-xl bg-slate-900 border border-cyan-400/50 text-xs text-slate-200 shadow-2xl font-sans relative z-50"
+                        className="p-2.5 rounded-lg bg-slate-950 border border-cyan-500/40 text-xs text-slate-300 font-sans relative z-50"
                       >
-                        <span className="font-bold text-cyan-400 block mb-0.5 font-mono flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 text-cyan-300" />
-                          {selectedTechInfo.name} Architecture:
+                        <span className="font-bold text-cyan-400 block mb-0.5 font-mono">
+                          {selectedTechInfo.name}:
                         </span>
                         <span>{selectedTechInfo.info}</span>
                       </motion.div>
@@ -550,41 +619,40 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
             </AnimatePresence>
           </div>
 
-          {/* Reaction Bar & CTAs */}
-          <div className="relative z-40 flex flex-col gap-2.5 pt-3 border-t border-white/15">
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
-                React:
-              </span>
-              {["🔥", "🚀", "👏", "⚡", "💡"].map((emoji) => (
-                <button
-                  key={emoji}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addReaction(emoji);
-                  }}
-                  className="w-8 h-8 rounded-full bg-slate-900 border border-white/15 hover:border-cyan-400 hover:scale-125 active:scale-90 transition-all flex items-center justify-center text-sm shadow-md cursor-pointer"
-                >
-                  {emoji}
-                </button>
-              ))}
-            </div>
+          {/* Bottom Action Controls */}
+          <div className="relative z-40 flex flex-col gap-2 pt-2.5 border-t border-slate-800">
+            <div className="flex items-center justify-between font-mono gap-2">
+              <div className="flex items-center gap-1">
+                {["🔥", "🚀", "👏", "⚡"].map((emoji) => (
+                  <button
+                    key={emoji}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addReaction(emoji);
+                    }}
+                    className="w-7 h-7 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-400 active:scale-95 transition-all flex items-center justify-center text-xs cursor-pointer"
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
 
-            <div className="flex items-center gap-2 font-mono">
-              <a
-                href={`mailto:${PERSONAL.email}`}
-                className="flex-1 py-2.5 px-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer"
-              >
-                Get in Touch <Mail className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-              >
-                Resume <Download className="w-3.5 h-3.5 text-cyan-400" />
-              </a>
+              <div className="flex items-center gap-1.5">
+                <a
+                  href={`mailto:${PERSONAL.email}`}
+                  className="py-1.5 px-2.5 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1 hover:bg-cyan-400 transition-all shadow-sm cursor-pointer"
+                >
+                  Contact <Mail className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-1.5 px-2.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 font-bold text-xs flex items-center gap-1 hover:bg-slate-800 transition-all cursor-pointer"
+                >
+                  Resume <Download className="w-3.5 h-3.5 text-cyan-400" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -592,17 +660,17 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
           <button
             onClick={(e) => prevSlide(e)}
             disabled={currentIdx === 0}
-            className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-40 p-2 rounded-full bg-slate-950/80 text-white disabled:opacity-20 border border-white/15 cursor-pointer"
+            className="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 z-40 p-2 rounded-full bg-slate-900 text-slate-300 disabled:opacity-20 border border-slate-800 cursor-pointer hover:border-slate-700"
             aria-label="Previous story slide"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={(e) => nextSlide(e)}
-            className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-40 p-2 rounded-full bg-slate-950/80 text-white border border-white/15 cursor-pointer"
+            className="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 z-40 p-2 rounded-full bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer hover:border-slate-700"
             aria-label="Next story slide"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </motion.div>
       </div>

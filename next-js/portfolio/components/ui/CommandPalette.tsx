@@ -63,37 +63,37 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     onClose();
   };
 
-  // Build command items list
+  // Build clean, usable command items list
   const navCommands: CommandItem[] = [
     {
       id: "nav-home",
       category: "Navigation",
       title: "Jump to Home",
-      subtitle: "Overview & identity",
+      subtitle: "Overview & Identity",
       icon: <Terminal className="w-4 h-4 text-sky-400" />,
       action: () => { goTo("home"); onClose(); },
     },
     {
       id: "nav-about",
       category: "Navigation",
-      title: "Jump to About Core",
-      subtitle: "Curiosity, discipline & core values",
+      title: "Jump to About",
+      subtitle: "Background & Core Values",
       icon: <User className="w-4 h-4 text-cyan-400" />,
       action: () => { goTo("about"); onClose(); },
     },
     {
       id: "nav-exp",
       category: "Navigation",
-      title: "Jump to Professional Experience",
-      subtitle: "Career timeline @ iLink Digital & Standard Chartered",
+      title: "Jump to Experience",
+      subtitle: "Career Timeline & Company Roles",
       icon: <ArrowRight className="w-4 h-4 text-emerald-400" />,
       action: () => { goTo("experience"); onClose(); },
     },
     {
       id: "nav-skills",
       category: "Navigation",
-      title: "Jump to Skills Capability Map",
-      subtitle: "Backend, Data Engineering, AI/ML & Cloud Stack",
+      title: "Jump to Skills",
+      subtitle: "Backend, Data Engineering & AI/ML Stack",
       icon: <Command className="w-4 h-4 text-amber-400" />,
       action: () => { goTo("skills"); onClose(); },
     },
@@ -101,49 +101,52 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       id: "nav-projects",
       category: "Navigation",
       title: "Jump to Featured Projects",
-      subtitle: "schema-shield PyPI, AI workflows, RAG engines",
+      subtitle: "schema-shield PyPI package & open source",
       icon: <Workflow className="w-4 h-4 text-purple-400" />,
       action: () => { goTo("projects"); onClose(); },
     },
     {
       id: "nav-contact",
       category: "Navigation",
-      title: "Jump to Contact & Outreach",
-      subtitle: "Direct message & availability info",
+      title: "Jump to Contact",
+      subtitle: "Direct message & outreach info",
       icon: <Mail className="w-4 h-4 text-blue-400" />,
       action: () => { goTo("contact"); onClose(); },
-    },
-    {
-      id: "nav-lab",
-      category: "Navigation",
-      title: "Open Interactive UI Laboratory (/lab)",
-      subtitle: "Chock CLI terminal, live pipeline canvas & benchmarks",
-      icon: <Terminal className="w-4 h-4 text-amber-400" />,
-      action: () => { window.location.href = "/lab"; onClose(); },
     },
   ];
 
   const actionCommands: CommandItem[] = [
     {
-      id: "act-story",
-      category: "Actions",
-      title: "Watch Developer Story Highlights",
-      subtitle: "Interactive Instagram-style reel",
-      icon: <Play className="w-4 h-4 text-amber-400" />,
-      action: () => { onOpenStory(); onClose(); },
-    },
-    {
       id: "act-resume",
       category: "Actions",
-      title: "Preview Resume PDF Modal",
-      subtitle: "Inline document viewer & print options",
+      title: "Preview Resume PDF",
+      subtitle: "Inline document viewer & download",
       icon: <FileText className="w-4 h-4 text-sky-400" />,
       action: () => { onOpenResumeModal(); onClose(); },
     },
     {
+      id: "act-story",
+      category: "Actions",
+      title: "Watch Developer Story Highlights",
+      subtitle: "Interactive highlight reel",
+      icon: <Play className="w-4 h-4 text-amber-400" />,
+      action: () => { onOpenStory(); onClose(); },
+    },
+    {
+      id: "act-github",
+      category: "Actions",
+      title: "Open GitHub Profile",
+      subtitle: "github.com/CHOCKA-LINGAM",
+      icon: <ArrowRight className="w-4 h-4 text-cyan-400" />,
+      action: () => {
+        window.open(PERSONAL.github, "_blank");
+        onClose();
+      },
+    },
+    {
       id: "act-email",
       category: "Actions",
-      title: "Copy Email to Clipboard",
+      title: "Copy Email Address",
       subtitle: PERSONAL.email,
       icon: <Mail className="w-4 h-4 text-emerald-400" />,
       action: () => {
@@ -153,16 +156,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
   ];
 
-  const themeCommands: CommandItem[] = themeOptions.map((t) => ({
-    id: `theme-${t.id}`,
-    category: "Themes",
-    title: `Switch Theme: ${t.name}`,
-    subtitle: t.category === "dark" ? "Dark Theme" : "Light Theme",
-    icon: <Palette className="w-4 h-4 text-sky-400" />,
-    action: () => changeTheme(t.id),
-  }));
-
-  const allCommands = [...navCommands, ...actionCommands, ...themeCommands];
+  const allCommands = [...navCommands, ...actionCommands];
 
   const filteredCommands = allCommands.filter((cmd) => {
     if (!query.trim()) return true;
