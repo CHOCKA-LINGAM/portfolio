@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Mail, Linkedin, MapPin, Send, MessageSquare, ArrowRight } from "lucide-react";
+import { Mail, Linkedin, Github, MapPin, Send, MessageSquare, ArrowRight } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 
 export function MonographContactConnect() {
@@ -44,6 +44,24 @@ export function MonographContactConnect() {
               <div className="flex flex-col min-w-0">
                 <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">DIRECT EMAIL</span>
                 <span className="text-xs sm:text-sm font-bold text-white truncate break-all">{PERSONAL.email}</span>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+          </a>
+
+          <a
+            href={PERSONAL.github}
+            target="_blank"
+            rel="noreferrer"
+            className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-white/10 hover:border-cyan-400/60 transition-all flex items-center justify-between group backdrop-blur-md shadow-lg"
+          >
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="p-2.5 rounded-xl bg-cyan-950 border border-cyan-500/40 text-cyan-300 shrink-0">
+                <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">GITHUB REPOSITORIES</span>
+                <span className="text-xs sm:text-sm font-bold text-white truncate">github.com/CHOCKA-LINGAM</span>
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all shrink-0 ml-2" />

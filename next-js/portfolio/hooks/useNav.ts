@@ -13,7 +13,18 @@ export function useNav() {
     if (typeof window !== "undefined") {
       const targetEl = document.getElementById(`section-${page}`);
       if (targetEl) {
-        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        // scrollIntoView respects CSS scroll-margin-top (scroll-mt-24) set on every section
+        try {
+          targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch {
+          const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+          const elementTop = targetEl.getBoundingClientRect().top;
+          const offsetPosition = elementTop + scrollY - 85;
+          window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: "smooth",
+          });
+        }
       }
     }
   }, []);
@@ -35,7 +46,7 @@ export function useNav() {
       },
       {
         root: null,
-        rootMargin: "-25% 0px -45% 0px",
+        rootMargin: "-20% 0px -40% 0px",
         threshold: 0.1,
       }
     );

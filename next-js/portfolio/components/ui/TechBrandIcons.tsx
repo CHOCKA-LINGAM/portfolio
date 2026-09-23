@@ -2,26 +2,32 @@
 
 import React from "react";
 
-// ─── 1. iLINK DIGITAL EXACT CORPORATE BRAND LOGO (Infinity Loop Ribbon) ───
+// ─── 1. iLINK DIGITAL CORPORATE BRAND LOGO (Official Infinity Loop & "iLink Digital" Typography) ───
 export function ILinkLogoIcon({ className = "w-6 h-6" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Upper Red Infinity Swoosh */}
+    <svg className={className} viewBox="0 0 210 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Red Ribbon Arc (Top-Left to Bottom-Right) */}
       <path
-        d="M 5 25 C 20 0, 50 0, 95 25 C 75 50, 45 45, 5 25 Z"
-        fill="#DC2626"
+        d="M 6 25 C 12 8, 30 8, 40 25 C 50 42, 68 42, 74 25 C 67 43, 46 43, 38 29 C 30 15, 13 15, 6 25 Z"
+        fill="#D32F2F"
       />
-      {/* Lower Grey Infinity Swoosh */}
+      {/* Grey Ribbon Arc (Bottom-Left to Top-Right) */}
       <path
-        d="M 5 25 C 20 45, 50 45, 95 25 C 80 5, 50 10, 5 25 Z"
+        d="M 6 25 C 12 42, 30 42, 40 25 C 50 8, 68 8, 74 25 C 67 7, 46 7, 38 21 C 30 35, 13 35, 6 25 Z"
         fill="#6B7280"
-        opacity="0.9"
       />
-      {/* Overlapping Center Blend */}
-      <path
-        d="M 5 25 C 30 10, 70 40, 95 25 C 70 10, 30 40, 5 25 Z"
-        fill="#DC2626"
-      />
+      {/* "iLink Digital" Red Brand Wordmark */}
+      <text
+        x="82"
+        y="33"
+        fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        fontSize="24"
+        fontWeight="600"
+        fill="#D32F2F"
+        letterSpacing="-0.2"
+      >
+        iLink Digital
+      </text>
     </svg>
   );
 }
@@ -161,6 +167,22 @@ export function ReactBrandIcon({ className = "w-4 h-4" }: { className?: string }
   );
 }
 
+export function AngularBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="#DD0031">
+      <path d="M12 2L2 5.5l1.5 13L12 22l8.5-3.5 1.5-13L12 2zM12 4.4l5.3 12.6h-2.1l-1.1-2.7H9.9l-1.1 2.7H6.7L12 4.4zm1.4 8.1l-1.4-3.4-1.4 3.4h2.8z"/>
+    </svg>
+  );
+}
+
+export function HTMLCSSBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="#E34F26">
+      <path d="M1.5 0h21l-1.9 21.2L12 24l-8.6-2.8L1.5 0zm16.5 4.5H6l.4 4.5h9.2l-.4 4.5-3.2 1-3.2-1-.2-2.3H6.3l.4 5.3 5.3 1.7 5.3-1.7.7-8H6.4l-.2-2.3h11.8z"/>
+    </svg>
+  );
+}
+
 export function NextjsBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -224,8 +246,10 @@ export function getOriginalTechIcon(techName: string, className = "w-4 h-4") {
   if (lower.includes("azure")) return <AzureBrandIcon className={className} />;
   if (lower.includes("aws") || lower.includes("bedrock")) return <AWSBrandIcon className={className} />;
   if (lower.includes("react")) return <ReactBrandIcon className={className} />;
+  if (lower.includes("angular")) return <AngularBrandIcon className={className} />;
+  if (lower.includes("html") || lower.includes("css")) return <HTMLCSSBrandIcon className={className} />;
   if (lower.includes("next")) return <NextjsBrandIcon className={className} />;
-  if (lower.includes("typescript") || lower.includes("ts")) return <TypeScriptBrandIcon className={className} />;
+  if (lower.includes("typescript") || lower.includes("js") || lower.includes("javascript")) return <TypeScriptBrandIcon className={className} />;
   if (lower.includes("tailwind")) return <TailwindBrandIcon className={className} />;
   if (lower.includes("openai") || lower.includes("claude") || lower.includes("llm")) return <OpenAIBrandIcon className={className} />;
   if (lower.includes("postgres") || lower.includes("sql")) return <PostgresBrandIcon className={className} />;

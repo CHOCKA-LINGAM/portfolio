@@ -19,7 +19,7 @@ import { MonographSkillsCapability } from "@/components/monograph/MonographSkill
 import { MonographContactConnect } from "@/components/monograph/MonographContactConnect";
 import { MonographEasterEggs } from "@/components/monograph/MonographEasterEggs";
 import { Project } from "@/data/index";
-import { Moon } from "lucide-react";
+import { Terminal, Github } from "lucide-react";
 
 export default function Page() {
   const { current, goTo } = useNav();
@@ -122,16 +122,25 @@ export default function Page() {
             <span>| Senior Software Engineer</span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span>Good ideas travel far.</span>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://github.com/CHOCKA-LINGAM"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 text-slate-700 hover:text-cyan-600 transition-colors font-bold"
+            >
+              <Github className="w-3.5 h-3.5 text-slate-950" />
+              <span>GitHub</span>
+            </a>
+
             <button
               onClick={() => setIsEasterEggOpen(true)}
-              className="px-3.5 py-1 rounded-full bg-slate-950/80 border border-cyan-500/30 text-cyan-300 hover:border-amber-400 hover:text-amber-300 transition-all cursor-pointer flex items-center gap-2 shadow-inner group"
-              title="Interactive Lunar Mode 🌙"
+              className="px-3.5 py-1 rounded-full bg-slate-950/80 border border-cyan-500/30 text-cyan-300 hover:border-cyan-400 hover:text-white transition-all cursor-pointer flex items-center gap-2 shadow-inner group"
+              title="Open System Radar & Developer CLI 💻"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse group-hover:scale-125 transition-transform" />
-              <Moon className="w-3.5 h-3.5 text-amber-300 group-hover:rotate-12 transition-transform" />
-              <span className="text-[11px] font-mono text-slate-400 group-hover:text-amber-200">Phase 92%</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse group-hover:scale-125 transition-transform" />
+              <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="text-[11px] font-mono text-slate-300 group-hover:text-cyan-200">System Radar 💻</span>
             </button>
           </div>
 

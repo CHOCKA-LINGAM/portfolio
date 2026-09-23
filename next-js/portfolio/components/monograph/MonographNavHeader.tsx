@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Command, Sparkles, Moon, Menu, X } from "lucide-react";
+import { Command, Terminal, Menu, X, Github } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Page } from "@/hooks/useNav";
 
@@ -37,8 +37,17 @@ export function MonographNavHeader({
   ];
 
   const handleMobileNav = (sectionId: Page) => {
-    onNavigate(sectionId);
     setMobileMenuOpen(false);
+    setTimeout(() => {
+      onNavigate(sectionId);
+    }, 60);
+  };
+
+  const handleLogoClick = () => {
+    setMobileMenuOpen(false);
+    setTimeout(() => {
+      onNavigate("home");
+    }, 60);
   };
 
   return (
@@ -52,10 +61,7 @@ export function MonographNavHeader({
       <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-10 flex items-center justify-between">
         {/* Monogram Logo */}
         <button
-          onClick={() => {
-            onNavigate("home");
-            setMobileMenuOpen(false);
-          }}
+          onClick={handleLogoClick}
           className="flex items-center gap-3 cursor-pointer group"
         >
           <div className="w-9 h-9 rounded-xl bg-slate-900 border border-white/20 flex items-center justify-center font-display font-extrabold text-sm text-white group-hover:border-cyan-400 group-hover:text-cyan-300 transition-all shadow-md">
@@ -88,6 +94,19 @@ export function MonographNavHeader({
 
         {/* Right Actions & Mobile Hamburger Menu Toggle */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* GitHub Profile Button */}
+          <a
+            href="https://github.com/CHOCKA-LINGAM"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 border border-white/15 text-slate-300 hover:text-white hover:border-cyan-400 font-mono text-xs transition-all cursor-pointer shadow-md"
+            title="GitHub Profile"
+          >
+            <Github className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden sm:inline font-bold">GitHub</span>
+          </a>
+
+          {/* Cmd + K Button */}
           <button
             onClick={onOpenCmdPalette}
             className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-slate-900 border border-white/15 text-slate-300 hover:text-white hover:border-cyan-400 font-mono text-xs transition-all cursor-pointer shadow-md"
@@ -97,14 +116,14 @@ export function MonographNavHeader({
             <span className="hidden sm:inline">Cmd + K</span>
           </button>
 
-          {/* Secret Easter Egg Trigger Dot */}
+          {/* System Radar & CLI Trigger Dot */}
           <button
             onClick={onTriggerEasterEgg}
-            title="Secret Easter Egg discovery 🤫"
-            className="w-8 h-8 rounded-full bg-slate-900 border border-white/15 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-all cursor-pointer shadow-md group relative"
+            title="System Radar & CLI 💻"
+            className="w-8 h-8 rounded-full bg-slate-900 border border-white/15 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 transition-all cursor-pointer shadow-md group relative"
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:bg-amber-400 animate-ping absolute" />
-            <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:bg-amber-400 relative" />
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping absolute" />
+            <span className="w-2 h-2 rounded-full bg-cyan-400 relative" />
           </button>
 
           {/* Mobile / Tablet Menu Toggle Button */}
@@ -149,6 +168,35 @@ export function MonographNavHeader({
                   </button>
                 );
               })}
+
+              <div className="border-t border-white/10 pt-2 mt-1 flex flex-col gap-1.5">
+                <a
+                  href="https://github.com/CHOCKA-LINGAM"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2.5 rounded-xl text-left text-xs font-bold text-slate-200 bg-slate-900 border border-white/10 flex items-center justify-between hover:text-white cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Github className="w-4 h-4 text-cyan-400" />
+                    GitHub Profile
+                  </span>
+                  <span className="text-[10px] text-cyan-400">@CHOCKA-LINGAM</span>
+                </a>
+
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onTriggerEasterEgg();
+                  }}
+                  className="px-4 py-2.5 rounded-xl text-left text-xs font-bold text-cyan-300 bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-between cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Terminal className="w-4 h-4 text-cyan-400" />
+                    System Radar &amp; CLI
+                  </span>
+                  <span className="text-[10px] text-cyan-400">💻</span>
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
