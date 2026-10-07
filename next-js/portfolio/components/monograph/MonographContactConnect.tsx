@@ -8,7 +8,7 @@ export function MonographContactConnect() {
   return (
     <section
       id="section-contact"
-      className="relative w-full min-h-[80vh] rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24"
+      className="relative w-full min-h-[80dvh] rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24"
     >
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -42,7 +42,7 @@ export function MonographContactConnect() {
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">DIRECT EMAIL</span>
+                <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">DIRECT EMAIL</span>
                 <span className="text-xs sm:text-sm font-bold text-white truncate break-all">{PERSONAL.email}</span>
               </div>
             </div>
@@ -60,7 +60,7 @@ export function MonographContactConnect() {
                 <Github className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">GITHUB REPOSITORIES</span>
+                <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">GITHUB REPOSITORIES</span>
                 <span className="text-xs sm:text-sm font-bold text-white truncate">github.com/CHOCKA-LINGAM</span>
               </div>
             </div>
@@ -78,7 +78,7 @@ export function MonographContactConnect() {
                 <Linkedin className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">LINKEDIN PROFILE</span>
+                <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">LINKEDIN PROFILE</span>
                 <span className="text-xs sm:text-sm font-bold text-white truncate">linkedin.com/in/chockalingam-balan</span>
               </div>
             </div>
@@ -90,7 +90,7 @@ export function MonographContactConnect() {
               <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">LOCATION &amp; RELOCATION</span>
+              <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">LOCATION &amp; RELOCATION</span>
               <span className="text-xs sm:text-sm font-bold text-white">Chennai, India • Open for Global Remote / Relocation</span>
             </div>
           </div>

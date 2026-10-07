@@ -22,6 +22,8 @@ import {
   Calendar,
 } from "lucide-react";
 import { PERSONAL, getExperienceYearsLabel } from "@/data/index";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export interface StorySlide {
   id: number;
@@ -197,6 +199,10 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
   const currentSlide = STORY_SLIDES[currentIdx];
 
+  useBodyScrollLock(isOpen);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(isOpen, dialogRef);
+
   const playTechSound = (freq = 587.33, duration = 0.15) => {
     try {
       if (typeof window === "undefined") return;
@@ -368,6 +374,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
   return (
     <AnimatePresence>
       <div 
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="story-modal-title"
@@ -386,7 +393,8 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
           onMouseUp={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
-          className="relative z-10 w-full max-w-[480px] max-h-[90vh] rounded-2xl overflow-y-auto overflow-x-hidden border border-slate-800 bg-slate-950 text-slate-100 shadow-2xl flex flex-col justify-between p-3.5 sm:p-5"
+          onTouchCancel={() => setIsPaused(false)}
+          className="relative z-10 w-full max-w-[480px] max-h-[90dvh] rounded-2xl overflow-y-auto overflow-x-hidden border border-slate-800 bg-slate-950 text-slate-100 shadow-2xl flex flex-col justify-between p-3.5 sm:p-5"
         >
           {/* Floating Emoji Reactions */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-50">
@@ -410,20 +418,22 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
               <div
                 key={slide.id}
                 onClick={(e) => goToSlide(idx, e)}
-                className="h-1 flex-1 rounded-full bg-slate-800 overflow-hidden cursor-pointer hover:bg-slate-700 transition-colors min-h-[6px]"
+                className="touch-manipulation flex-1 py-2 -my-2 cursor-pointer group"
                 title={`${slide.category}`}
               >
-                <div
-                  className="h-full bg-cyan-400 transition-all duration-75"
-                  style={{
-                    width:
-                      idx < currentIdx
-                        ? "100%"
-                        : idx === currentIdx
-                        ? `${progress}%`
-                        : "0%",
-                  }}
-                />
+                <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden group-hover:bg-slate-700 transition-colors">
+                  <div
+                    className="h-full bg-cyan-400 transition-all duration-75"
+                    style={{
+                      width:
+                        idx < currentIdx
+                          ? "100%"
+                          : idx === currentIdx
+                          ? `${progress}%`
+                          : "0%",
+                    }}
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -438,7 +448,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                 <span className="text-xs font-bold text-white font-mono leading-tight">
                   Chockalingam Balan
                 </span>
-                <span className="text-[10px] font-mono text-cyan-400 flex items-center gap-1">
+                <span className="text-[11px] font-mono text-cyan-400 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   STORY {currentIdx + 1}/{STORY_SLIDES.length}
                 </span>
@@ -448,11 +458,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
             <div className="flex items-center gap-1.5">
               <button
                 onClick={toggleSound}
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                  toggleSound();
-                }}
-                className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                className={`touch-manipulation flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-mono font-bold transition-all cursor-pointer ${
                   soundEnabled
                     ? "bg-cyan-950 text-cyan-300 border-cyan-500/50"
                     : "bg-slate-900 text-slate-400 border-slate-800 hover:text-white"
@@ -474,8 +480,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
               <button
                 onClick={handleCloseModal}
-                onTouchEnd={handleCloseModal}
-                className="p-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center"
+                className="touch-manipulation p-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center"
                 title="Close Story (ESC)"
               >
                 <X className="w-4 h-4 text-cyan-400" />
@@ -502,17 +507,24 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.16 }}
-                className="relative z-30 flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md shadow-xl pointer-events-auto"
+                onClick={(e) => {
+                  // Story-style tap navigation across the card; ignore taps on buttons/links
+                  if ((e.target as HTMLElement).closest("button, a")) return;
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  if (e.clientX - rect.left < rect.width / 3) prevSlide(e);
+                  else nextSlide(e);
+                }}
+                className="relative z-30 flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md shadow-xl pointer-events-auto cursor-pointer"
               >
                 {/* Header Tag */}
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <div className="flex items-center gap-1.5">
                     {currentSlide.icon}
-                    <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                    <span className="text-[11px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">
                       {currentSlide.category}
                     </span>
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-400 font-medium flex items-center gap-1 shrink-0">
+                  <span className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-400 font-medium flex items-center gap-1 shrink-0">
                     <Calendar className="w-3 h-3 text-slate-500" />
                     {currentSlide.period}
                   </span>
@@ -536,18 +548,18 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                 {currentSlide.educationDetail && (
                   <div className="p-2.5 sm:p-3 rounded-lg bg-slate-950 border border-slate-800 flex flex-col gap-1 font-mono text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] sm:text-[11px] font-bold text-cyan-400 flex items-center gap-1.5">
+                      <span className="text-[11px] sm:text-[11px] font-bold text-cyan-400 flex items-center gap-1.5">
                         <GraduationCap className="w-4 h-4 text-cyan-400 shrink-0" />
                         ACADEMIC DEGREE
                       </span>
-                      <span className="text-[10px] text-slate-400 font-bold">
+                      <span className="text-[11px] text-slate-400 font-bold">
                         {currentSlide.educationDetail.year}
                       </span>
                     </div>
                     <span className="font-bold text-white font-sans text-xs">
                       {currentSlide.educationDetail.degree}
                     </span>
-                    <span className="text-[10px] sm:text-[11px] text-slate-400">
+                    <span className="text-[11px] sm:text-[11px] text-slate-400">
                       {currentSlide.educationDetail.institution}
                     </span>
                   </div>
@@ -563,7 +575,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                   {currentSlide.highlights.map((h, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-slate-950 border border-slate-800 text-[10px] sm:text-[11px] font-mono font-semibold text-slate-300 flex items-center gap-1.5"
+                      className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-slate-950 border border-slate-800 text-[11px] sm:text-[11px] font-mono font-semibold text-slate-300 flex items-center gap-1.5"
                     >
                       <ShieldCheck className="w-3 h-3 text-cyan-400 shrink-0" />
                       <span>{h}</span>
@@ -573,7 +585,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
                 {/* Tech Chips */}
                 <div className="pt-2 border-t border-slate-800 relative z-40 pointer-events-auto flex flex-col gap-1.5">
-                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                     <Info className="w-3 h-3 text-cyan-400 shrink-0" />
                     Tech stack architecture:
                   </span>
@@ -587,7 +599,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                           if (soundEnabled) playTechSound(700, 0.08);
                           setSelectedTechInfo(selectedTechInfo?.name === chip.name ? null : chip);
                         }}
-                        className={`px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-mono font-bold transition-all border cursor-pointer relative z-50 ${
+                        className={`px-2 py-0.5 rounded text-[11px] sm:text-[11px] font-mono font-bold transition-all border cursor-pointer relative z-50 ${
                           selectedTechInfo?.name === chip.name
                             ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/60"
                             : "bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-slate-200"
@@ -621,6 +633,24 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
           {/* Bottom Action Controls */}
           <div className="relative z-40 flex flex-col gap-2 pt-2.5 border-t border-slate-800">
+            {/* Mobile prev/next controls (desktop uses side arrows) */}
+            <div className="flex sm:hidden items-center justify-between gap-2 font-mono">
+              <button
+                onClick={(e) => prevSlide(e)}
+                disabled={currentIdx === 0}
+                className="touch-manipulation flex-1 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center gap-1 disabled:opacity-30 cursor-pointer"
+                aria-label="Previous story slide"
+              >
+                <ChevronLeft className="w-4 h-4" /> Prev
+              </button>
+              <button
+                onClick={(e) => nextSlide(e)}
+                className="touch-manipulation flex-1 py-2 rounded-lg bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
+                aria-label="Next story slide"
+              >
+                {currentIdx === STORY_SLIDES.length - 1 ? "Done" : "Next"} <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
             <div className="flex items-center justify-between font-mono gap-2">
               <div className="flex items-center gap-1">
                 {["🔥", "🚀", "👏", "⚡"].map((emoji) => (

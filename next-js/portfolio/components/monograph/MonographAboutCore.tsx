@@ -11,7 +11,7 @@ export function MonographAboutCore({
   const coreValues = ["Curiosity", "Discipline", "Execution", "Impact"];
 
   return (
-    <section id="section-about" className="relative w-full min-h-[85vh] rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-4 sm:my-8 flex flex-col justify-between scroll-mt-24">
+    <section id="section-about" className="relative w-full min-h-[85dvh] rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-4 sm:my-8 flex flex-col justify-between scroll-mt-24">
       {/* Background Glow */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-10 right-1/4 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-cyan-500/10 rounded-full blur-[140px]" />

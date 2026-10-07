@@ -32,7 +32,7 @@ export function MonographProjectDetail({
             <span className="text-xs font-mono text-cyan-600 font-bold uppercase tracking-widest">
               05 / PROJECT DETAIL
             </span>
-            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+            <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold ${
               isDevInProgress ? "bg-amber-100 text-amber-800 border border-amber-300" : "bg-emerald-100 text-emerald-800 border border-emerald-300"
             }`}>
               {currentProject.status}
@@ -145,29 +145,29 @@ export function MonographProjectDetail({
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                     <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-md flex flex-col justify-center">
                       <span className="font-extrabold text-slate-950">DDL / Schema Ingestion</span>
-                      <span className="text-[10px] text-slate-500 mt-1">SQL Script / Delta Schema</span>
+                      <span className="text-[11px] text-slate-500 mt-1">SQL Script / Delta Schema</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-950 shadow-md flex flex-col justify-center">
                       <span className="font-extrabold">AST Introspection Engine</span>
-                      <span className="text-[10px] text-purple-700 mt-1">Python AST Diff Engine</span>
+                      <span className="text-[11px] text-purple-700 mt-1">Python AST Diff Engine</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 shadow-md flex flex-col justify-center">
                       <span className="font-extrabold">Safety Classifier Rules</span>
-                      <span className="text-[10px] text-emerald-700 mt-1">SAFE / WARNING / BREAKING</span>
+                      <span className="text-[11px] text-emerald-700 mt-1">SAFE / WARNING / BREAKING</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center pt-1">
                     <div className="p-4 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-950 shadow-md flex flex-col justify-center">
                       <span className="font-extrabold">Target Lakehouse / Database</span>
-                      <span className="text-[10px] text-cyan-700 mt-1">Databricks Delta & Postgres</span>
+                      <span className="text-[11px] text-cyan-700 mt-1">Databricks Delta & Postgres</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-md flex flex-col justify-center">
                       <span className="font-extrabold">CI/CD & CLI Guardrail</span>
-                      <span className="text-[10px] text-amber-700 mt-1">schema-shield check (PyPI)</span>
+                      <span className="text-[11px] text-amber-700 mt-1">schema-shield check (PyPI)</span>
                     </div>
                   </div>
                 </div>
@@ -175,15 +175,15 @@ export function MonographProjectDetail({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-xs font-mono">
                   <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-md flex flex-col justify-center">
                     <span className="font-extrabold text-slate-950">Input Module</span>
-                    <span className="text-[10px] text-slate-500 mt-1">Data Ingestion</span>
+                    <span className="text-[11px] text-slate-500 mt-1">Data Ingestion</span>
                   </div>
                   <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-950 shadow-md flex flex-col justify-center">
                     <span className="font-extrabold">Processing Engine</span>
-                    <span className="text-[10px] text-purple-700 mt-1">In Development</span>
+                    <span className="text-[11px] text-purple-700 mt-1">In Development</span>
                   </div>
                   <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 shadow-md flex flex-col justify-center">
                     <span className="font-extrabold">Output Pipeline</span>
-                    <span className="text-[10px] text-emerald-700 mt-1">Staging Target</span>
+                    <span className="text-[11px] text-emerald-700 mt-1">Staging Target</span>
                   </div>
                 </div>
               )}

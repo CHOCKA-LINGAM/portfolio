@@ -116,9 +116,9 @@ export default function Page() {
         </div>
 
         {/* Footer & Responsive Bar */}
-        <footer className="w-full pt-16 pb-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500 mt-12">
+        <footer className="w-full pt-16 pb-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500 mt-12">
           <div className="flex items-center gap-2">
-            <span className="font-display font-extrabold text-slate-950">CHOCKA<span className="text-cyan-600">.dev</span></span>
+            <span className="font-display font-extrabold text-white">CHOCKA<span className="text-cyan-400">.dev</span></span>
             <span>| Senior Software Engineer</span>
           </div>
 
@@ -127,9 +127,9 @@ export default function Page() {
               href="https://github.com/CHOCKA-LINGAM"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 text-slate-700 hover:text-cyan-600 transition-colors font-bold"
+              className="flex items-center gap-1.5 text-slate-300 hover:text-cyan-400 transition-colors font-bold"
             >
-              <Github className="w-3.5 h-3.5 text-slate-950" />
+              <Github className="w-3.5 h-3.5 text-cyan-400" />
               <span>GitHub</span>
             </a>
 

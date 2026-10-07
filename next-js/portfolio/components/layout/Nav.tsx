@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Command, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { PAGES, type Page } from "@/hooks/useNav";
-import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 
 interface NavProps {
   current: Page;
@@ -72,10 +71,8 @@ export default function Nav({ current, goTo, onOpenCommandPalette }: NavProps) {
           ))}
         </div>
 
-        {/* Theme Switcher, UI Lab Route Link & Command Palette */}
+        {/* UI Lab Route Link & Command Palette */}
         <div className="flex items-center gap-2 sm:gap-2.5 pl-2 sm:pl-3 border-l border-[var(--border)]">
-          <ThemeSwitcher />
-
           <Link
             href="/lab"
             className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-sky-500/15 text-sky-400 hover:bg-sky-500/25 border border-sky-500/30 transition-all cursor-pointer whitespace-nowrap shadow-sm"

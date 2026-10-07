@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Command, Terminal, Menu, X, Github } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Page } from "@/hooks/useNav";
@@ -18,14 +18,34 @@ export function MonographNavHeader({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu on Escape or when tapping outside the header
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointer);
+    };
+  }, [mobileMenuOpen]);
 
   const navItems = [
     { id: "home", label: "Home" },
@@ -52,6 +72,7 @@ export function MonographNavHeader({
 
   return (
     <header
+      ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-slate-950/85 backdrop-blur-xl border-b border-white/10 py-3.5 shadow-2xl"
@@ -129,8 +150,9 @@ export function MonographNavHeader({
           {/* Mobile / Tablet Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="flex lg:hidden p-2 rounded-xl bg-slate-900 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer"
+            className="touch-manipulation flex lg:hidden p-2.5 rounded-xl bg-slate-900 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer"
             aria-label="Toggle Navigation Menu"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-5 h-5 text-cyan-400" /> : <Menu className="w-5 h-5 text-slate-300" />}
           </button>
@@ -148,7 +170,7 @@ export function MonographNavHeader({
             className="lg:hidden overflow-hidden bg-slate-950/95 border-b border-white/10 backdrop-blur-2xl px-4 py-4 mt-2 font-mono"
           >
             <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest px-2 mb-1">
+              <span className="text-[11px] text-cyan-400 font-bold uppercase tracking-widest px-2 mb-1">
                 // NAVIGATION SECTIONS
               </span>
               {navItems.map((item) => {
@@ -157,14 +179,14 @@ export function MonographNavHeader({
                   <button
                     key={item.id}
                     onClick={() => handleMobileNav(item.id as Page)}
-                    className={`px-4 py-2.5 rounded-xl text-left text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                    className={`touch-manipulation px-4 py-3 rounded-xl text-left text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
                       isActive
                         ? "bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-md"
                         : "text-slate-300 hover:bg-slate-900 hover:text-white border border-transparent"
                     }`}
                   >
                     <span>{item.label}</span>
-                    <span className="text-[10px] text-slate-500 font-mono">0{navItems.indexOf(item) + 1}</span>
+                    <span className="text-[11px] text-slate-500 font-mono">0{navItems.indexOf(item) + 1}</span>
                   </button>
                 );
               })}
@@ -180,7 +202,7 @@ export function MonographNavHeader({
                     <Github className="w-4 h-4 text-cyan-400" />
                     GitHub Profile
                   </span>
-                  <span className="text-[10px] text-cyan-400">@CHOCKA-LINGAM</span>
+                  <span className="text-[11px] text-cyan-400">@CHOCKA-LINGAM</span>
                 </a>
 
                 <button
@@ -194,7 +216,7 @@ export function MonographNavHeader({
                     <Terminal className="w-4 h-4 text-cyan-400" />
                     System Radar &amp; CLI
                   </span>
-                  <span className="text-[10px] text-cyan-400">💻</span>
+                  <span className="text-[11px] text-cyan-400">💻</span>
                 </button>
               </div>
             </div>

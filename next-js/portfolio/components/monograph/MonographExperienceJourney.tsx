@@ -24,16 +24,16 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
   return (
     <div
       className="relative flex flex-col gap-1.5"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setIsOpen(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setIsOpen(false)}
     >
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
           // TECH STACK
         </span>
-        <span className="text-[10px] font-mono text-emerald-600 font-bold flex items-center gap-1">
+        <span className="text-[11px] font-mono text-emerald-600 font-bold flex items-center gap-1">
           <Layers className="w-3 h-3 text-emerald-500" />
-          Hover to inspect ({tags.length})
+          Tap or hover ({tags.length})
         </span>
       </div>
 
@@ -42,7 +42,7 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
         className="group relative cursor-pointer p-3.5 rounded-xl bg-slate-950 text-slate-100 border border-slate-800 transition-all hover:border-emerald-500/50 hover:shadow-lg flex items-center justify-between gap-3 shadow-md select-none"
       >
         <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-ping" />
+          <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
           <p className="font-mono text-xs text-slate-200 truncate font-medium">
             {previewTech}
           </p>
@@ -67,8 +67,8 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
                   <Layers className="w-3.5 h-3.5 text-emerald-400" />
                   ORIGINAL TECH BRAND LOGOS ({tags.length})
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">
-                  Hover to inspect
+                <span className="text-[11px] font-mono text-slate-400">
+                  Tap or hover
                 </span>
               </div>
 
@@ -98,7 +98,7 @@ export function MonographExperienceJourney() {
   const activeExp = experiences[selectedIdx] || experiences[0];
 
   return (
-    <section id="section-experience" className="relative w-full min-h-[85vh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
+    <section id="section-experience" className="relative w-full min-h-[85dvh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
       {/* Header Bar */}
       <div className="flex flex-col gap-2 border-b border-slate-200 pb-6 relative z-10">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-700 text-xs font-mono font-bold tracking-widest w-max shadow-sm">
@@ -108,27 +108,6 @@ export function MonographExperienceJourney() {
         <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
           Experience
         </h2>
-      </div>
-
-      {/* Mobile Top Company Tab Selector Bar */}
-      <div className="flex lg:hidden overflow-x-auto gap-2 py-3 border-b border-slate-200 no-scrollbar scroll-smooth relative z-10 font-mono text-xs">
-        {experiences.map((exp, idx) => {
-          const isSelected = selectedIdx === idx;
-          return (
-            <button
-              key={`mobile-tab-${exp.id}`}
-              onClick={() => setSelectedIdx(idx)}
-              className={`px-3.5 py-2 rounded-xl font-bold whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer border ${
-                isSelected
-                  ? "bg-slate-950 text-white border-slate-950 shadow-md"
-                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-400"
-              }`}
-            >
-              {getOriginalCompanyIcon(exp.company, "w-4 h-4 shrink-0")}
-              <span>{exp.company}</span>
-            </button>
-          );
-        })}
       </div>
 
       {/* Main Content Layout */}
@@ -146,7 +125,12 @@ export function MonographExperienceJourney() {
             return (
               <div key={exp.id} className="flex flex-col gap-2">
                 <motion.button
-                  onClick={() => setSelectedIdx(selectedIdx === idx ? -1 : idx)}
+                  onClick={() =>
+                    setSelectedIdx(
+                      selectedIdx === idx && typeof window !== "undefined" && window.innerWidth < 1024 ? -1 : idx
+                    )
+                  }
+                  aria-expanded={isSelected}
                   whileHover={{ x: 4 }}
                   className={`relative z-10 p-4 rounded-2xl border text-left font-mono transition-all cursor-pointer flex items-center justify-between shadow-md ${
                     isSelected
@@ -188,7 +172,7 @@ export function MonographExperienceJourney() {
                       className="lg:hidden overflow-visible p-5 rounded-2xl bg-white border border-slate-200 shadow-xl flex flex-col gap-4 font-sans text-xs text-slate-700 my-1"
                     >
                       <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                        <span className="px-2.5 py-1 rounded-full bg-slate-950 text-white font-mono font-bold text-[10px]">
+                        <span className="px-2.5 py-1 rounded-full bg-slate-950 text-white font-mono font-bold text-[11px]">
                           {exp.period}
                         </span>
                         <span className="font-mono font-bold text-emerald-600 text-xs">

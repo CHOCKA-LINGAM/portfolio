@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Download, Printer, ExternalLink, FileText } from "lucide-react";
 import { PERSONAL } from "@/data/index";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -11,6 +13,9 @@ interface ResumeModalProps {
 }
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+  useBodyScrollLock(isOpen);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(isOpen, dialogRef);
   useEffect(() => {
     if (!isOpen) return;
 
@@ -27,6 +32,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   return (
     <AnimatePresence>
       <div 
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="resume-modal-title"
@@ -37,7 +43,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 16 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-4xl h-[90vh] max-h-[860px] rounded-3xl bg-[var(--surface-1)] border border-[var(--border-strong)] shadow-2xl flex flex-col justify-between overflow-hidden"
+          className="relative w-full max-w-4xl h-[90dvh] max-h-[860px] rounded-3xl bg-[var(--surface-1)] border border-[var(--border-strong)] shadow-2xl flex flex-col justify-between overflow-hidden"
         >
           {/* Header Bar */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)] bg-[var(--surface-2)]">

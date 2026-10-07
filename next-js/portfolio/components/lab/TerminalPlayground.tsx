@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Terminal as TerminalIcon, Sparkles, Send, Trash2 } from "lucide-react";
-import { themeOptions, ThemeId } from "@/components/ui/ThemeSwitcher";
+import { Terminal as TerminalIcon, Send, Trash2 } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 
 interface TerminalLog {
@@ -22,7 +21,7 @@ export const TerminalPlayground: React.FC = () => {
     {
       id: 2,
       type: "system",
-      text: "Type 'help' for a list of available commands or try 'databricks-bundle', 'stack', 'theme cyberpunk', or 'contact'.",
+      text: "Type 'help' for a list of available commands or try 'databricks-bundle', 'stack', 'about', or 'contact'.",
     },
   ]);
 
@@ -41,7 +40,7 @@ export const TerminalPlayground: React.FC = () => {
     if (!raw) return;
 
     addLog("input", `$ ${raw}`);
-    const [cmd, ...args] = raw.split(" ");
+    const [cmd] = raw.split(" ");
     const commandName = cmd.toLowerCase();
 
     switch (commandName) {
@@ -51,7 +50,6 @@ export const TerminalPlayground: React.FC = () => {
           `Available Chock CLI Commands:
   • databricks-bundle  : Run live simulation of published PyPI asset bundle deployment
   • stack              : Output ASCII architecture pipeline diagram
-  • theme <theme-name> : Switch site theme directly (e.g. 'theme emerald', 'theme cyberpunk')
   • contact            : Display direct outreach & email details
   • about              : Print executive engineer overview
   • clear              : Clear terminal screen logs`
@@ -87,26 +85,6 @@ export const TerminalPlayground: React.FC = () => {
         );
         break;
 
-      case "theme":
-        if (args.length === 0) {
-          addLog("error", "Error: Specify a theme name. Example: 'theme emerald'. Available: " + themeOptions.map(t => t.id).join(", "));
-        } else {
-          const targetTheme = args[0].toLowerCase() as ThemeId;
-          const match = themeOptions.find((t) => t.id === targetTheme);
-          if (match) {
-            localStorage.setItem("portfolio_theme", match.id);
-            if (match.id === "midnight") {
-              document.documentElement.removeAttribute("data-theme");
-            } else {
-              document.documentElement.setAttribute("data-theme", match.id);
-            }
-            addLog("success", `Switched active theme to '${match.name}' (${match.id})`);
-          } else {
-            addLog("error", `Error: Unknown theme '${args[0]}'. Available: ` + themeOptions.map(t => t.id).join(", "));
-          }
-        }
-        break;
-
       case "contact":
         addLog(
           "output",
@@ -119,7 +97,7 @@ export const TerminalPlayground: React.FC = () => {
         break;
 
       case "about":
-        addLog("output", `${PERSONAL.name} - ${PERSONAL.role}. 5+ years building high-throughput backend microservices, PySpark ETL engines, and production AI workflows at iLink Digital & Standard Chartered.`);
+        addLog("output", `${PERSONAL.name} - ${PERSONAL.role}. 5+ years building high-throughput backend microservices, PySpark ETL engines, and production AI workflows.`);
         break;
 
       case "clear":
@@ -193,7 +171,7 @@ export const TerminalPlayground: React.FC = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Try 'databricks-bundle', 'stack', 'theme cyberpunk', or 'help'..."
+          placeholder="Try 'databricks-bundle', 'stack', 'about', or 'help'..."
           className="flex-1 bg-transparent text-slate-100 outline-none font-mono text-xs sm:text-sm placeholder-slate-500"
         />
         <button

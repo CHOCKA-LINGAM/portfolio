@@ -271,7 +271,7 @@ export function getOriginalCompanyIcon(companyName: string, className = "w-8 h-4
   if (lower.includes("kaar")) return <KaarLogoIcon className={className} />;
 
   return (
-    <span className="w-5 h-5 rounded bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+    <span className="w-5 h-5 rounded bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-[11px] font-bold flex items-center justify-center shrink-0">
       {companyName.substring(0, 2).toUpperCase()}
     </span>
   );

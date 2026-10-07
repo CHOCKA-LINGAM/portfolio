@@ -22,7 +22,7 @@ export function MonographHomeSignal({
   const expYears = getExperienceYearsLabel();
 
   return (
-    <section className="relative w-full min-h-[90vh] sm:min-h-[92vh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-4 sm:p-10 lg:p-16 my-4 flex flex-col justify-between">
+    <section className="relative w-full min-h-[90dvh] sm:min-h-[92dvh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-4 sm:p-10 lg:p-16 my-4 flex flex-col justify-between">
       {/* ── TOP TAG HEADER WITH 5+ YEARS EXPERIENCE BADGE STRIP ── */}
       <div className="flex flex-wrap items-center justify-between w-full gap-3 relative z-10">
         <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-700 text-xs font-mono font-bold tracking-wider shadow-sm">
@@ -45,7 +45,7 @@ export function MonographHomeSignal({
             <span className="text-slate-950">Chockalingam</span>
           </h1>
 
-          <p className="text-xs sm:text-base lg:text-lg font-sans text-slate-700 leading-relaxed font-normal max-w-xl bg-white/90 p-4 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-sm">
+          <p className="text-sm sm:text-base lg:text-lg font-sans text-slate-700 leading-relaxed font-normal max-w-xl bg-white/90 p-4 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-sm">
             Senior Software Engineer building automated data pipelines, backend APIs, and intelligent AI microservices — backed by{" "}
             <span className="inline-flex items-center gap-1 font-mono text-xs font-bold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
               <PythonBrandIcon className="w-3.5 h-3.5" /> Python
@@ -97,8 +97,8 @@ export function MonographHomeSignal({
           
           {/* Root Origin Node on Left: SYSTEM badge */}
           <div
-            className="absolute z-20 px-3 py-1.5 rounded-full bg-slate-950 text-white font-mono text-[10px] sm:text-xs font-bold shadow-xl border border-slate-700 flex items-center gap-1.5"
-            style={{ left: "22%", top: "50%", transform: "translate(-100%, -50%)" }}
+            className="absolute z-20 px-3 py-1.5 rounded-full bg-slate-950 text-white font-mono text-[11px] sm:text-xs font-bold shadow-xl border border-slate-700 flex items-center gap-1.5"
+            style={{ left: "0%", top: "50%", transform: "translate(0, -50%)" }}
           >
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
             <span>SYSTEM</span>
@@ -126,7 +126,7 @@ export function MonographHomeSignal({
             </defs>
 
             {/* Main Source Stem extending horizontally from SYSTEM badge */}
-            <path d="M 22,50 L 36,50" stroke="#020617" strokeWidth="1.2" strokeLinecap="round" />
+            <path d="M 20,50 L 36,50" stroke="#020617" strokeWidth="1.2" strokeLinecap="round" />
 
             {/* Branch 1 to Data (Target = 62%, 10%) */}
             <path d="M 36,50 C 50,50 54,10 62,10" stroke="url(#flowGrad1)" strokeWidth="0.8" />
@@ -143,34 +143,34 @@ export function MonographHomeSignal({
 
           {/* Node Chips Positioned Directly at Target Endpoints (62% Left) */}
           <div
-            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-sky-300 shadow-md font-mono text-[10px] sm:text-xs font-bold text-sky-950 backdrop-blur-md z-20"
+            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-sky-300 shadow-md font-mono text-[11px] sm:text-xs font-bold text-sky-950 backdrop-blur-md z-20"
             style={{ left: "62%", top: "10%", transform: "translate(0, -50%)" }}
           >
-            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-500 animate-ping" />
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-500 animate-pulse" />
             <span>Data</span>
           </div>
 
           <div
-            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-purple-300 shadow-md font-mono text-[10px] sm:text-xs font-bold text-purple-950 backdrop-blur-md z-20"
+            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-purple-300 shadow-md font-mono text-[11px] sm:text-xs font-bold text-purple-950 backdrop-blur-md z-20"
             style={{ left: "62%", top: "36.6%", transform: "translate(0, -50%)" }}
           >
-            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-500 animate-ping" />
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-500 animate-pulse" />
             <span>AI</span>
           </div>
 
           <div
-            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-emerald-300 shadow-md font-mono text-[10px] sm:text-xs font-bold text-emerald-950 backdrop-blur-md z-20"
+            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-emerald-300 shadow-md font-mono text-[11px] sm:text-xs font-bold text-emerald-950 backdrop-blur-md z-20"
             style={{ left: "62%", top: "63.3%", transform: "translate(0, -50%)" }}
           >
-            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-ping" />
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Backend</span>
           </div>
 
           <div
-            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-amber-300 shadow-md font-mono text-[10px] sm:text-xs font-bold text-amber-950 backdrop-blur-md z-20"
+            className="absolute flex items-center gap-1.5 p-1 px-2.5 sm:px-3.5 rounded-full bg-white border border-amber-300 shadow-md font-mono text-[11px] sm:text-xs font-bold text-amber-950 backdrop-blur-md z-20"
             style={{ left: "62%", top: "90%", transform: "translate(0, -50%)" }}
           >
-            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 animate-ping" />
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 animate-pulse" />
             <span>Fullstack</span>
           </div>
 

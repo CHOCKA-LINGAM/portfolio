@@ -49,7 +49,7 @@ export function MonographSkillsCapability() {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
 
   return (
-    <section id="section-skills" className="relative w-full min-h-[85vh] rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
+    <section id="section-skills" className="relative w-full min-h-[85dvh] rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
       {/* Background Orbs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[160px]" />
@@ -71,14 +71,16 @@ export function MonographSkillsCapability() {
       <div className="relative z-10 my-auto py-8 flex flex-col gap-6">
         
         {/* Mobile Horizontal Category Tab Selector Bar */}
-        <div className="flex sm:hidden overflow-x-auto gap-2 pb-2 border-b border-white/10 no-scrollbar font-mono text-xs">
+        <div role="tablist" aria-label="Skill categories" className="flex sm:hidden overflow-x-auto gap-2 pb-2 border-b border-white/10 no-scrollbar font-mono text-xs">
           {categories.map((cat) => {
             const isSelected = activeCategory.id === cat.id;
             return (
               <button
                 key={`skills-tab-${cat.id}`}
+                role="tab"
+                aria-selected={isSelected}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer border ${
+                className={`touch-manipulation px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer border ${
                   isSelected
                     ? "bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-md"
                     : "bg-slate-900/80 text-slate-300 border-white/10 hover:border-white/30"
@@ -100,7 +102,9 @@ export function MonographSkillsCapability() {
                 key={cat.id}
                 onClick={() => setActiveCategory(cat)}
                 whileHover={{ y: -4 }}
-                className={`p-4 sm:p-5 xl:p-6 rounded-2xl border text-left font-mono transition-all cursor-pointer backdrop-blur-xl flex flex-col gap-4 ${
+                className={`p-4 sm:p-5 xl:p-6 rounded-2xl border text-left font-mono transition-all cursor-pointer backdrop-blur-xl flex-col gap-4 ${
+                  isSelected ? "flex" : "hidden sm:flex"
+                } ${
                   isSelected
                     ? "bg-slate-900/90 border-cyan-400 text-white shadow-[0_0_30px_rgba(34,211,238,0.3)] ring-1 ring-cyan-400/40"
                     : "bg-slate-950/60 border-white/10 text-slate-300 hover:border-white/30"
@@ -111,7 +115,7 @@ export function MonographSkillsCapability() {
                     <span className="p-1 rounded bg-white/5 shrink-0">{cat.icon}</span>
                     <span className="break-words">{cat.title}</span>
                   </span>
-                  <span className="text-[10px] text-cyan-400 font-bold px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/30 shrink-0 mt-0.5">
+                  <span className="text-[11px] text-cyan-400 font-bold px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/30 shrink-0 mt-0.5">
                     {cat.skills.length} TECHS
                   </span>
                 </div>

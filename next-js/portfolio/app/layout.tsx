@@ -65,7 +65,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="blue" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${manrope.variable} ${jetbrains.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable}`}>
         {children}
       </body>

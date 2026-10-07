@@ -94,9 +94,9 @@ export function MonographProjectsTopology() {
                 href={flagshipProject.link}
                 target="_blank"
                 rel="noreferrer"
-                className="px-6 py-3 rounded-2xl text-xs font-mono font-bold text-white bg-slate-950 hover:bg-slate-800 flex items-center gap-2.5 transition-all shadow-md cursor-pointer"
+                className="w-full sm:w-auto justify-center text-left px-5 sm:px-6 py-3 rounded-2xl text-xs font-mono font-bold text-white bg-slate-950 hover:bg-slate-800 flex items-center gap-2.5 transition-all shadow-md cursor-pointer"
               >
-                <Terminal className="w-4 h-4 text-emerald-400" /> PyPI Package (pip install schema-shield)
+                <Terminal className="w-4 h-4 text-emerald-400 shrink-0" /> <span className="min-w-0 break-words">PyPI Package (pip install schema-shield)</span>
               </a>
             )}
             {flagshipProject.github && (
@@ -104,7 +104,7 @@ export function MonographProjectsTopology() {
                 href={flagshipProject.github}
                 target="_blank"
                 rel="noreferrer"
-                className="px-6 py-3 rounded-2xl text-xs font-mono font-bold text-slate-800 border border-slate-300 bg-slate-50 hover:bg-slate-100 transition-all flex items-center gap-2.5 cursor-pointer shadow-sm"
+                className="w-full sm:w-auto justify-center px-5 sm:px-6 py-3 rounded-2xl text-xs font-mono font-bold text-slate-800 border border-slate-300 bg-slate-50 hover:bg-slate-100 transition-all flex items-center gap-2.5 cursor-pointer shadow-sm"
               >
                 <Github className="w-4 h-4 text-cyan-600" /> View Source Repository
               </a>
