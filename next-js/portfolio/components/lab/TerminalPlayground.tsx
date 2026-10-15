@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Terminal as TerminalIcon, Sparkles, Send, Trash2 } from "lucide-react";
-import { themeOptions, ThemeId } from "@/components/ui/ThemeSwitcher";
+import { Terminal as TerminalIcon, Send, Trash2 } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 
 interface TerminalLog {
@@ -22,7 +21,7 @@ export const TerminalPlayground: React.FC = () => {
     {
       id: 2,
       type: "system",
-      text: "Type 'help' for a list of available commands or try 'databricks-bundle', 'stack', 'theme cyberpunk', or 'contact'.",
+      text: "Type 'help' for a list of available commands or try 'databricks-bundle', 'stack', 'about', or 'contact'.",
     },
   ]);
 
@@ -41,7 +40,7 @@ export const TerminalPlayground: React.FC = () => {
     if (!raw) return;
 
     addLog("input", `$ ${raw}`);
-    const [cmd, ...args] = raw.split(" ");
+    const [cmd] = raw.split(" ");
     const commandName = cmd.toLowerCase();
 
     switch (commandName) {
@@ -49,9 +48,8 @@ export const TerminalPlayground: React.FC = () => {
         addLog(
           "output",
           `Available Chock CLI Commands:
-  • databricks-bundle  : Run live simulation of published PyPI asset bundle deployment
+  • databricks-bundle  : Simulate the Pandas to PySpark migration
   • stack              : Output ASCII architecture pipeline diagram
-  • theme <theme-name> : Switch site theme directly (e.g. 'theme emerald', 'theme cyberpunk')
   • contact            : Display direct outreach & email details
   • about              : Print executive engineer overview
   • clear              : Clear terminal screen logs`
@@ -59,16 +57,13 @@ export const TerminalPlayground: React.FC = () => {
         break;
 
       case "databricks-bundle":
-        addLog("output", "[1/4] Connecting to PyPI repository (databricks-bundle v1.2.4)...");
+        addLog("output", "[1/3] Legacy Pandas pipelines identified...");
         setTimeout(() => {
-          addLog("output", "[2/4] Downloading wheels & validating cryptographic hashes... ✓");
-        }, 300);
+          addLog("output", "[2/3] Migrating to distributed PySpark on Azure Databricks...");
+        }, 400);
         setTimeout(() => {
-          addLog("output", "[3/4] Authenticating with Databricks workspace host (https://adb-8493021.azuredatabricks.net)...");
-        }, 650);
-        setTimeout(() => {
-          addLog("success", "[4/4] SUCCESS: Deployed multi-tenant PySpark asset bundle across 12 worker nodes. Ingestion runtime: 8.5min.");
-        }, 1100);
+          addLog("success", "[3/3] DONE: Pandas to PySpark migration complete. DAG planning API responds in under 5s.");
+        }, 900);
         break;
 
       case "stack":
@@ -77,34 +72,14 @@ export const TerminalPlayground: React.FC = () => {
           `+-----------------------------------------------------------------------+
 | SYSTEM ARCHITECTURE PIPELINE                                         |
 +-----------------------------------------------------------------------+
- [Raw Events] ──> (Apache Kafka) ──> [PySpark / Databricks Ingestion] 
+ [Raw Events] ──> (Azure Databricks) ──> [PySpark / Databricks Ingestion] 
                                                     │
                                                     ▼
- [Client UI]  <── (FastAPI Async) <── [PostgreSQL + Redis Cache Layer]
+ [Client UI]  <── (FastAPI Async) <── [Django multi-tenant backend]
                                                     │
                                                     ▼
-                                    [AWS Bedrock LLM Guardrails]`
+                                    [AWS Bedrock AI workflows]`
         );
-        break;
-
-      case "theme":
-        if (args.length === 0) {
-          addLog("error", "Error: Specify a theme name. Example: 'theme emerald'. Available: " + themeOptions.map(t => t.id).join(", "));
-        } else {
-          const targetTheme = args[0].toLowerCase() as ThemeId;
-          const match = themeOptions.find((t) => t.id === targetTheme);
-          if (match) {
-            localStorage.setItem("portfolio_theme", match.id);
-            if (match.id === "midnight") {
-              document.documentElement.removeAttribute("data-theme");
-            } else {
-              document.documentElement.setAttribute("data-theme", match.id);
-            }
-            addLog("success", `Switched active theme to '${match.name}' (${match.id})`);
-          } else {
-            addLog("error", `Error: Unknown theme '${args[0]}'. Available: ` + themeOptions.map(t => t.id).join(", "));
-          }
-        }
         break;
 
       case "contact":
@@ -114,12 +89,12 @@ export const TerminalPlayground: React.FC = () => {
   • Email   : ${PERSONAL.email}
   • LinkedIn: ${PERSONAL.linkedin}
   • GitHub  : ${PERSONAL.github}
-  • Status  : Available for Senior Backend & Tech Lead roles globally`
+  • Status  : Open to backend and data engineering roles`
         );
         break;
 
       case "about":
-        addLog("output", `${PERSONAL.name} - ${PERSONAL.role}. 5+ years building high-throughput backend microservices, PySpark ETL engines, and production AI workflows at iLink Digital & Standard Chartered.`);
+        addLog("output", `${PERSONAL.name} - ${PERSONAL.role}. Python backend engineer building multi-tenant Django platforms, PySpark data pipelines, and production AI workflows.`);
         break;
 
       case "clear":
@@ -193,7 +168,7 @@ export const TerminalPlayground: React.FC = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Try 'databricks-bundle', 'stack', 'theme cyberpunk', or 'help'..."
+          placeholder="Try 'databricks-bundle', 'stack', 'about', or 'help'..."
           className="flex-1 bg-transparent text-slate-100 outline-none font-mono text-xs sm:text-sm placeholder-slate-500"
         />
         <button

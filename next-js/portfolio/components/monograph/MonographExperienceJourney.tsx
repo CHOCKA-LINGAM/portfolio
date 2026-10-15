@@ -24,16 +24,16 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
   return (
     <div
       className="relative flex flex-col gap-1.5"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setIsOpen(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setIsOpen(false)}
     >
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">
           // TECH STACK
         </span>
-        <span className="text-[10px] font-mono text-emerald-600 font-bold flex items-center gap-1">
+        <span className="text-[11px] font-mono text-emerald-600 font-bold flex items-center gap-1">
           <Layers className="w-3 h-3 text-emerald-500" />
-          Hover to inspect ({tags.length})
+          Tap or hover ({tags.length})
         </span>
       </div>
 
@@ -42,7 +42,7 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
         className="group relative cursor-pointer p-3.5 rounded-xl bg-slate-950 text-slate-100 border border-slate-800 transition-all hover:border-emerald-500/50 hover:shadow-lg flex items-center justify-between gap-3 shadow-md select-none"
       >
         <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-ping" />
+          <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
           <p className="font-mono text-xs text-slate-200 truncate font-medium">
             {previewTech}
           </p>
@@ -65,10 +65,10 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
               <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
                 <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                  ORIGINAL TECH BRAND LOGOS ({tags.length})
+                  TECH STACK ({tags.length})
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">
-                  Hover to inspect
+                <span className="text-[11px] font-mono text-slate-400">
+                  Tap or hover
                 </span>
               </div>
 
@@ -91,6 +91,20 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
   );
 }
 
+function ImpactList({ items }: { items?: string[] }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <ul className="flex flex-col gap-2">
+      {items.map((h) => (
+        <li key={h} className="flex items-start gap-2 text-xs sm:text-[13px] text-slate-800 leading-relaxed">
+          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+          <span>{h}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function MonographExperienceJourney() {
   const experiences = EXPERIENCE as ExperienceItem[];
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -98,44 +112,23 @@ export function MonographExperienceJourney() {
   const activeExp = experiences[selectedIdx] || experiences[0];
 
   return (
-    <section id="section-experience" className="relative w-full min-h-[85vh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
+    <section id="section-experience" className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24">
       {/* Header Bar */}
       <div className="flex flex-col gap-2 border-b border-slate-200 pb-6 relative z-10">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-700 text-xs font-mono font-bold tracking-widest w-max shadow-sm">
           <Milestone className="w-3.5 h-3.5 text-emerald-600" />
           <span>03 // EXPERIENCE</span>
         </div>
-        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
+        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
           Experience
         </h2>
-      </div>
-
-      {/* Mobile Top Company Tab Selector Bar */}
-      <div className="flex lg:hidden overflow-x-auto gap-2 py-3 border-b border-slate-200 no-scrollbar scroll-smooth relative z-10 font-mono text-xs">
-        {experiences.map((exp, idx) => {
-          const isSelected = selectedIdx === idx;
-          return (
-            <button
-              key={`mobile-tab-${exp.id}`}
-              onClick={() => setSelectedIdx(idx)}
-              className={`px-3.5 py-2 rounded-xl font-bold whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer border ${
-                isSelected
-                  ? "bg-slate-950 text-white border-slate-950 shadow-md"
-                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-400"
-              }`}
-            >
-              {getOriginalCompanyIcon(exp.company, "w-4 h-4 shrink-0")}
-              <span>{exp.company}</span>
-            </button>
-          );
-        })}
       </div>
 
       {/* Main Content Layout */}
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start my-auto py-8">
         
         {/* Left Column */}
-        <div className="lg:col-span-6 flex flex-col gap-3.5 relative">
+        <div className="lg:col-span-6 flex flex-col gap-3.5 relative lg:sticky lg:top-24 self-start">
           
           <svg className="hidden lg:block absolute left-6 top-4 bottom-4 w-1 pointer-events-none">
             <line x1="0" y1="0" x2="0" y2="100%" stroke="#020617" strokeWidth="2" strokeDasharray="4 4" opacity="0.3" />
@@ -145,10 +138,14 @@ export function MonographExperienceJourney() {
             const isSelected = selectedIdx === idx;
             return (
               <div key={exp.id} className="flex flex-col gap-2">
-                <motion.button
-                  onClick={() => setSelectedIdx(selectedIdx === idx ? -1 : idx)}
-                  whileHover={{ x: 4 }}
-                  className={`relative z-10 p-4 rounded-2xl border text-left font-mono transition-all cursor-pointer flex items-center justify-between shadow-md ${
+                <button
+                  onClick={() =>
+                    setSelectedIdx(
+                      selectedIdx === idx && typeof window !== "undefined" && window.innerWidth < 1024 ? -1 : idx
+                    )
+                  }
+                  aria-expanded={isSelected}
+                                    className={`relative z-10 p-4 rounded-2xl border text-left font-mono transition-all cursor-pointer flex items-center justify-between shadow-md ${
                     isSelected
                       ? "bg-slate-950 text-white border-slate-950 shadow-xl"
                       : "bg-white text-slate-800 border-slate-200 hover:border-slate-400 hover:bg-slate-50"
@@ -162,7 +159,7 @@ export function MonographExperienceJourney() {
                     </span>
 
                     <div className="flex flex-col truncate">
-                      <span className="font-display font-extrabold text-sm sm:text-base text-slate-950 truncate max-w-[260px] sm:max-w-full font-bold flex items-center gap-2" style={{ color: isSelected ? "#ffffff" : undefined }}>
+                      <span className="font-display font-extrabold text-sm sm:text-base text-slate-950 truncate font-bold flex items-center gap-2" style={{ color: isSelected ? "#ffffff" : undefined }}>
                         {getOriginalCompanyIcon(exp.company, "w-5 h-5 shrink-0")}
                         <span className="truncate">{exp.role}</span>
                       </span>
@@ -176,7 +173,7 @@ export function MonographExperienceJourney() {
                     <ChevronDown className={`w-4 h-4 lg:hidden transition-transform duration-200 ${isSelected ? "rotate-180 text-emerald-400" : "text-slate-400"}`} />
                     <ArrowUpRight className={`hidden lg:block w-4 h-4 ${isSelected ? "text-emerald-400" : "text-slate-400"}`} />
                   </div>
-                </motion.button>
+                </button>
 
                 <AnimatePresence>
                   {isSelected && (
@@ -188,7 +185,7 @@ export function MonographExperienceJourney() {
                       className="lg:hidden overflow-visible p-5 rounded-2xl bg-white border border-slate-200 shadow-xl flex flex-col gap-4 font-sans text-xs text-slate-700 my-1"
                     >
                       <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                        <span className="px-2.5 py-1 rounded-full bg-slate-950 text-white font-mono font-bold text-[10px]">
+                        <span className="px-2.5 py-1 rounded-full bg-slate-950 text-white font-mono font-bold text-[11px]">
                           {exp.period}
                         </span>
                         <span className="font-mono font-bold text-emerald-600 text-xs">
@@ -199,6 +196,8 @@ export function MonographExperienceJourney() {
                       <p className="leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-slate-800">
                         {exp.description}
                       </p>
+
+                      <ImpactList items={exp.highlights} />
 
                       <TechCapabilitiesFixedPopover tags={exp.tags} />
                     </motion.div>
@@ -237,15 +236,13 @@ export function MonographExperienceJourney() {
             {activeExp.description}
           </p>
 
+          <ImpactList items={activeExp.highlights} />
+
           <TechCapabilitiesFixedPopover tags={activeExp.tags} />
         </div>
 
       </div>
 
-      {/* Footer Tag */}
-      <div className="flex items-center justify-end pt-4 border-t border-slate-200 text-xs font-mono text-slate-500 relative z-10">
-        <span>03 / 06</span>
-      </div>
     </section>
   );
 }

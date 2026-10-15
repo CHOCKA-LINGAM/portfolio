@@ -45,7 +45,7 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                 <span className="text-xs font-mono text-cyan-600 font-bold uppercase tracking-widest">
                   PROJECT SPECIFICATIONS
                 </span>
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold ${
                   isDevInProgress ? "bg-amber-100 text-amber-800 border border-amber-300" : "bg-emerald-100 text-emerald-800 border border-emerald-300"
                 }`}>
                   {project.status}
@@ -161,29 +161,29 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                     <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-center">
                       <span className="font-extrabold text-slate-950">DDL Ingestion</span>
-                      <span className="text-[10px] text-slate-500 mt-1">SQL / Delta Schema</span>
+                      <span className="text-[11px] text-slate-500 mt-1">SQL / Delta Schema</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-950 shadow-sm flex flex-col justify-center">
                       <span className="font-extrabold">AST Engine</span>
-                      <span className="text-[10px] text-purple-700 mt-1">Python AST Diff</span>
+                      <span className="text-[11px] text-purple-700 mt-1">Python AST Diff</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 shadow-sm flex flex-col justify-center">
                       <span className="font-extrabold">Safety Classifier</span>
-                      <span className="text-[10px] text-emerald-700 mt-1">SAFE / WARNING / BREAKING</span>
+                      <span className="text-[11px] text-emerald-700 mt-1">SAFE / WARNING / BREAKING</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center pt-1">
                     <div className="p-4 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-950 shadow-sm flex flex-col justify-center">
                       <span className="font-extrabold">Target Storage</span>
-                      <span className="text-[10px] text-cyan-700 mt-1">Databricks Delta &amp; Postgres</span>
+                      <span className="text-[11px] text-cyan-700 mt-1">Databricks Delta &amp; Postgres</span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm flex flex-col justify-center">
                       <span className="font-extrabold">CI/CD Guardrail</span>
-                      <span className="text-[10px] text-amber-700 mt-1">schema-shield check (PyPI)</span>
+                      <span className="text-[11px] text-amber-700 mt-1">schema-shield check (PyPI)</span>
                     </div>
                   </div>
                 </div>
@@ -191,15 +191,15 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center text-xs font-mono">
                   <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-center">
                     <span className="font-extrabold text-slate-950">Input Layer</span>
-                    <span className="text-[10px] text-slate-500 mt-1">Data Ingestion</span>
+                    <span className="text-[11px] text-slate-500 mt-1">Data Ingestion</span>
                   </div>
                   <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm flex flex-col justify-center">
                     <span className="font-extrabold">Processing Engine</span>
-                    <span className="text-[10px] text-amber-700 mt-1">In Active Development</span>
+                    <span className="text-[11px] text-amber-700 mt-1">In Active Development</span>
                   </div>
                   <div className="p-4 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-950 shadow-sm flex flex-col justify-center">
                     <span className="font-extrabold">Staging Target</span>
-                    <span className="text-[10px] text-cyan-700 mt-1">Pipeline Validation</span>
+                    <span className="text-[11px] text-cyan-700 mt-1">Pipeline Validation</span>
                   </div>
                 </div>
               )}

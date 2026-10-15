@@ -51,6 +51,7 @@ export interface ExperienceItem {
   company: string;
   location: string;
   description: string;
+  highlights?: string[];
   tags: string[];
 }
 

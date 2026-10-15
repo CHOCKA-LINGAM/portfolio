@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -22,6 +22,8 @@ import {
   Calendar,
 } from "lucide-react";
 import { PERSONAL, getExperienceYearsLabel } from "@/data/index";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export interface StorySlide {
   id: number;
@@ -60,11 +62,10 @@ const STORY_SLIDES: StorySlide[] = [
     highlights: [
       "B.E. Computer Science Graduate (2020)",
       "Strong CS Fundamentals & Data Structures",
-      "RDBMS, OS Memory & Network Protocols",
+      "RDBMS, SQL & Backend Fundamentals",
     ],
     techChips: [
       { name: "Python", info: "Core language for backend microservices, async APIs & distributed data processing" },
-      { name: "C / C++", info: "Foundational low-level memory management & object-oriented programming" },
       { name: "SQL", info: "Relational database schema design, normalization & query optimization" },
     ],
     icon: <GraduationCap className="w-4 h-4 text-cyan-400" />,
@@ -97,7 +98,7 @@ const STORY_SLIDES: StorySlide[] = [
     organization: "Tiger Analytics",
     period: "Oct 2023 – Nov 2025",
     subtitle: "PepIris Retail CV Platform (10–12 Global Markets)",
-    quote: "Architected Django multi-tenant backend operating across 10–12 international markets on a single codebase. Migrated legacy data pipelines to PySpark on Azure Databricks, cutting QA cycle times by >90%.",
+    quote: "Architected Django multi-tenant backend operating across 10–12 international markets on a single codebase. Migrated legacy Pandas pipelines to distributed PySpark on Azure Databricks, and cut QA validation cycle time by over 90% through direct model-validation workflows.",
     highlights: [
       "10–12 Global International Markets Deployed",
       ">90% QA Validation Cycle Time Reduction",
@@ -136,15 +137,15 @@ const STORY_SLIDES: StorySlide[] = [
     title: "Creator of 'schema-shield'",
     organization: "PyPI Package Author",
     period: "Active Open Source",
-    subtitle: "Automated Runtime Schema Assertions & Data Drift Protection",
-    quote: "Authored and published 'schema-shield' on PyPI (pip install schema-shield) to enforce zero-dependency runtime schema validation and data drift protection in data pipelines.",
+    subtitle: "Schema Compatibility & Transfer Safety for Data Pipelines",
+    quote: "Authored and published 'schema-shield' on PyPI (pip install schema-shield) a schema compatibility and transfer-safety utility that classifies schema changes as SAFE, WARNING, or BREAKING for Databricks Delta Lake and PostgreSQL pipelines.",
     highlights: [
       "Published PyPI Package Creator (pip install schema-shield)",
-      "Automated Runtime Schema & Data Drift Assertions",
-      "Zero-Dependency Lightweight Python Package",
+      "SAFE / WARNING / BREAKING Change Classification",
+      "Guardrail for Databricks Delta Lake & PostgreSQL",
     ],
     techChips: [
-      { name: "schema-shield", info: "Open-source Python package for runtime schema validation & assertions" },
+      { name: "schema-shield", info: "Open-source Python utility that classifies schema changes by deployment safety" },
       { name: "PyPI Release", info: "Official Python Package Index release" },
     ],
     icon: <Award className="w-4 h-4 text-amber-400" />,
@@ -158,14 +159,14 @@ const STORY_SLIDES: StorySlide[] = [
     subtitle: "Architecting Microservices, Lakehouses & AI Workflows",
     quote: `Combining ${getExperienceYearsLabel()} years of production engineering experience across high-scale backend microservices, PySpark distributed data lakes, multi-tenant architectures, and enterprise AI integrations.`,
     highlights: [
-      "5+ Years Senior Software Engineering",
+      `${getExperienceYearsLabel()} Years Software Engineering`,
       "Multi-Tenant & Lakehouse Architecture",
       "Open for Global Remote & Relocation",
     ],
     techChips: [
       { name: "Backend", info: "Python, FastAPI, Django, Async Microservices, Multi-Tenant Architecture" },
       { name: "Data Engineering", info: "Azure Databricks, PySpark, Apache Airflow, Lakehouse ETL" },
-      { name: "AI & Cloud", info: "OpenAI API, Claude, AWS Bedrock, Docker, React, TypeScript" },
+      { name: "AI & Cloud", info: "OpenAI API, Claude, AWS Bedrock, Docker, React, JavaScript" },
     ],
     icon: <Cpu className="w-4 h-4 text-indigo-400" />,
   },
@@ -193,16 +194,25 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
   const [reactions, setReactions] = useState<FloatingReaction[]>([]);
   const lastNavTimeRef = useRef<number>(0);
-  const [progress, setProgress] = useState(0);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  // Auto-advance is skipped for reduced-motion users; they step through manually
+  const [autoAdvance] = useState(
+    () => typeof window === "undefined" || !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   const currentSlide = STORY_SLIDES[currentIdx];
+
+  useBodyScrollLock(isOpen);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(isOpen, dialogRef);
 
   const playTechSound = (freq = 587.33, duration = 0.15) => {
     try {
       if (typeof window === "undefined") return;
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
-      const ctx = new AudioCtx();
+      if (!audioCtxRef.current) audioCtxRef.current = new AudioCtx();
+      const ctx = audioCtxRef.current;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
@@ -229,38 +239,6 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
     }
   }, [currentIdx, soundEnabled, isOpen]);
 
-  // Auto-advance progress timer (6s per slide)
-  useEffect(() => {
-    if (!isOpen || isPaused || selectedTechInfo !== null) return;
-
-    const DURATION = 6000;
-    const STEP = 50;
-
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) return 100;
-        return prev + (STEP / DURATION) * 100;
-      });
-    }, STEP);
-
-    return () => clearInterval(interval);
-  }, [isOpen, isPaused, selectedTechInfo]);
-
-  useEffect(() => {
-    if (progress >= 100) {
-      const now = Date.now();
-      if (now - lastNavTimeRef.current >= 300) {
-        lastNavTimeRef.current = now;
-        if (currentIdx < STORY_SLIDES.length - 1) {
-          setCurrentIdx((i) => i + 1);
-          setProgress(0);
-        } else {
-          onClose();
-        }
-      }
-    }
-  }, [progress, currentIdx, onClose]);
-
   const goToSlide = (idx: number, e?: React.SyntheticEvent) => {
     if (e) {
       e.preventDefault();
@@ -272,11 +250,10 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     if (idx < 0 || idx >= STORY_SLIDES.length) return;
     setCurrentIdx(idx);
-    setProgress(0);
     setSelectedTechInfo(null);
   };
 
-  const nextSlide = (e?: React.SyntheticEvent) => {
+  const nextSlide = useCallback((e?: React.SyntheticEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -287,14 +264,13 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     if (currentIdx < STORY_SLIDES.length - 1) {
       setCurrentIdx((prev) => prev + 1);
-      setProgress(0);
       setSelectedTechInfo(null);
     } else {
       onClose();
     }
-  };
+  }, [currentIdx, onClose]);
 
-  const prevSlide = (e?: React.SyntheticEvent) => {
+  const prevSlide = useCallback((e?: React.SyntheticEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -305,10 +281,9 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     if (currentIdx > 0) {
       setCurrentIdx((prev) => prev - 1);
-      setProgress(0);
       setSelectedTechInfo(null);
     }
-  };
+  }, [currentIdx]);
 
   const toggleSound = () => {
     const nextState = !soundEnabled;
@@ -352,22 +327,28 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, currentIdx, onClose]);
+  }, [isOpen, nextSlide, prevSlide, onClose]);
 
   useEffect(() => {
     if (!isOpen) {
       setCurrentIdx(0);
-      setProgress(0);
       setSelectedTechInfo(null);
       setReactions([]);
     }
   }, [isOpen]);
+
+  useEffect(() => () => {
+    audioCtxRef.current?.close().catch(() => {});
+  }, []);
+
+  const timerRunning = autoAdvance && !isPaused && selectedTechInfo === null;
 
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
       <div 
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="story-modal-title"
@@ -386,7 +367,8 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
           onMouseUp={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
           onTouchEnd={() => setIsPaused(false)}
-          className="relative z-10 w-full max-w-[480px] max-h-[90vh] rounded-2xl overflow-y-auto overflow-x-hidden border border-slate-800 bg-slate-950 text-slate-100 shadow-2xl flex flex-col justify-between p-3.5 sm:p-5"
+          onTouchCancel={() => setIsPaused(false)}
+          className="relative z-10 w-full max-w-[480px] max-h-[90dvh] rounded-2xl overflow-y-auto overflow-x-hidden border border-slate-800 bg-slate-950 text-slate-100 shadow-2xl flex flex-col justify-between p-3.5 sm:p-5"
         >
           {/* Floating Emoji Reactions */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-50">
@@ -410,20 +392,22 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
               <div
                 key={slide.id}
                 onClick={(e) => goToSlide(idx, e)}
-                className="h-1 flex-1 rounded-full bg-slate-800 overflow-hidden cursor-pointer hover:bg-slate-700 transition-colors min-h-[6px]"
+                className="touch-manipulation flex-1 py-2 -my-2 cursor-pointer group"
                 title={`${slide.category}`}
               >
-                <div
-                  className="h-full bg-cyan-400 transition-all duration-75"
-                  style={{
-                    width:
-                      idx < currentIdx
-                        ? "100%"
-                        : idx === currentIdx
-                        ? `${progress}%`
-                        : "0%",
-                  }}
-                />
+                <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden group-hover:bg-slate-700 transition-colors">
+                  {idx === currentIdx && autoAdvance ? (
+                    // CSS-driven 6s timer: no per-frame React renders; finishing it advances the story
+                    <div
+                      key={currentIdx}
+                      className="story-progress h-full w-full bg-cyan-400 origin-left"
+                      style={{ animationPlayState: timerRunning ? "running" : "paused" }}
+                      onAnimationEnd={() => nextSlide()}
+                    />
+                  ) : (
+                    <div className={`h-full bg-cyan-400 ${idx <= currentIdx ? "w-full" : "w-0"}`} />
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -438,7 +422,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                 <span className="text-xs font-bold text-white font-mono leading-tight">
                   Chockalingam Balan
                 </span>
-                <span className="text-[10px] font-mono text-cyan-400 flex items-center gap-1">
+                <span className="text-[11px] font-mono text-cyan-400 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   STORY {currentIdx + 1}/{STORY_SLIDES.length}
                 </span>
@@ -448,11 +432,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
             <div className="flex items-center gap-1.5">
               <button
                 onClick={toggleSound}
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                  toggleSound();
-                }}
-                className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                className={`touch-manipulation flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-mono font-bold transition-all cursor-pointer ${
                   soundEnabled
                     ? "bg-cyan-950 text-cyan-300 border-cyan-500/50"
                     : "bg-slate-900 text-slate-400 border-slate-800 hover:text-white"
@@ -474,8 +454,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
               <button
                 onClick={handleCloseModal}
-                onTouchEnd={handleCloseModal}
-                className="p-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center"
+                className="touch-manipulation p-1.5 rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800 transition-all cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center"
                 title="Close Story (ESC)"
               >
                 <X className="w-4 h-4 text-cyan-400" />
@@ -502,17 +481,24 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.16 }}
-                className="relative z-30 flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md shadow-xl pointer-events-auto"
+                onClick={(e) => {
+                  // Story-style tap navigation across the card; ignore taps on buttons/links
+                  if ((e.target as HTMLElement).closest("button, a")) return;
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  if (e.clientX - rect.left < rect.width / 3) prevSlide(e);
+                  else nextSlide(e);
+                }}
+                className="relative z-30 flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md shadow-xl pointer-events-auto cursor-pointer"
               >
                 {/* Header Tag */}
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <div className="flex items-center gap-1.5">
                     {currentSlide.icon}
-                    <span className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                    <span className="text-[11px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">
                       {currentSlide.category}
                     </span>
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-400 font-medium flex items-center gap-1 shrink-0">
+                  <span className="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-400 font-medium flex items-center gap-1 shrink-0">
                     <Calendar className="w-3 h-3 text-slate-500" />
                     {currentSlide.period}
                   </span>
@@ -536,18 +522,18 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                 {currentSlide.educationDetail && (
                   <div className="p-2.5 sm:p-3 rounded-lg bg-slate-950 border border-slate-800 flex flex-col gap-1 font-mono text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] sm:text-[11px] font-bold text-cyan-400 flex items-center gap-1.5">
+                      <span className="text-[11px] sm:text-[11px] font-bold text-cyan-400 flex items-center gap-1.5">
                         <GraduationCap className="w-4 h-4 text-cyan-400 shrink-0" />
                         ACADEMIC DEGREE
                       </span>
-                      <span className="text-[10px] text-slate-400 font-bold">
+                      <span className="text-[11px] text-slate-400 font-bold">
                         {currentSlide.educationDetail.year}
                       </span>
                     </div>
                     <span className="font-bold text-white font-sans text-xs">
                       {currentSlide.educationDetail.degree}
                     </span>
-                    <span className="text-[10px] sm:text-[11px] text-slate-400">
+                    <span className="text-[11px] sm:text-[11px] text-slate-400">
                       {currentSlide.educationDetail.institution}
                     </span>
                   </div>
@@ -563,7 +549,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                   {currentSlide.highlights.map((h, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-slate-950 border border-slate-800 text-[10px] sm:text-[11px] font-mono font-semibold text-slate-300 flex items-center gap-1.5"
+                      className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-slate-950 border border-slate-800 text-[11px] sm:text-[11px] font-mono font-semibold text-slate-300 flex items-center gap-1.5"
                     >
                       <ShieldCheck className="w-3 h-3 text-cyan-400 shrink-0" />
                       <span>{h}</span>
@@ -573,7 +559,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
                 {/* Tech Chips */}
                 <div className="pt-2 border-t border-slate-800 relative z-40 pointer-events-auto flex flex-col gap-1.5">
-                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                     <Info className="w-3 h-3 text-cyan-400 shrink-0" />
                     Tech stack architecture:
                   </span>
@@ -587,7 +573,7 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                           if (soundEnabled) playTechSound(700, 0.08);
                           setSelectedTechInfo(selectedTechInfo?.name === chip.name ? null : chip);
                         }}
-                        className={`px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-mono font-bold transition-all border cursor-pointer relative z-50 ${
+                        className={`px-2 py-0.5 rounded text-[11px] sm:text-[11px] font-mono font-bold transition-all border cursor-pointer relative z-50 ${
                           selectedTechInfo?.name === chip.name
                             ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/60"
                             : "bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-slate-200"
@@ -621,6 +607,24 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
           {/* Bottom Action Controls */}
           <div className="relative z-40 flex flex-col gap-2 pt-2.5 border-t border-slate-800">
+            {/* Mobile prev/next controls (desktop uses side arrows) */}
+            <div className="flex sm:hidden items-center justify-between gap-2 font-mono">
+              <button
+                onClick={(e) => prevSlide(e)}
+                disabled={currentIdx === 0}
+                className="touch-manipulation flex-1 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center gap-1 disabled:opacity-30 cursor-pointer"
+                aria-label="Previous story slide"
+              >
+                <ChevronLeft className="w-4 h-4" /> Prev
+              </button>
+              <button
+                onClick={(e) => nextSlide(e)}
+                className="touch-manipulation flex-1 py-2 rounded-lg bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
+                aria-label="Next story slide"
+              >
+                {currentIdx === STORY_SLIDES.length - 1 ? "Done" : "Next"} <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
             <div className="flex items-center justify-between font-mono gap-2">
               <div className="flex items-center gap-1">
                 {["🔥", "🚀", "👏", "⚡"].map((emoji) => (

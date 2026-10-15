@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -9,14 +11,13 @@ import {
   User,
   Workflow,
   Play,
-  Palette,
   Mail,
   FileText,
   X,
   Terminal,
+  HelpCircle,
 } from "lucide-react";
 import { Page } from "@/hooks/useNav";
-import { themeOptions, ThemeId } from "@/components/ui/ThemeSwitcher";
 import { PERSONAL } from "@/data/index";
 
 interface CommandPaletteProps {
@@ -25,11 +26,12 @@ interface CommandPaletteProps {
   goTo: (page: Page) => void;
   onOpenStory: () => void;
   onOpenResumeModal: () => void;
+  onOpenRecruiterQA?: () => void;
 }
 
 interface CommandItem {
   id: string;
-  category: "Navigation" | "Themes" | "Actions";
+  category: "Navigation" | "Actions";
   title: string;
   subtitle?: string;
   icon: React.ReactNode;
@@ -42,9 +44,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   goTo,
   onOpenStory,
   onOpenResumeModal,
+  onOpenRecruiterQA,
 }) => {
   const [query, setQuery] = useState("");
   const [selectedIdx, setSelectedIdx] = useState(0);
+
+  useBodyScrollLock(isOpen);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(isOpen, dialogRef);
 
   useEffect(() => {
     if (!isOpen) {
@@ -52,16 +59,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       setSelectedIdx(0);
     }
   }, [isOpen]);
-
-  const changeTheme = (theme: ThemeId) => {
-    localStorage.setItem("portfolio_theme", theme);
-    if (theme === "midnight") {
-      document.documentElement.removeAttribute("data-theme");
-    } else {
-      document.documentElement.setAttribute("data-theme", theme);
-    }
-    onClose();
-  };
 
   // Build clean, usable command items list
   const navCommands: CommandItem[] = [
@@ -116,6 +113,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   ];
 
   const actionCommands: CommandItem[] = [
+    ...(onOpenRecruiterQA
+      ? [
+          {
+            id: "act-recruiter",
+            category: "Actions" as const,
+            title: "Recruiter Quick Answers",
+            subtitle: "Roles, stack, location & availability",
+            icon: <HelpCircle className="w-4 h-4 text-emerald-400" />,
+            action: () => { onOpenRecruiterQA(); onClose(); },
+          },
+        ]
+      : []),
     {
       id: "act-resume",
       category: "Actions",
@@ -139,7 +148,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       subtitle: "github.com/CHOCKA-LINGAM",
       icon: <ArrowRight className="w-4 h-4 text-cyan-400" />,
       action: () => {
-        window.open(PERSONAL.github, "_blank");
+        window.open(PERSONAL.github, "_blank", "noopener,noreferrer");
         onClose();
       },
     },
@@ -150,7 +159,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       subtitle: PERSONAL.email,
       icon: <Mail className="w-4 h-4 text-emerald-400" />,
       action: () => {
-        navigator.clipboard.writeText(PERSONAL.email);
+        navigator.clipboard?.writeText(PERSONAL.email).catch(() => {});
         onClose();
       },
     },
@@ -197,42 +206,47 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   return (
     <AnimatePresence>
       <div 
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Developer Command Palette"
         className="fixed inset-0 z-[3000] flex items-start justify-center pt-16 sm:pt-24 p-3 bg-slate-950/80 backdrop-blur-xl"
       >
+        {/* Backdrop click closes palette */}
+        <div className="absolute inset-0 z-0" onClick={onClose} />
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: -10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -10 }}
           transition={{ duration: 0.18 }}
-          className="relative w-full max-w-xl rounded-2xl bg-[var(--surface-1)] border border-[var(--border-strong)] shadow-2xl overflow-hidden flex flex-col"
+          className="relative z-10 w-full max-w-xl rounded-2xl bg-[var(--surface-1)] border border-[var(--border-strong)] shadow-2xl overflow-hidden flex flex-col"
         >
           {/* Input Header */}
           <div className="flex items-center px-4 py-3.5 border-b border-[var(--border)] gap-3">
             <Search className="w-5 h-5 text-sky-400 shrink-0" />
             <input
               type="text"
+              aria-label="Search commands"
               autoFocus
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
                 setSelectedIdx(0);
               }}
-              placeholder="Type a command or search (e.g. 'home', 'projects', 'cyberpunk', 'resume')..."
-              className="w-full bg-transparent text-sm text-[var(--text)] placeholder-[var(--text-muted)] outline-none font-sans"
+              placeholder="Type a command or search (e.g. 'home', 'projects', 'resume')..."
+              className="w-full bg-transparent text-base sm:text-sm text-[var(--text)] placeholder-[var(--text-muted)] outline-none font-sans"
             />
             <button
               onClick={onClose}
-              className="p-1 rounded-lg bg-[var(--surface-2)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
+              aria-label="Close command palette"
+              className="touch-manipulation p-2 rounded-lg bg-[var(--surface-2)] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Results List */}
-          <div className="max-h-[360px] overflow-y-auto p-2 flex flex-col gap-1">
+          <div className="max-h-[min(360px,60dvh)] overflow-y-auto p-2 flex flex-col gap-1">
             {filteredCommands.length === 0 ? (
               <div className="p-8 text-center text-xs text-[var(--muted)] font-sans">
                 No matching commands found for &ldquo;{query}&rdquo;.
@@ -267,7 +281,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-[var(--surface-1)] border border-[var(--border)] text-[var(--muted)] shrink-0">
+                    <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-[var(--surface-1)] border border-[var(--border)] text-[var(--muted)] shrink-0">
                       {cmd.category}
                     </span>
                   </button>
@@ -283,7 +297,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               <span>↵ Select</span>
               <span>ESC Close</span>
             </div>
-            <span>Cmd + K</span>
+            <span>Ctrl / ⌘ + K</span>
           </div>
         </motion.div>
       </div>

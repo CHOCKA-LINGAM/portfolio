@@ -3,9 +3,9 @@
 import React from "react";
 
 // ─── 1. iLINK DIGITAL CORPORATE BRAND LOGO (Official Infinity Loop & "iLink Digital" Typography) ───
-export function ILinkLogoIcon({ className = "w-6 h-6" }: { className?: string }) {
+export function ILinkLogoIcon({ className = "w-6 h-6", markOnly = false }: { className?: string; markOnly?: boolean }) {
   return (
-    <svg className={className} viewBox="0 0 210 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} viewBox={markOnly ? "0 0 80 50" : "0 0 210 50"} fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Red Ribbon Arc (Top-Left to Bottom-Right) */}
       <path
         d="M 6 25 C 12 8, 30 8, 40 25 C 50 42, 68 42, 74 25 C 67 43, 46 43, 38 29 C 30 15, 13 15, 6 25 Z"
@@ -17,7 +17,7 @@ export function ILinkLogoIcon({ className = "w-6 h-6" }: { className?: string })
         fill="#6B7280"
       />
       {/* "iLink Digital" Red Brand Wordmark */}
-      <text
+      {!markOnly && <text
         x="82"
         y="33"
         fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
@@ -27,55 +27,7 @@ export function ILinkLogoIcon({ className = "w-6 h-6" }: { className?: string })
         letterSpacing="-0.2"
       >
         iLink Digital
-      </text>
-    </svg>
-  );
-}
-
-// ─── 2. TIGER ANALYTICS EXACT CORPORATE BRAND LOGO (Serif A with Orange Swoosh) ───
-export function TigerAnalyticsLogoIcon({ className = "w-6 h-6" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Serif "Tiger" text */}
-      <text x="5" y="20" fontFamily="Georgia, serif" fontSize="18" fontWeight="bold" fill="currentColor">
-        Tiger
-      </text>
-      {/* Serif "Analytics" text */}
-      <text x="5" y="42" fontFamily="Georgia, serif" fontSize="18" fontWeight="bold" fill="currentColor">
-        Analytics
-      </text>
-      {/* Signature Orange Swoosh over the letter "A" */}
-      <path
-        d="M 5 44 C 15 34, 25 36, 32 40 C 22 42, 12 45, 5 44 Z"
-        fill="#EA580C"
-      />
-    </svg>
-  );
-}
-
-// ─── 3. KAARTECH EXACT CORPORATE BRAND LOGO (Ripple Rings + Red Splash Teardrops) ───
-export function KaarLogoIcon({ className = "w-6 h-6" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Concentric Ripple Ellipses */}
-      <ellipse cx="50" cy="30" rx="38" ry="12" stroke="#991B1B" strokeWidth="2.5" fill="none" />
-      <ellipse cx="50" cy="30" rx="24" ry="7" stroke="#DC2626" strokeWidth="2" fill="none" />
-      <ellipse cx="50" cy="30" rx="10" ry="3" stroke="#DC2626" strokeWidth="1.5" fill="none" />
-      
-      {/* Dual Red Splash Teardrops at top */}
-      <path
-        d="M 44 24 C 40 14, 42 6, 45 2 C 48 10, 48 18, 44 24 Z"
-        fill="#B91C1C"
-      />
-      <path
-        d="M 54 22 C 52 14, 53 8, 55 4 C 57 10, 57 17, 54 22 Z"
-        fill="#EF4444"
-      />
-
-      {/* KaarTech Text */}
-      <text x="12" y="52" fontFamily="Arial, sans-serif" fontSize="13" fontWeight="900" fontStyle="italic" fill="currentColor">
-        KaarTech
-      </text>
+      </text>}
     </svg>
   );
 }
@@ -103,7 +55,7 @@ export function FastAPIBrandIcon({ className = "w-4 h-4" }: { className?: string
 export function DjangoBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M11.233 0v16.14h-2.39V2.13H6.467v14.01c0 5.727 3.513 7.86 7.156 7.86 2.39 0 4.144-.766 5.05-1.579l-1.09-1.928c-.684.582-1.942 1.09-3.418 1.09-2.734 0-4.664-1.636-4.664-5.462V0h1.733z" fill="#092E20"/>
+      <path d="M11.233 0v16.14h-2.39V2.13H6.467v14.01c0 5.727 3.513 7.86 7.156 7.86 2.39 0 4.144-.766 5.05-1.579l-1.09-1.928c-.684.582-1.942 1.09-3.418 1.09-2.734 0-4.664-1.636-4.664-5.462V0h1.733z" fill="#44B78B"/>
     </svg>
   );
 }
@@ -218,8 +170,10 @@ export function OpenAIBrandIcon({ className = "w-4 h-4" }: { className?: string 
 
 export function PostgresBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="#4169E1">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="#4169E1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="5" rx="8" ry="3" />
+      <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+      <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
     </svg>
   );
 }
@@ -228,6 +182,15 @@ export function AirflowBrandIcon({ className = "w-4 h-4" }: { className?: string
   return (
     <svg className={className} viewBox="0 0 24 24" fill="#017CEE">
       <path d="M12 0L2 12h8v12l10-12h-8L12 0z"/>
+    </svg>
+  );
+}
+
+// Neutral mark for LLM / AI tooling that is not OpenAI-specific
+export function AISparkIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="#8B5CF6">
+      <path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4L12 2z" />
     </svg>
   );
 }
@@ -249,9 +212,10 @@ export function getOriginalTechIcon(techName: string, className = "w-4 h-4") {
   if (lower.includes("angular")) return <AngularBrandIcon className={className} />;
   if (lower.includes("html") || lower.includes("css")) return <HTMLCSSBrandIcon className={className} />;
   if (lower.includes("next")) return <NextjsBrandIcon className={className} />;
-  if (lower.includes("typescript") || lower.includes("js") || lower.includes("javascript")) return <TypeScriptBrandIcon className={className} />;
+  if (lower.includes("typescript") || lower.includes("javascript")) return <TypeScriptBrandIcon className={className} />;
   if (lower.includes("tailwind")) return <TailwindBrandIcon className={className} />;
-  if (lower.includes("openai") || lower.includes("claude") || lower.includes("llm")) return <OpenAIBrandIcon className={className} />;
+  if (lower.includes("openai")) return <OpenAIBrandIcon className={className} />;
+  if (/claude|llm|\bai\b|prompt|context engineering|semantic|multi-model/.test(lower)) return <AISparkIcon className={className} />;
   if (lower.includes("postgres") || lower.includes("sql")) return <PostgresBrandIcon className={className} />;
   if (lower.includes("airflow")) return <AirflowBrandIcon className={className} />;
 
@@ -266,12 +230,23 @@ export function getOriginalTechIcon(techName: string, className = "w-4 h-4") {
 // ─── DYNAMIC COMPANY LOGO RESOLVER ───
 export function getOriginalCompanyIcon(companyName: string, className = "w-8 h-4") {
   const lower = companyName.toLowerCase();
-  if (lower.includes("ilink")) return <ILinkLogoIcon className={className} />;
-  if (lower.includes("tiger")) return <TigerAnalyticsLogoIcon className={className} />;
-  if (lower.includes("kaar")) return <KaarLogoIcon className={className} />;
+  if (lower.includes("ilink")) return <ILinkLogoIcon className={className} markOnly />;
+  // Monogram tiles keep small wordmark logos legible at icon size
+  if (lower.includes("tiger"))
+    return (
+      <span className="w-6 h-6 rounded-md bg-orange-500/15 border border-orange-500/40 text-orange-500 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+        TA
+      </span>
+    );
+  if (lower.includes("kaar"))
+    return (
+      <span className="w-6 h-6 rounded-md bg-sky-500/15 border border-sky-500/40 text-sky-600 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+        KT
+      </span>
+    );
 
   return (
-    <span className="w-5 h-5 rounded bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+    <span className="w-5 h-5 rounded bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-[11px] font-bold flex items-center justify-center shrink-0">
       {companyName.substring(0, 2).toUpperCase()}
     </span>
   );

@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-import { Workflow, Github, CheckCircle2, Terminal, ShieldCheck } from "lucide-react";
+import { Workflow, Github, CheckCircle2, Terminal, ShieldCheck, Hammer } from "lucide-react";
 import { PROJECTS, type Project } from "@/data/index";
+import { SchemaShieldDemo } from "@/components/monograph/SchemaShieldDemo";
 
 export function MonographProjectsTopology() {
   const allProjects = PROJECTS as Project[];
@@ -14,12 +14,12 @@ export function MonographProjectsTopology() {
   return (
     <section
       id="section-projects"
-      className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 pt-8 sm:pt-14 my-8 flex flex-col justify-between scroll-mt-24"
+      className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 pt-8 sm:pt-14 flex flex-col justify-between scroll-mt-24"
     >
       {/* Background Soft Light Pattern */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px]" />
-        <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-slate-300/20 rounded-full blur-[140px]" />
+        <div className="absolute top-1/4 left-10 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.06),transparent)]" />
+        <div className="absolute bottom-10 right-10 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,rgba(203,213,225,0.24),transparent)]" />
         
         {/* Subtle Light Grid Pattern */}
         <div
@@ -37,24 +37,23 @@ export function MonographProjectsTopology() {
           <Workflow className="w-3.5 h-3.5 text-cyan-600" />
           <span>05 // PROJECTS</span>
         </div>
-        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
-          Featured Project
+        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
+          Projects
         </h2>
       </div>
 
       {/* ── SINGLE STANDALONE FLAGSHIP SPOTLIGHT (SCHEMA-SHIELD) ── */}
       <div className="relative z-10 my-8 flex justify-center">
-        <motion.div
-          whileHover={{ y: -3 }}
-          className="w-full max-w-3xl p-6 sm:p-10 rounded-3xl border border-cyan-500/80 bg-white text-slate-900 shadow-xl ring-1 ring-cyan-400/20 flex flex-col gap-6 backdrop-blur-md"
+        <article
+          className="w-full max-w-5xl p-6 sm:p-10 rounded-3xl border border-cyan-500/80 bg-white text-slate-900 shadow-xl ring-1 ring-cyan-400/20 flex flex-col gap-6 backdrop-blur-md"
         >
           {/* Top Status Bar */}
           <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
               <span className="text-[11px] font-mono font-extrabold tracking-wider text-slate-600 uppercase flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                ACTIVE OPEN SOURCE PRODUCTION PACKAGE
+                OPEN SOURCE · PYTHON PACKAGE
               </span>
             </div>
 
@@ -65,14 +64,16 @@ export function MonographProjectsTopology() {
 
           {/* Title & Description */}
           <div className="flex flex-col gap-2 pt-1">
-            <h3 className="text-2xl sm:text-4xl font-display font-extrabold text-slate-950 tracking-tight flex items-center justify-between">
+            <h3 className="text-2xl sm:text-4xl font-display font-extrabold text-slate-950 tracking-tight flex items-center justify-between gap-3">
               <span>{flagshipProject.title}</span>
-              <ShieldCheck className="w-6 h-6 text-cyan-600 animate-pulse" />
+              <ShieldCheck className="w-6 h-6 text-cyan-600 shrink-0" aria-hidden="true" />
             </h3>
             <p className="text-sm sm:text-base font-sans text-slate-700 leading-relaxed pt-1">
               {flagshipProject.desc}
             </p>
           </div>
+
+          {flagshipProject.title === "schema-shield" && <SchemaShieldDemo />}
 
           {/* Tech Stack Badges */}
           <div className="flex flex-wrap gap-2 pt-2">
@@ -94,9 +95,9 @@ export function MonographProjectsTopology() {
                 href={flagshipProject.link}
                 target="_blank"
                 rel="noreferrer"
-                className="px-6 py-3 rounded-2xl text-xs font-mono font-bold text-white bg-slate-950 hover:bg-slate-800 flex items-center gap-2.5 transition-all shadow-md cursor-pointer"
+                className="w-full sm:w-auto justify-center text-left px-5 sm:px-6 py-3 rounded-2xl text-xs font-mono font-bold text-white bg-slate-950 hover:bg-slate-800 flex items-center gap-2.5 transition-all shadow-md cursor-pointer"
               >
-                <Terminal className="w-4 h-4 text-emerald-400" /> PyPI Package (pip install schema-shield)
+                <Terminal className="w-4 h-4 text-emerald-400 shrink-0" /> <span className="min-w-0 break-words">View on PyPI · pip install {flagshipProject.title}</span>
               </a>
             )}
             {flagshipProject.github && (
@@ -104,20 +105,39 @@ export function MonographProjectsTopology() {
                 href={flagshipProject.github}
                 target="_blank"
                 rel="noreferrer"
-                className="px-6 py-3 rounded-2xl text-xs font-mono font-bold text-slate-800 border border-slate-300 bg-slate-50 hover:bg-slate-100 transition-all flex items-center gap-2.5 cursor-pointer shadow-sm"
+                className="w-full sm:w-auto justify-center px-5 sm:px-6 py-3 rounded-2xl text-xs font-mono font-bold text-slate-800 border border-slate-300 bg-slate-50 hover:bg-slate-100 transition-all flex items-center gap-2.5 cursor-pointer shadow-sm"
               >
                 <Github className="w-4 h-4 text-cyan-600" /> View Source Repository
               </a>
             )}
           </div>
 
-        </motion.div>
+        </article>
       </div>
 
-      {/* Footer Tag */}
-      <div className="flex items-center justify-end pt-4 border-t border-slate-200 text-xs font-mono text-slate-500 relative z-10">
-        <span>05 / 06</span>
-      </div>
+      {/* Currently building */}
+      {allProjects.some((p) => !p.featured) && (
+        <div className="relative z-10 flex flex-col gap-3 pb-2 w-full max-w-5xl mx-auto">
+          <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+            <Hammer className="w-3.5 h-3.5 text-amber-600" />
+            Currently building
+          </span>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {allProjects.filter((p) => !p.featured).map((p) => (
+              <li key={p.id} className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col gap-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-display font-extrabold text-sm text-slate-950">{p.title}</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
+                    In progress
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">{p.desc}</p>
+                <p className="text-[11px] font-mono text-slate-500 mt-auto">{p.stack.join(" · ")}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   );
 }
