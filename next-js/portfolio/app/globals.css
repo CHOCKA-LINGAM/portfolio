@@ -254,7 +254,7 @@
 html,
 body {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
   color: var(--text);
   font-family: var(--font-manrope), sans-serif;
@@ -501,4 +501,9 @@ textarea {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Reserve scrollbar space so opening a modal (scroll lock) doesn't shift the page */
+html {
+  scrollbar-gutter: stable;
 }

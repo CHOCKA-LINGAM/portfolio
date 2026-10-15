@@ -17,7 +17,7 @@ export function MonographProjectDetail({
   const isDevInProgress = currentProject.status.toUpperCase().includes("IN PROGRESS") || currentProject.status.toUpperCase().includes("DEV");
 
   return (
-    <section className="relative w-full min-h-[88vh] rounded-3xl overflow-hidden border border-slate-200 bg-white text-slate-900 shadow-2xl p-6 sm:p-12 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
+    <section className="relative w-full min-h-[88vh] rounded-3xl overflow-hidden border border-slate-200 bg-white text-slate-900 shadow-2xl p-6 sm:p-12 lg:p-16 flex flex-col justify-between scroll-mt-24">
       {/* Top Navigation Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div className="flex flex-col gap-2">

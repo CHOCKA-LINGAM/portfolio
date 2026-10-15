@@ -48,7 +48,7 @@ export const TerminalPlayground: React.FC = () => {
         addLog(
           "output",
           `Available Chock CLI Commands:
-  • databricks-bundle  : Run live simulation of published PyPI asset bundle deployment
+  • databricks-bundle  : Simulate the Pandas to PySpark migration
   • stack              : Output ASCII architecture pipeline diagram
   • contact            : Display direct outreach & email details
   • about              : Print executive engineer overview
@@ -57,16 +57,13 @@ export const TerminalPlayground: React.FC = () => {
         break;
 
       case "databricks-bundle":
-        addLog("output", "[1/4] Connecting to PyPI repository (databricks-bundle v1.2.4)...");
+        addLog("output", "[1/3] Legacy Pandas pipelines identified...");
         setTimeout(() => {
-          addLog("output", "[2/4] Downloading wheels & validating cryptographic hashes... ✓");
-        }, 300);
+          addLog("output", "[2/3] Migrating to distributed PySpark on Azure Databricks...");
+        }, 400);
         setTimeout(() => {
-          addLog("output", "[3/4] Authenticating with Databricks workspace host (https://adb-8493021.azuredatabricks.net)...");
-        }, 650);
-        setTimeout(() => {
-          addLog("success", "[4/4] SUCCESS: Deployed multi-tenant PySpark asset bundle across 12 worker nodes. Ingestion runtime: 8.5min.");
-        }, 1100);
+          addLog("success", "[3/3] DONE: Pandas to PySpark migration complete. DAG planning API responds in under 5s.");
+        }, 900);
         break;
 
       case "stack":
@@ -75,13 +72,13 @@ export const TerminalPlayground: React.FC = () => {
           `+-----------------------------------------------------------------------+
 | SYSTEM ARCHITECTURE PIPELINE                                         |
 +-----------------------------------------------------------------------+
- [Raw Events] ──> (Apache Kafka) ──> [PySpark / Databricks Ingestion] 
+ [Raw Events] ──> (Azure Databricks) ──> [PySpark / Databricks Ingestion] 
                                                     │
                                                     ▼
- [Client UI]  <── (FastAPI Async) <── [PostgreSQL + Redis Cache Layer]
+ [Client UI]  <── (FastAPI Async) <── [Django multi-tenant backend]
                                                     │
                                                     ▼
-                                    [AWS Bedrock LLM Guardrails]`
+                                    [AWS Bedrock AI workflows]`
         );
         break;
 
@@ -92,12 +89,12 @@ export const TerminalPlayground: React.FC = () => {
   • Email   : ${PERSONAL.email}
   • LinkedIn: ${PERSONAL.linkedin}
   • GitHub  : ${PERSONAL.github}
-  • Status  : Available for Senior Backend & Tech Lead roles globally`
+  • Status  : Open to backend and data engineering roles`
         );
         break;
 
       case "about":
-        addLog("output", `${PERSONAL.name} - ${PERSONAL.role}. 5+ years building high-throughput backend microservices, PySpark ETL engines, and production AI workflows.`);
+        addLog("output", `${PERSONAL.name} - ${PERSONAL.role}. Python backend engineer building multi-tenant Django platforms, PySpark data pipelines, and production AI workflows.`);
         break;
 
       case "clear":

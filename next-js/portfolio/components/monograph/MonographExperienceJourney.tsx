@@ -91,6 +91,20 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
   );
 }
 
+function ImpactList({ items }: { items?: string[] }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <ul className="flex flex-col gap-2">
+      {items.map((h) => (
+        <li key={h} className="flex items-start gap-2 text-xs sm:text-[13px] text-slate-800 leading-relaxed">
+          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+          <span>{h}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function MonographExperienceJourney() {
   const experiences = EXPERIENCE as ExperienceItem[];
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -98,14 +112,14 @@ export function MonographExperienceJourney() {
   const activeExp = experiences[selectedIdx] || experiences[0];
 
   return (
-    <section id="section-experience" className="relative w-full min-h-[85dvh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
+    <section id="section-experience" className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24">
       {/* Header Bar */}
       <div className="flex flex-col gap-2 border-b border-slate-200 pb-6 relative z-10">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-700 text-xs font-mono font-bold tracking-widest w-max shadow-sm">
           <Milestone className="w-3.5 h-3.5 text-emerald-600" />
           <span>03 // EXPERIENCE</span>
         </div>
-        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
+        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
           Experience
         </h2>
       </div>
@@ -114,7 +128,7 @@ export function MonographExperienceJourney() {
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start my-auto py-8">
         
         {/* Left Column */}
-        <div className="lg:col-span-6 flex flex-col gap-3.5 relative">
+        <div className="lg:col-span-6 flex flex-col gap-3.5 relative lg:sticky lg:top-24 self-start">
           
           <svg className="hidden lg:block absolute left-6 top-4 bottom-4 w-1 pointer-events-none">
             <line x1="0" y1="0" x2="0" y2="100%" stroke="#020617" strokeWidth="2" strokeDasharray="4 4" opacity="0.3" />
@@ -184,6 +198,8 @@ export function MonographExperienceJourney() {
                         {exp.description}
                       </p>
 
+                      <ImpactList items={exp.highlights} />
+
                       <TechCapabilitiesFixedPopover tags={exp.tags} />
                     </motion.div>
                   )}
@@ -221,15 +237,13 @@ export function MonographExperienceJourney() {
             {activeExp.description}
           </p>
 
+          <ImpactList items={activeExp.highlights} />
+
           <TechCapabilitiesFixedPopover tags={activeExp.tags} />
         </div>
 
       </div>
 
-      {/* Footer Tag */}
-      <div className="flex items-center justify-end pt-4 border-t border-slate-200 text-xs font-mono text-slate-500 relative z-10">
-        <span>03 / 06</span>
-      </div>
     </section>
   );
 }

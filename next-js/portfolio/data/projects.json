@@ -19,7 +19,7 @@
     "desc": "Lightweight asyncio-first DAG execution engine for dependency-aware Python task orchestration and workflow execution.",
     "stack": ["Python", "AsyncIO", "PyPI", "Workflow DAG", "Orchestration"],
     "github": "https://github.com/chockalingam1805",
-    "link": "https://pypi.org/project/pyflow-engine"
+    "link": "https://github.com/chockalingam1805"
   },
   {
     "id": "01",

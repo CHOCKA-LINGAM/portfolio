@@ -24,11 +24,11 @@ const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   variable: "--font-serif",
   weight: ["400"],
-  style: ["italic", "normal"],
+  style: ["italic"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://chockalingam.dev"),
+  metadataBase: new URL("https://chocka-devfolio.vercel.app"),
   title: "Chockalingam Balan — Senior Software Engineer",
   description:
     "Senior software engineer with 5+ years building scalable backend platforms, distributed data systems, and production AI workflows.",

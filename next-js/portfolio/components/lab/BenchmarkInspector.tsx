@@ -18,37 +18,37 @@ interface BenchmarkCase {
 
 const BENCHMARKS: BenchmarkCase[] = [
   {
-    id: "etl-latency",
-    title: "Databricks & PySpark Ingestion Latency",
-    category: "Data Processing",
-    before: "14.2 Minutes per 3.2TB Batch",
-    after: "8.5 Minutes per 3.2TB Batch",
-    improvement: "40% Runtime Speedup",
-    tech: "PySpark Partitioning & Delta Lake ACID",
-    summary: "Refactored legacy single-node processing into multi-tenant distributed PySpark partition nodes with automated Delta Lake caching.",
-    impact: "$42k Annual Cloud Compute Savings",
+    id: "claims-api",
+    title: "AI Claims API Response Time",
+    category: "Backend & AI",
+    before: "25 seconds per claims request",
+    after: "10 seconds per claims request",
+    improvement: "25s → 10s",
+    tech: "Python, FastAPI, AI-assisted claims workflow",
+    summary: "Reworked the AI claims API request path to cut end-to-end response time.",
+    impact: "Faster claims turnaround for end users",
   },
   {
-    id: "qa-coverage",
-    title: "Automated Microservice QA Suite",
+    id: "qa-cycle",
+    title: "QA Validation Cycle",
     category: "QA & Reliability",
-    before: "35% Manual Test Coverage",
-    after: "90%+ Automated Coverage",
-    improvement: "15x Regression Defect Cut",
-    tech: "pytest-asyncio, Mock Fixtures & GitHub Actions",
-    summary: "Engineered automated unit & integration test suites for FastAPI microservices with simulated async network latency.",
-    impact: "Zero Critical Defect Leaks in Production",
+    before: "Manual validation cycles",
+    after: "Direct model-validation workflow",
+    improvement: ">90% cycle-time cut",
+    tech: "Django, model validation",
+    summary: "Replaced manual QA passes with direct model-validation workflows on the multi-tenant Django platform.",
+    impact: "10–12 markets validated on one codebase",
   },
   {
-    id: "api-throughput",
-    title: "FastAPI Connection Pooling & Redis Caching",
-    category: "Backend Microservices",
-    before: "180ms Response Latency (SQL Bottleneck)",
-    after: "sub-45ms Response Latency",
-    improvement: "4x Throughput Gain",
-    tech: "FastAPI, asyncpg, Redis LRU Cache",
-    summary: "Replaced synchronous ORM queries with raw asyncpg connection pools and Redis cache invalidation hooks.",
-    impact: "Sustained 5,000+ Requests/Sec peak load",
+    id: "dag-planning",
+    title: "DAG Planning API",
+    category: "Data Platform",
+    before: "Planning handled outside the API",
+    after: "Sub-5s DAG planning API",
+    improvement: "sub-5s planning",
+    tech: "Python, FastAPI, PySpark, Azure Databricks",
+    summary: "Built a planning API for pipeline DAGs as part of migrating legacy Pandas pipelines to distributed PySpark.",
+    impact: "Faster pipeline setup and scheduling",
   },
 ];
 
@@ -66,11 +66,11 @@ export const BenchmarkInspector: React.FC = () => {
             </h3>
           </div>
           <p className="text-xs text-[var(--text-muted)] mt-0.5">
-            Empirical before-and-after benchmarks measured across iLink Digital &amp; Standard Chartered systems.
+            Before-and-after results taken from my resume.
           </p>
         </div>
         <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 w-max">
-          EMPIRICAL METRICS
+          RESUME-BACKED
         </span>
       </div>
 

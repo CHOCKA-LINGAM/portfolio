@@ -3,9 +3,9 @@
 import React from "react";
 
 // ─── 1. iLINK DIGITAL CORPORATE BRAND LOGO (Official Infinity Loop & "iLink Digital" Typography) ───
-export function ILinkLogoIcon({ className = "w-6 h-6" }: { className?: string }) {
+export function ILinkLogoIcon({ className = "w-6 h-6", markOnly = false }: { className?: string; markOnly?: boolean }) {
   return (
-    <svg className={className} viewBox="0 0 210 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} viewBox={markOnly ? "0 0 80 50" : "0 0 210 50"} fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Red Ribbon Arc (Top-Left to Bottom-Right) */}
       <path
         d="M 6 25 C 12 8, 30 8, 40 25 C 50 42, 68 42, 74 25 C 67 43, 46 43, 38 29 C 30 15, 13 15, 6 25 Z"
@@ -17,7 +17,7 @@ export function ILinkLogoIcon({ className = "w-6 h-6" }: { className?: string })
         fill="#6B7280"
       />
       {/* "iLink Digital" Red Brand Wordmark */}
-      <text
+      {!markOnly && <text
         x="82"
         y="33"
         fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
@@ -27,7 +27,7 @@ export function ILinkLogoIcon({ className = "w-6 h-6" }: { className?: string })
         letterSpacing="-0.2"
       >
         iLink Digital
-      </text>
+      </text>}
     </svg>
   );
 }
@@ -103,7 +103,7 @@ export function FastAPIBrandIcon({ className = "w-4 h-4" }: { className?: string
 export function DjangoBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M11.233 0v16.14h-2.39V2.13H6.467v14.01c0 5.727 3.513 7.86 7.156 7.86 2.39 0 4.144-.766 5.05-1.579l-1.09-1.928c-.684.582-1.942 1.09-3.418 1.09-2.734 0-4.664-1.636-4.664-5.462V0h1.733z" fill="#092E20"/>
+      <path d="M11.233 0v16.14h-2.39V2.13H6.467v14.01c0 5.727 3.513 7.86 7.156 7.86 2.39 0 4.144-.766 5.05-1.579l-1.09-1.928c-.684.582-1.942 1.09-3.418 1.09-2.734 0-4.664-1.636-4.664-5.462V0h1.733z" fill="#44B78B"/>
     </svg>
   );
 }
@@ -266,9 +266,20 @@ export function getOriginalTechIcon(techName: string, className = "w-4 h-4") {
 // ─── DYNAMIC COMPANY LOGO RESOLVER ───
 export function getOriginalCompanyIcon(companyName: string, className = "w-8 h-4") {
   const lower = companyName.toLowerCase();
-  if (lower.includes("ilink")) return <ILinkLogoIcon className={className} />;
-  if (lower.includes("tiger")) return <TigerAnalyticsLogoIcon className={className} />;
-  if (lower.includes("kaar")) return <KaarLogoIcon className={className} />;
+  if (lower.includes("ilink")) return <ILinkLogoIcon className={className} markOnly />;
+  // Monogram tiles keep small wordmark logos legible at icon size
+  if (lower.includes("tiger"))
+    return (
+      <span className="w-6 h-6 rounded-md bg-orange-500/15 border border-orange-500/40 text-orange-500 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+        TA
+      </span>
+    );
+  if (lower.includes("kaar"))
+    return (
+      <span className="w-6 h-6 rounded-md bg-sky-500/15 border border-sky-500/40 text-sky-600 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+        KT
+      </span>
+    );
 
   return (
     <span className="w-5 h-5 rounded bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-[11px] font-bold flex items-center justify-center shrink-0">

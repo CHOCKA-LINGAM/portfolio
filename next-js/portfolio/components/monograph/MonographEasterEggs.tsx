@@ -13,10 +13,9 @@ import {
   Sparkles,
   Clock,
   MapPin,
-  Info,
-  Compass,
 } from "lucide-react";
 import { Page } from "@/hooks/useNav";
+import { PERSONAL, getExperienceYearsLabel } from "@/data/index";
 
 interface LiveMoonData {
   phaseName: string;
@@ -107,15 +106,12 @@ export function MonographEasterEggs({
   const [ celestialClicks, setCelestialClicks] = useState(0);
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [localTimeStr, setLocalTimeStr] = useState("");
-  const [isDaytime, setIsDaytime] = useState(false);
-  const [activeSkyMode, setActiveSkyMode] = useState<"day" | "night">("day");
+  const [activeTab, setActiveTab] = useState<"terminal" | "moon">("terminal");
 
-  const dayQuotes = [
-    "\"Every morning brings new code, fresh perspectives, and unlimited architectural potential.\"",
-    "\"Daylight fuels deep focus, clear execution, and elegant system designs.\"",
-    "\"Sunlight reveals the structure of things. Build with clarity and precision.\"",
-    "\"Under the bright sun, turning complex problems into simple, scalable solutions.\"",
-  ];
+  // Always open on the career pipeline
+  useEffect(() => {
+    if (isOpen) setActiveTab("terminal");
+  }, [isOpen]);
 
   const nightQuotes = [
     "\"Curiosity is the engine of achievement. Great software is built with passion.\"",
@@ -128,16 +124,11 @@ export function MonographEasterEggs({
   // Terminal state for inline bottom section
   const [cmdInput, setCmdInput] = useState("");
   const [outputLog, setOutputLog] = useState<string[]>([
-    "ChockaOS v2.4.0 Developer Terminal Active",
-    "Type 'help', 'pyspark', 'fastapi', 'ai', or 'schema-shield'",
+    "chocka-dev console — answers come from my real experience",
+    "Type 'help' to list commands (try 'impact' or 'whoami')",
   ]);
 
   useEffect(() => {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const daytimeActive = currentHour >= 6 && currentHour < 18;
-    setIsDaytime(daytimeActive);
-    setActiveSkyMode(daytimeActive ? "day" : "night");
     setMoonData(calculateLiveMoonData());
 
     const updateTime = () => {
@@ -172,15 +163,25 @@ export function MonographEasterEggs({
     const cmd = commandText.trim().toLowerCase();
     let res = "";
     if (cmd === "help") {
-      res = "Available commands: help, pyspark, fastapi, ai, schema-shield, clear";
+      res = "Commands: whoami, impact, stack, experience, pyspark, fastapi, ai, schema-shield, contact, clear";
+    } else if (cmd === "whoami") {
+      res = `Chockalingam Balan — Senior Software Engineer, ${getExperienceYearsLabel()} yrs. Backend, data platforms & AI. Chennai, India.`;
+    } else if (cmd === "impact") {
+      res = "10–12 markets on one codebase • >90% QA cycle-time cut (direct model validation) • AI claims API 25s → 10s • sub-5s DAG planning API";
+    } else if (cmd === "stack") {
+      res = "Python, FastAPI, Django, PySpark, Azure Databricks, Airflow, Celery, AWS Bedrock / OpenAI, Docker, AKS, React.";
+    } else if (cmd === "experience") {
+      res = "iLink Digital (2025–now) → Tiger Analytics (2023–2025) → KAAR Technologies (2020–2023).";
     } else if (cmd === "pyspark") {
-      res = "⚡ PySpark ETL: Processing 1.2M rows/sec with Delta Lake ACID transactions.";
+      res = "⚡ PySpark: migrated legacy Pandas pipelines to distributed Spark on Azure Databricks.";
     } else if (cmd === "fastapi") {
-      res = "🚀 FastAPI Backend: P95 API Latency < 18ms with async connection pooling.";
+      res = "🚀 FastAPI: orchestration service at iLink for DAG generation & execution planning, under 5s.";
     } else if (cmd === "ai") {
-      res = "🤖 AI Agents: RAG Vector Indexing + Autonomous LLM Tool Calling Engine.";
+      res = "🤖 AI: LLM accelerators (OpenAI, Claude, AWS Bedrock); AI claims API latency 25s → 10s.";
     } else if (cmd === "schema-shield") {
-      res = "🛡️ schema-shield PyPI: pip install schema-shield (Runtime schema assertion).";
+      res = "🛡️ schema-shield (PyPI): schema compatibility & transfer-safety utility; classifies changes as SAFE / WARNING / BREAKING. pip install schema-shield";
+    } else if (cmd === "contact") {
+      res = `📬 ${PERSONAL.email} — open to global remote / relocation.`;
     } else if (cmd === "clear") {
       setOutputLog([]);
       setCmdInput("");
@@ -204,158 +205,79 @@ export function MonographEasterEggs({
     executeCmd(cmdInput);
   };
 
-  const currentQuotes = activeSkyMode === "day" ? dayQuotes : nightQuotes;
+  const currentQuotes = nightQuotes;
 
   return (
     <>
-      {/* ── INLINE TERMINAL SECTION AT BOTTOM OF PAGE ── */}
-      <section id="section-easteregg" className="relative w-full rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-6 sm:p-12 my-8 flex flex-col justify-between scroll-mt-24">
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute top-10 right-10 w-[450px] h-[450px] bg-cyan-500/10 rounded-full blur-[150px]" />
-          <div className="absolute bottom-10 left-10 w-[450px] h-[450px] bg-purple-500/10 rounded-full blur-[150px]" />
-        </div>
 
-        <div className="flex flex-col gap-2 border-b border-white/10 pb-6 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-950/60 text-cyan-300 text-xs font-mono font-bold tracking-widest w-max backdrop-blur-md">
-            <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-            <span>DEVELOPER CLI &amp; INSIGHTS</span>
-          </div>
-          <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-extrabold text-white tracking-tight leading-tight max-w-full break-words">
-            System Terminal
-          </h2>
-        </div>
-
-        <div className="my-auto py-8 relative z-10 font-mono max-w-4xl mx-auto w-full">
-          <div className="p-6 rounded-2xl bg-slate-900/90 border border-cyan-500/30 backdrop-blur-2xl shadow-xl flex flex-col justify-between min-h-[320px]">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3 text-xs text-cyan-300 font-bold">
-              <span className="flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-cyan-400" />
-                chocka-dev :: system-console v2.4
-              </span>
-              <span className="text-[11px] text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/30">
-                ACTIVE
-              </span>
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-950/90 border border-white/10 text-xs text-emerald-300 h-40 overflow-y-auto my-4 font-mono leading-relaxed space-y-1">
-              {outputLog.map((line, i) => (
-                <div key={i}>{line}</div>
-              ))}
-              <div ref={logEndRef} />
-            </div>
-
-            <div className="flex flex-wrap gap-1.5 mb-4">
-              {["help", "pyspark", "fastapi", "ai", "schema-shield", "clear"].map((cmd) => (
-                <button
-                  key={cmd}
-                  onClick={() => executeCmd(cmd)}
-                  className="touch-manipulation px-3 py-1.5 sm:px-2.5 sm:py-1 rounded-lg bg-slate-950 border border-cyan-500/30 text-xs text-cyan-300 hover:bg-cyan-500/20 transition-all cursor-pointer font-bold"
-                >
-                  {cmd}
-                </button>
-              ))}
-            </div>
-
-            <form onSubmit={handleCommandSubmit} className="flex items-center gap-2">
-              <input
-                type="text"
-                value={cmdInput}
-                onChange={(e) => setCmdInput(e.target.value)}
-                placeholder="Type command (e.g. 'help', 'pyspark', 'ai')..."
-                className="w-full min-w-0 px-4 py-2 rounded-xl bg-slate-950 border border-white/20 text-base sm:text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-400"
-              />
-              <button type="submit" className="px-4 py-2 rounded-xl bg-cyan-400 text-slate-950 font-bold text-xs cursor-pointer flex items-center gap-1 hover:bg-cyan-300 transition-all">
-                <Send className="w-3.5 h-3.5" /> Send
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between pt-4 border-t border-white/10 text-xs font-mono text-slate-400 relative z-10">
-          <span>Clean code. Scalable pipelines. High performance.</span>
-          <span>CHOCKA.dev</span>
-        </div>
-      </section>
-
-      {/* ── FULL-SCREEN DYNAMIC CELESTIAL SKY OVERLAY (DAYTIME SUN / NIGHTTIME SUPERMOON) ── */}
+      {/* ── FULL-SCREEN CAREER PIPELINE OVERLAY (+ LIVE MOON PHASE BONUS TAB) ── */}
       <AnimatePresence>
         {isOpen && (
           <div
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Live sky radar"
+            aria-label="System terminal and moon phase"
             className="fixed inset-0 z-[5000] flex items-center justify-center p-3 sm:p-6 bg-slate-950/92 backdrop-blur-2xl"
           >
             {/* Backdrop click exit */}
-            <div
-              className="absolute inset-0 z-0 cursor-pointer"
-              onClick={handleClose}
-            />
+            <div className="absolute inset-0 z-0 cursor-pointer" onClick={handleClose} />
 
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 15 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className={`relative z-10 w-full max-w-2xl rounded-3xl bg-slate-950 text-white shadow-2xl p-5 sm:p-8 flex flex-col justify-between min-h-[min(520px,92dvh)] max-h-[92dvh] overflow-y-auto border ${
-                activeSkyMode === "day"
-                  ? "border-amber-400/40 shadow-[0_0_80px_rgba(251,191,36,0.2)]"
-                  : "border-cyan-500/30 shadow-[0_0_80px_rgba(34,211,238,0.15)]"
-              }`}
+              className="relative z-10 w-full max-w-3xl rounded-3xl bg-slate-950 text-white shadow-2xl p-5 sm:p-8 flex flex-col justify-between min-h-[min(520px,92dvh)] max-h-[92dvh] overflow-y-auto border border-cyan-500/30 shadow-[0_0_80px_rgba(34,211,238,0.15)]"
             >
               {/* Top Header Bar */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/10 pb-4 gap-3">
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-xl border shrink-0 ${
-                    activeSkyMode === "day"
-                      ? "bg-amber-950/80 border-amber-500/40 text-amber-300"
-                      : "bg-cyan-950/80 border-cyan-500/40 text-cyan-300"
-                  }`}>
-                    {activeSkyMode === "day" ? (
-                      <Sun className="w-5 h-5 animate-spin-slow text-amber-400" />
+                  <div className="p-2 rounded-xl border shrink-0 bg-cyan-950/80 border-cyan-500/40 text-cyan-300">
+                    {activeTab === "terminal" ? (
+                      <Terminal className="w-5 h-5 text-cyan-400" />
                     ) : (
                       <Moon className="w-5 h-5 animate-pulse text-amber-300" />
                     )}
                   </div>
                   <div className="flex flex-col">
-                    <span className={`font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 ${
-                      activeSkyMode === "day" ? "text-amber-400" : "text-cyan-400"
-                    }`}>
-                      {activeSkyMode === "day" ? "LIVE DAYTIME SOLAR TRANSIT ☀️" : "LIVE CELESTIAL SUPERMOON 🌙"}
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 text-cyan-400">
+                      {activeTab === "terminal" ? "SYSTEM TERMINAL // LIVE" : "LIVE MOON PHASE 🌙"}
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     </span>
                     <span className="text-xs font-sans text-slate-300">
-                      Real-time astronomical sky synced to {moonData.userLocationLabel}
+                      {activeTab === "terminal"
+                        ? "Ask about my work — answers come from my real experience"
+                        : `Real-time lunar phase synced to ${moonData.userLocationLabel}`}
                     </span>
                   </div>
                 </div>
 
-                {/* Day / Night Toggle Pill & Exit Button */}
+                {/* Tabs & Exit Button */}
                 <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
-                  <div className="flex items-center gap-1 p-1 rounded-full bg-slate-900 border border-white/10 font-mono text-xs">
+                  <div role="tablist" className="flex items-center gap-1 p-1 rounded-full bg-slate-900 border border-white/10 font-mono text-xs">
                     <button
-                      onClick={() => setActiveSkyMode("day")}
+                      role="tab"
+                      aria-selected={activeTab === "terminal"}
+                      onClick={() => setActiveTab("terminal")}
                       className={`touch-manipulation px-3 py-1.5 sm:py-1 rounded-full font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                        activeSkyMode === "day"
-                          ? "bg-amber-400 text-slate-950 shadow-md"
-                          : "text-slate-400 hover:text-white"
+                        activeTab === "terminal" ? "bg-cyan-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
                       }`}
                     >
-                      <Sun className="w-3.5 h-3.5 text-slate-950" />
-                      <span>Daylight ☀️</span>
+                      <Terminal className="w-3.5 h-3.5" />
+                      <span>Terminal</span>
                     </button>
 
                     <button
-                      onClick={() => setActiveSkyMode("night")}
+                      role="tab"
+                      aria-selected={activeTab === "moon"}
+                      onClick={() => setActiveTab("moon")}
                       className={`touch-manipulation px-3 py-1.5 sm:py-1 rounded-full font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                        activeSkyMode === "night"
-                          ? "bg-cyan-400 text-slate-950 shadow-md"
-                          : "text-slate-400 hover:text-white"
+                        activeTab === "moon" ? "bg-amber-400 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
                       }`}
                     >
-                      <Moon className="w-3.5 h-3.5 text-slate-950" />
-                      <span>Night Moon 🌙</span>
+                      <Moon className="w-3.5 h-3.5" />
+                      <span>Moon 🌙</span>
                     </button>
                   </div>
 
@@ -371,97 +293,48 @@ export function MonographEasterEggs({
                 </div>
               </div>
 
-              {/* AUTOMATIC DAY/NIGHT LOCAL TIME NOTICE */}
-              <div className="mt-3 p-3 rounded-xl bg-slate-900/90 border border-white/10 text-xs font-mono text-slate-300 flex items-start gap-2.5">
-                <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                <span>
-                  <strong className="text-cyan-300">Local Sky Sync:</strong> It is currently <strong className="text-amber-300">{isDaytime ? "DAYTIME" : "NIGHTTIME"} ({localTimeStr || "Now"})</strong> in <span className="text-emerald-400 font-bold">{moonData.userLocationLabel}</span>. {isDaytime ? "The sky radar displays the Golden Solar Transit during daylight hours." : "The sky radar displays the live astronomical Supermoon at night."} You can also use the toggle to preview night moon or day sun anytime!
-                </span>
-              </div>
-
-              {/* ── DAYTIME SKY CANVAS (SOLAR TRANSIT ☀️) ── */}
-              {activeSkyMode === "day" && (
-                <div className="my-auto py-5 flex flex-col items-center gap-6 text-center">
-                  <div className="relative group cursor-pointer">
-                    {/* Golden Sun Ambient Rays */}
-                    <div className="absolute inset-0 rounded-full blur-3xl bg-amber-400/30 animate-pulse pointer-events-none" />
-
-                    <motion.div
-                      onClick={() => {
-                        setCelestialClicks((prev) => prev + 1);
-                        setQuoteIndex((prev) => (prev + 1) % dayQuotes.length);
-                      }}
-                      whileHover={{ scale: 1.06 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="relative w-44 h-44 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 border-amber-300 shadow-[0_0_80px_rgba(251,191,36,0.6)] flex items-center justify-center bg-gradient-to-tr from-amber-300 via-amber-400 to-yellow-200 select-none"
-                    >
-                      <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.4)_0%,transparent_70%)] animate-pulse" />
-                      
-                      <div className="relative z-10 flex flex-col items-center justify-center p-3 text-slate-950">
-                        <Sun className="w-8 h-8 text-slate-950 mb-1 animate-spin-slow" />
-                        <span className="font-display font-extrabold text-xs tracking-wider uppercase drop-shadow">
-                          DAYLIGHT TRANSIT
-                        </span>
-                        <span className="font-mono text-[11px] font-bold text-slate-900">
-                          100% Solar Active
-                        </span>
-                      </div>
-                    </motion.div>
+              {/* ── CAREER PIPELINE ── */}
+              {activeTab === "terminal" && (
+                <div className="my-auto py-5 font-mono flex flex-col gap-3">
+                  <div
+                    aria-live="polite"
+                    className="p-4 rounded-xl bg-slate-900/90 border border-white/10 text-xs text-emerald-300 h-48 overflow-y-auto leading-relaxed space-y-1"
+                  >
+                    {outputLog.map((line, i) => (
+                      <div key={i}>{line}</div>
+                    ))}
+                    <div ref={logEndRef} />
                   </div>
 
-                  {/* Live Solar Telemetry Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full font-mono text-xs">
-                    <div className="p-3 rounded-xl bg-slate-900/90 border border-amber-500/20 flex flex-col gap-1 text-left">
-                      <span className="text-[11px] text-slate-400 font-bold flex items-center gap-1">
-                        <Sun className="w-3 h-3 text-amber-400" /> SKY CYCLE
-                      </span>
-                      <span className="text-xs font-bold text-amber-300">
-                        {isDaytime ? "Daylight Transit ☀️" : "Dusk / Night 🌙"}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-slate-900/90 border border-amber-500/20 flex flex-col gap-1 text-left">
-                      <span className="text-[11px] text-slate-400 font-bold flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-amber-400" /> SOLAR INTENSITY
-                      </span>
-                      <span className="text-xs font-bold text-emerald-400">
-                        100% Daylight Peak
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-slate-900/90 border border-amber-500/20 flex flex-col gap-1 text-left">
-                      <span className="text-[11px] text-slate-400 font-bold flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-cyan-400" /> OBSERVER LOCATION
-                      </span>
-                      <span className="text-xs font-bold text-cyan-300 truncate" title={moonData.userLocationLabel}>
-                        {moonData.userLocationLabel}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-slate-900/90 border border-amber-500/20 flex flex-col gap-1 text-left">
-                      <span className="text-[11px] text-slate-400 font-bold flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-purple-400" /> LOCAL TIME
-                      </span>
-                      <span className="text-xs font-bold text-purple-300">
-                        {localTimeStr || "Syncing..."}
-                      </span>
-                    </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {["help", "whoami", "impact", "stack", "experience", "schema-shield", "contact", "clear"].map((cmd) => (
+                      <button
+                        key={cmd}
+                        onClick={() => executeCmd(cmd)}
+                        className="touch-manipulation px-3 py-1.5 sm:px-2.5 sm:py-1 rounded-lg bg-slate-950 border border-cyan-500/30 text-xs text-cyan-300 hover:bg-cyan-500/20 transition-all cursor-pointer font-bold"
+                      >
+                        {cmd}
+                      </button>
+                    ))}
                   </div>
 
-                  {/* Daytime Starlight Quote Box */}
-                  <div className="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/30 text-center max-w-md w-full shadow-lg">
-                    <p className="font-serif-italic text-sm text-amber-200 leading-relaxed">
-                      {currentQuotes[quoteIndex]}
-                    </p>
-                    <span className="block mt-1.5 text-[11px] font-mono text-slate-400">
-                      Tap Sun to reflect ({celestialClicks} clicks)
-                    </span>
-                  </div>
+                  <form onSubmit={handleCommandSubmit} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={cmdInput}
+                      onChange={(e) => setCmdInput(e.target.value)}
+                      placeholder="Type a command (e.g. 'help', 'impact', 'whoami')..."
+                      className="w-full min-w-0 px-4 py-2 rounded-xl bg-slate-950 border border-white/20 text-base sm:text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-cyan-400"
+                    />
+                    <button type="submit" className="px-4 py-2 rounded-xl bg-cyan-400 text-slate-950 font-bold text-xs cursor-pointer flex items-center gap-1 hover:bg-cyan-300 transition-all">
+                      <Send className="w-3.5 h-3.5" /> Send
+                    </button>
+                  </form>
                 </div>
               )}
 
               {/* ── NIGHTTIME SKY CANVAS (CELESTIAL SUPERMOON 🌙) ── */}
-              {activeSkyMode === "night" && (
+              {activeTab === "moon" && (
                 <div className="my-auto py-5 flex flex-col items-center gap-6 text-center">
                   <div className="relative group cursor-pointer">
                     <div
@@ -585,7 +458,7 @@ export function MonographEasterEggs({
                   onClick={handleClose}
                   className="w-full sm:w-auto px-5 py-2 rounded-xl bg-cyan-400 text-slate-950 font-bold text-xs hover:bg-cyan-300 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-lg"
                 >
-                  <span>Close Celestial Sky</span>
+                  <span>Close</span>
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>

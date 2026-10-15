@@ -36,11 +36,18 @@ export default function ParticleCanvas() {
     }
 
     let isVisible = true;
+    // Read the accent colour once per second instead of forcing a style recalculation every frame
+    let ar = "56, 189, 248";
+    let lastColorRead = 0;
 
     function draw() {
       if (!isVisible || document.hidden) return;
+      const now = performance.now();
+      if (now - lastColorRead > 1000) {
+        ar = (getComputedStyle(document.documentElement).getPropertyValue("--ar") || "56, 189, 248").trim();
+        lastColorRead = now;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const ar = (getComputedStyle(document.documentElement).getPropertyValue("--ar") || "56, 189, 248").trim();
 
       particles.forEach((p) => {
         p.x += p.vx; p.y += p.vy;
@@ -97,8 +104,15 @@ export default function ParticleCanvas() {
     const onMove = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; };
     const onOut = () => { mouse.x = null; mouse.y = null; };
 
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", onMove);
+    // Debounced so dragging the window edge does not rebuild particles on every pixel
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    };
+
+    window.addEventListener("resize", onResize);
+    window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mouseout", onOut);
     resize();
     draw();
@@ -106,7 +120,8 @@ export default function ParticleCanvas() {
       cancelAnimationFrame(raf);
       observer.disconnect();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("resize", resize);
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseout", onOut);
     };

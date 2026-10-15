@@ -30,30 +30,30 @@ export function MonographSkillsCapability() {
       id: "ai",
       title: "AI / ML Systems",
       icon: <Cpu className="w-4 h-4 text-purple-400" />,
-      skills: ["OpenAI API", "Claude Sonnet/Opus", "AWS Bedrock", "LLM Pipelines", "XGBoost", "RAG Search"],
+      skills: ["OpenAI API", "Claude Sonnet/Opus", "AWS Bedrock", "LLM Pipelines", "XGBoost", "LightGBM"],
     },
     {
       id: "frontend",
       title: "Frontend & Web",
       icon: <Layout className="w-4 h-4 text-sky-400" />,
-      skills: ["React.js", "Angular", "TypeScript / JS", "HTML5 / CSS3", "REST Integration"],
+      skills: ["React.js", "Angular", "JavaScript", "REST Integration"],
     },
     {
       id: "cloud",
       title: "Cloud & DevOps",
       icon: <Cloud className="w-4 h-4 text-amber-400" />,
-      skills: ["Azure", "Docker", "AKS / Kubernetes", "GCP", "Celery Tasks", "CI/CD"],
+      skills: ["Azure", "Docker", "AKS / Kubernetes", "GCP", "Celery Tasks", "AWS Databricks"],
     },
   ];
 
   const [activeCategory, setActiveCategory] = useState(categories[0]);
 
   return (
-    <section id="section-skills" className="relative w-full min-h-[85dvh] rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24">
+    <section id="section-skills" className="relative w-full rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24">
       {/* Background Orbs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[160px]" />
-        <div className="absolute bottom-10 right-10 w-[450px] h-[450px] bg-cyan-500/10 rounded-full blur-[140px]" />
+        <div className="absolute top-1/4 left-10 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,rgba(168,85,247,0.12),transparent)]" />
+        <div className="absolute bottom-10 right-10 w-[450px] h-[450px] rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.12),transparent)]" />
       </div>
 
       {/* Top Header Tag */}
@@ -62,7 +62,7 @@ export function MonographSkillsCapability() {
           <Workflow className="w-3.5 h-3.5 text-purple-400" />
           <span>04 // SKILLS</span>
         </div>
-        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-white tracking-tight leading-tight max-w-full break-words">
+        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-display font-extrabold text-white tracking-tight leading-tight max-w-full break-words">
           Technical Skills
         </h2>
       </div>
@@ -135,10 +135,6 @@ export function MonographSkillsCapability() {
 
       </div>
 
-      {/* Footer Tag */}
-      <div className="flex items-center justify-end pt-4 border-t border-white/10 text-xs font-mono text-slate-400 relative z-10">
-        <span>04 / 06</span>
-      </div>
     </section>
   );
 }

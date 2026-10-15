@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Workflow, Github, CheckCircle2, Terminal, ShieldCheck } from "lucide-react";
 import { PROJECTS, type Project } from "@/data/index";
+import { SchemaShieldDemo } from "@/components/monograph/SchemaShieldDemo";
 
 export function MonographProjectsTopology() {
   const allProjects = PROJECTS as Project[];
@@ -14,12 +15,12 @@ export function MonographProjectsTopology() {
   return (
     <section
       id="section-projects"
-      className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 pt-8 sm:pt-14 my-8 flex flex-col justify-between scroll-mt-24"
+      className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 pt-8 sm:pt-14 flex flex-col justify-between scroll-mt-24"
     >
       {/* Background Soft Light Pattern */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px]" />
-        <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-slate-300/20 rounded-full blur-[140px]" />
+        <div className="absolute top-1/4 left-10 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.06),transparent)]" />
+        <div className="absolute bottom-10 right-10 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,rgba(203,213,225,0.24),transparent)]" />
         
         {/* Subtle Light Grid Pattern */}
         <div
@@ -37,7 +38,7 @@ export function MonographProjectsTopology() {
           <Workflow className="w-3.5 h-3.5 text-cyan-600" />
           <span>05 // PROJECTS</span>
         </div>
-        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
+        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-display font-extrabold text-slate-950 tracking-tight leading-tight max-w-full break-words">
           Featured Project
         </h2>
       </div>
@@ -46,7 +47,7 @@ export function MonographProjectsTopology() {
       <div className="relative z-10 my-8 flex justify-center">
         <motion.div
           whileHover={{ y: -3 }}
-          className="w-full max-w-3xl p-6 sm:p-10 rounded-3xl border border-cyan-500/80 bg-white text-slate-900 shadow-xl ring-1 ring-cyan-400/20 flex flex-col gap-6 backdrop-blur-md"
+          className="w-full max-w-5xl p-6 sm:p-10 rounded-3xl border border-cyan-500/80 bg-white text-slate-900 shadow-xl ring-1 ring-cyan-400/20 flex flex-col gap-6 backdrop-blur-md"
         >
           {/* Top Status Bar */}
           <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-4">
@@ -73,6 +74,8 @@ export function MonographProjectsTopology() {
               {flagshipProject.desc}
             </p>
           </div>
+
+          {flagshipProject.title === "schema-shield" && <SchemaShieldDemo />}
 
           {/* Tech Stack Badges */}
           <div className="flex flex-wrap gap-2 pt-2">
@@ -114,10 +117,19 @@ export function MonographProjectsTopology() {
         </motion.div>
       </div>
 
-      {/* Footer Tag */}
-      <div className="flex items-center justify-end pt-4 border-t border-slate-200 text-xs font-mono text-slate-500 relative z-10">
-        <span>05 / 06</span>
-      </div>
+      {/* Currently building */}
+      {allProjects.some((p) => !p.featured) && (
+        <div className="relative z-10 flex flex-col items-center gap-2.5 pb-2">
+          <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-widest">Currently building</span>
+          <div className="flex flex-wrap justify-center gap-2">
+            {allProjects.filter((p) => !p.featured).map((p) => (
+              <span key={p.id} title={p.desc} className="px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-mono font-semibold text-slate-700 shadow-sm">
+                {p.title}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

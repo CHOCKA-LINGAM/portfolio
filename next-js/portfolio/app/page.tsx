@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { MotionConfig } from "framer-motion";
 import { useNav } from "@/hooks/useNav";
-import ParticleCanvas from "@/components/ui/ParticleCanvas";
 import MouseGlow from "@/components/ui/MouseGlow";
+import { Reveal } from "@/components/ui/Reveal";
+import { SectionRail } from "@/components/ui/SectionRail";
 import { ScrollEnhancer } from "@/components/ui/ScrollEnhancer";
-import { DeveloperStoryModal } from "@/components/ui/DeveloperStoryModal";
-import { CommandPalette } from "@/components/ui/CommandPalette";
-import { ResumeModal } from "@/components/ui/ResumeModal";
-import { RecruiterQAModal } from "@/components/ui/RecruiterQAModal";
 
 import { MonographNavHeader } from "@/components/monograph/MonographNavHeader";
 import { MonographHomeSignal } from "@/components/monograph/MonographHomeSignal";
@@ -17,9 +16,30 @@ import { MonographProjectsTopology } from "@/components/monograph/MonographProje
 import { MonographExperienceJourney } from "@/components/monograph/MonographExperienceJourney";
 import { MonographSkillsCapability } from "@/components/monograph/MonographSkillsCapability";
 import { MonographContactConnect } from "@/components/monograph/MonographContactConnect";
-import { MonographEasterEggs } from "@/components/monograph/MonographEasterEggs";
-import { Project } from "@/data/index";
 import { Terminal, Github } from "lucide-react";
+
+// Code-split heavy, interaction-only pieces so the first paint ships less JavaScript
+const ParticleCanvas = dynamic(() => import("@/components/ui/ParticleCanvas"), { ssr: false });
+const DeveloperStoryModal = dynamic(
+  () => import("@/components/ui/DeveloperStoryModal").then((m) => m.DeveloperStoryModal),
+  { ssr: false }
+);
+const CommandPalette = dynamic(
+  () => import("@/components/ui/CommandPalette").then((m) => m.CommandPalette),
+  { ssr: false }
+);
+const ResumeModal = dynamic(
+  () => import("@/components/ui/ResumeModal").then((m) => m.ResumeModal),
+  { ssr: false }
+);
+const RecruiterQAModal = dynamic(
+  () => import("@/components/ui/RecruiterQAModal").then((m) => m.RecruiterQAModal),
+  { ssr: false }
+);
+const MonographEasterEggs = dynamic(
+  () => import("@/components/monograph/MonographEasterEggs").then((m) => m.MonographEasterEggs),
+  { ssr: false }
+);
 
 export default function Page() {
   const { current, goTo } = useNav();
@@ -41,9 +61,10 @@ export default function Page() {
   }, []);
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <div className="dot-grid" aria-hidden="true" />
       <ScrollEnhancer />
+      <SectionRail current={current} onNavigate={goTo} />
       <ParticleCanvas />
       <MouseGlow />
       
@@ -82,7 +103,7 @@ export default function Page() {
 
       {/* ── SPATIAL MONOGRAPH 6-SECTION STREAMLINED SYSTEM ── */}
       <main className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] 2xl:max-w-[1920px] px-4 sm:px-8 pt-20 pb-20">
-        <div className="flex flex-col gap-12 sm:gap-16 w-full">
+        <div className="flex flex-col gap-6 sm:gap-10 w-full">
           {/* Section 01: Homepage — The Signal */}
           <div id="section-home" className="w-full scroll-mt-24">
             <MonographHomeSignal
@@ -93,19 +114,19 @@ export default function Page() {
           </div>
 
           {/* Section 02: About — The Core */}
-          <MonographAboutCore onOpenStory={() => setIsStoryOpen(true)} />
+          <Reveal><MonographAboutCore onOpenStory={() => setIsStoryOpen(true)} /></Reveal>
 
           {/* Section 03: Experience — The Journey */}
-          <MonographExperienceJourney />
+          <Reveal><MonographExperienceJourney /></Reveal>
 
           {/* Section 04: Skills — Capability Map */}
-          <MonographSkillsCapability />
+          <Reveal><MonographSkillsCapability /></Reveal>
 
           {/* Section 05: Projects — Featured Open Source Flagship */}
-          <MonographProjectsTopology />
+          <Reveal><MonographProjectsTopology /></Reveal>
 
           {/* Section 06: Contact — Let's Connect */}
-          <MonographContactConnect />
+          <Reveal><MonographContactConnect /></Reveal>
 
           {/* Easter Eggs — Hidden Delights */}
           <MonographEasterEggs
@@ -149,6 +170,6 @@ export default function Page() {
           </div>
         </footer>
       </main>
-    </>
+    </MotionConfig>
   );
 }

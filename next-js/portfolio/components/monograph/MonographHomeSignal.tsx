@@ -1,14 +1,46 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { ArrowDown, Terminal, Activity, FileDown, HelpCircle } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowDown, FileDown, HelpCircle } from "lucide-react";
 import { getExperienceYearsLabel } from "@/data/index";
 import {
   PythonBrandIcon,
   DatabricksBrandIcon,
   PySparkBrandIcon,
 } from "@/components/ui/TechBrandIcons";
+
+const ROTATING_WORDS = ["data pipelines", "DAG engines", "AI workflows", "backend APIs"];
+
+// Cycles through what I build; reduced-motion users get the CSS-level animation cut-off
+function RotatingWord() {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % ROTATING_WORDS.length), 2400);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <span className="relative inline-grid align-baseline overflow-hidden pb-[0.14em] -mb-[0.14em]" aria-live="off">
+      {ROTATING_WORDS.map((w) => (
+        <span key={w} aria-hidden="true" className="invisible col-start-1 row-start-1 whitespace-nowrap">
+          {w}
+        </span>
+      ))}
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={ROTATING_WORDS[idx]}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          exit={{ y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          className="absolute inset-0 whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-sky-600 to-emerald-600"
+        >
+          {ROTATING_WORDS[idx]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
 export function MonographHomeSignal({
   onExplore,
@@ -22,7 +54,7 @@ export function MonographHomeSignal({
   const expYears = getExperienceYearsLabel();
 
   return (
-    <section className="relative w-full min-h-[90dvh] sm:min-h-[92dvh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-4 sm:p-10 lg:p-16 my-4 flex flex-col justify-between">
+    <section className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-4 sm:p-10 lg:p-16 my-4 flex flex-col justify-between">
       {/* ── TOP TAG HEADER WITH 5+ YEARS EXPERIENCE BADGE STRIP ── */}
       <div className="flex flex-wrap items-center justify-between w-full gap-3 relative z-10">
         <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-700 text-xs font-mono font-bold tracking-wider shadow-sm">
@@ -40,12 +72,16 @@ export function MonographHomeSignal({
         
         {/* Left Column: Giant Headline & Responsive Bio */}
         <div className="lg:col-span-7 flex flex-col gap-5 sm:gap-6 max-w-2xl">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-display font-extrabold tracking-tight text-slate-950 leading-[1.05] sm:leading-[1.0] break-words">
-            Hi, I&apos;m <br className="hidden sm:inline" />
-            <span className="text-slate-950">Chockalingam</span>
-          </h1>
+          <div className="flex flex-col gap-3">
+            <span className="font-mono text-[11px] sm:text-xs font-bold text-slate-600 tracking-wider uppercase">
+              Chockalingam Balan · Senior Software Engineer
+            </span>
+            <h1 className="text-3xl sm:text-5xl xl:text-6xl font-display font-extrabold tracking-tight text-slate-950 leading-[1.08]">
+              I build <RotatingWord /> that hold up in production.
+            </h1>
+          </div>
 
-          <p className="text-sm sm:text-base lg:text-lg font-sans text-slate-700 leading-relaxed font-normal max-w-xl bg-white/90 p-4 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-sm">
+          <p className="text-sm sm:text-base font-sans text-slate-700 leading-relaxed font-normal max-w-xl bg-white/90 p-4 rounded-2xl border border-slate-200 shadow-sm backdrop-blur-sm">
             Senior Software Engineer building automated data pipelines, backend APIs, and intelligent AI microservices — backed by{" "}
             <span className="inline-flex items-center gap-1 font-mono text-xs font-bold text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200">
               <PythonBrandIcon className="w-3.5 h-3.5" /> Python
@@ -97,8 +133,7 @@ export function MonographHomeSignal({
           
           {/* Root Origin Node on Left: SYSTEM badge */}
           <div
-            className="absolute z-20 px-3 py-1.5 rounded-full bg-slate-950 text-white font-mono text-[11px] sm:text-xs font-bold shadow-xl border border-slate-700 flex items-center gap-1.5"
-            style={{ left: "0%", top: "50%", transform: "translate(0, -50%)" }}
+            className="absolute z-20 top-1/2 left-0 -translate-y-1/2 sm:left-[20%] sm:-translate-x-full px-3 py-1.5 rounded-full bg-slate-950 text-white font-mono text-[11px] sm:text-xs font-bold shadow-xl border border-slate-700 flex items-center gap-1.5"
           >
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
             <span>SYSTEM</span>
@@ -178,24 +213,6 @@ export function MonographHomeSignal({
 
       </div>
 
-      {/* ── FOOTER BAR: RESPONSIVE & CENTERED ── */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-200 text-xs font-mono text-slate-500 relative z-10 w-full">
-        <div className="sm:w-1/3 text-center sm:text-left order-2 sm:order-1">
-          Chennai, India
-        </div>
-
-        <button
-          onClick={onExplore}
-          className="flex items-center justify-center gap-1.5 text-slate-900 font-bold hover:text-cyan-600 transition-colors cursor-pointer sm:w-1/3 text-center order-1 sm:order-2"
-        >
-          <span>Scroll to explore</span>
-          <ArrowDown className="w-3.5 h-3.5 animate-bounce text-cyan-600" />
-        </button>
-
-        <div className="sm:w-1/3 text-center sm:text-right text-slate-600 font-bold order-3">
-          Chockalingam Balan • Senior Engineer
-        </div>
-      </div>
     </section>
   );
 }

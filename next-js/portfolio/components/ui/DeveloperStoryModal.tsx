@@ -62,11 +62,10 @@ const STORY_SLIDES: StorySlide[] = [
     highlights: [
       "B.E. Computer Science Graduate (2020)",
       "Strong CS Fundamentals & Data Structures",
-      "RDBMS, OS Memory & Network Protocols",
+      "RDBMS, SQL & Backend Fundamentals",
     ],
     techChips: [
       { name: "Python", info: "Core language for backend microservices, async APIs & distributed data processing" },
-      { name: "C / C++", info: "Foundational low-level memory management & object-oriented programming" },
       { name: "SQL", info: "Relational database schema design, normalization & query optimization" },
     ],
     icon: <GraduationCap className="w-4 h-4 text-cyan-400" />,
@@ -99,7 +98,7 @@ const STORY_SLIDES: StorySlide[] = [
     organization: "Tiger Analytics",
     period: "Oct 2023 – Nov 2025",
     subtitle: "PepIris Retail CV Platform (10–12 Global Markets)",
-    quote: "Architected Django multi-tenant backend operating across 10–12 international markets on a single codebase. Migrated legacy data pipelines to PySpark on Azure Databricks, cutting QA cycle times by >90%.",
+    quote: "Architected Django multi-tenant backend operating across 10–12 international markets on a single codebase. Migrated legacy Pandas pipelines to distributed PySpark on Azure Databricks, and cut QA validation cycle time by over 90% through direct model-validation workflows.",
     highlights: [
       "10–12 Global International Markets Deployed",
       ">90% QA Validation Cycle Time Reduction",
@@ -138,15 +137,15 @@ const STORY_SLIDES: StorySlide[] = [
     title: "Creator of 'schema-shield'",
     organization: "PyPI Package Author",
     period: "Active Open Source",
-    subtitle: "Automated Runtime Schema Assertions & Data Drift Protection",
-    quote: "Authored and published 'schema-shield' on PyPI (pip install schema-shield) to enforce zero-dependency runtime schema validation and data drift protection in data pipelines.",
+    subtitle: "Schema Compatibility & Transfer Safety for Data Pipelines",
+    quote: "Authored and published 'schema-shield' on PyPI (pip install schema-shield) a schema compatibility and transfer-safety utility that classifies schema changes as SAFE, WARNING, or BREAKING for Databricks Delta Lake and PostgreSQL pipelines.",
     highlights: [
       "Published PyPI Package Creator (pip install schema-shield)",
-      "Automated Runtime Schema & Data Drift Assertions",
-      "Zero-Dependency Lightweight Python Package",
+      "SAFE / WARNING / BREAKING Change Classification",
+      "Guardrail for Databricks Delta Lake & PostgreSQL",
     ],
     techChips: [
-      { name: "schema-shield", info: "Open-source Python package for runtime schema validation & assertions" },
+      { name: "schema-shield", info: "Open-source Python utility that classifies schema changes by deployment safety" },
       { name: "PyPI Release", info: "Official Python Package Index release" },
     ],
     icon: <Award className="w-4 h-4 text-amber-400" />,
@@ -167,7 +166,7 @@ const STORY_SLIDES: StorySlide[] = [
     techChips: [
       { name: "Backend", info: "Python, FastAPI, Django, Async Microservices, Multi-Tenant Architecture" },
       { name: "Data Engineering", info: "Azure Databricks, PySpark, Apache Airflow, Lakehouse ETL" },
-      { name: "AI & Cloud", info: "OpenAI API, Claude, AWS Bedrock, Docker, React, TypeScript" },
+      { name: "AI & Cloud", info: "OpenAI API, Claude, AWS Bedrock, Docker, React, JavaScript" },
     ],
     icon: <Cpu className="w-4 h-4 text-indigo-400" />,
   },

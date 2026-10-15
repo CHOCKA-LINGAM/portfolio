@@ -1,19 +1,31 @@
 "use client";
 
-import React from "react";
-import { Mail, Linkedin, Github, MapPin, Send, MessageSquare, ArrowRight } from "lucide-react";
+import React, { useState } from "react";
+import { Mail, Linkedin, Github, MapPin, Send, MessageSquare, ArrowRight, Copy, Check } from "lucide-react";
 import { PERSONAL } from "@/data/index";
 
 export function MonographContactConnect() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(PERSONAL.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard unavailable; the mailto link still works
+    }
+  };
+
   return (
     <section
       id="section-contact"
-      className="relative w-full min-h-[80dvh] rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 my-8 flex flex-col justify-between scroll-mt-24"
+      className="relative w-full rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24"
     >
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[160px]" />
-        <div className="absolute bottom-10 right-10 w-[450px] h-[450px] bg-purple-500/10 rounded-full blur-[140px]" />
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.12),transparent)]" />
+        <div className="absolute bottom-10 right-10 w-[450px] h-[450px] rounded-full bg-[radial-gradient(closest-side,rgba(168,85,247,0.12),transparent)]" />
       </div>
 
       {/* Top Header Tag */}
@@ -22,13 +34,13 @@ export function MonographContactConnect() {
           <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
           <span>06 // CONTACT</span>
         </div>
-        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-white tracking-tight leading-tight max-w-full break-words">
+        <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-display font-extrabold text-white tracking-tight leading-tight max-w-full break-words">
           Contact Me
         </h2>
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto py-6 sm:py-10 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch my-auto py-6 sm:py-10 relative z-10">
         
         {/* Left Column */}
         <div className="lg:col-span-6 flex flex-col gap-3 sm:gap-4 font-mono w-full">
@@ -108,20 +120,26 @@ export function MonographContactConnect() {
             </p>
           </div>
 
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 self-start w-full sm:w-auto">
           <a
             href={`mailto:${PERSONAL.email}?subject=${encodeURIComponent("[Portfolio Inquiry] Hello Chocka")}`}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl font-mono font-bold text-xs text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer self-start"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl font-mono font-bold text-xs text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
           >
             <Send className="w-3.5 h-3.5 text-slate-950" /> Send Direct Message →
           </a>
+            <button
+              onClick={copyEmail}
+              className="touch-manipulation w-full sm:w-auto px-5 py-3.5 rounded-2xl font-mono font-bold text-xs text-cyan-200 bg-slate-950 border border-cyan-500/40 hover:border-cyan-300 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              aria-live="polite"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-cyan-400" />}
+              {copied ? "Copied!" : "Copy email"}
+            </button>
+          </div>
         </div>
 
       </div>
 
-      {/* Footer Tag */}
-      <div className="flex items-center justify-end pt-4 border-t border-white/10 text-xs font-mono text-slate-400 relative z-10">
-        <span>06 / 06</span>
-      </div>
     </section>
   );
 }
