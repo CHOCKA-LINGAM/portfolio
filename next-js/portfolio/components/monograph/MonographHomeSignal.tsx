@@ -54,7 +54,7 @@ export function MonographHomeSignal({
   const expYears = getExperienceYearsLabel();
 
   return (
-    <section className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-4 sm:p-10 lg:p-16 my-4 flex flex-col justify-between">
+    <section className="relative w-full min-h-[90dvh] sm:min-h-[92dvh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-4 sm:p-10 lg:p-16 my-4 flex flex-col justify-between">
       {/* ── TOP TAG HEADER WITH 5+ YEARS EXPERIENCE BADGE STRIP ── */}
       <div className="flex flex-wrap items-center justify-between w-full gap-3 relative z-10">
         <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-700 text-xs font-mono font-bold tracking-wider shadow-sm">

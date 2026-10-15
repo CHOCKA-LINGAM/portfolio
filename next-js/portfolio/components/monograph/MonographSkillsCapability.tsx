@@ -51,7 +51,7 @@ const CATEGORIES = [
 
 export function MonographSkillsCapability() {
   return (
-    <section id="section-skills" className="relative w-full rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24">
+    <section id="section-skills" className="relative w-full md:min-h-[85dvh] rounded-3xl overflow-hidden border border-purple-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24">
       {/* Background Orbs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-1/4 left-10 w-[500px] h-[500px] rounded-full bg-[radial-gradient(closest-side,rgba(168,85,247,0.12),transparent)]" />

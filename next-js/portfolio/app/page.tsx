@@ -126,7 +126,7 @@ export default function Page() {
       {/* ── SPATIAL MONOGRAPH 6-SECTION STREAMLINED SYSTEM ── */}
       <main
         id="main-content"
-        className="portfolio-shell relative z-10 mx-auto w-full max-w-[1440px] xl:max-w-[1600px] px-4 sm:px-8 pt-20 pb-12"
+        className="portfolio-shell relative z-10 w-full px-4 sm:px-8 xl:px-12 pt-20 pb-20"
       >
         <div className="flex flex-col gap-6 sm:gap-10 w-full">
           {/* Section 01: Homepage — The Signal */}

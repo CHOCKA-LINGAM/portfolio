@@ -85,7 +85,7 @@ export function MonographNavHeader({
           : "bg-slate-950/60 sm:bg-transparent py-4 sm:py-5 backdrop-blur-md sm:backdrop-blur-none"
       }`}
     >
-      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-10 flex items-center justify-between">
+      <div className="w-full px-4 sm:px-8 xl:px-12 flex items-center justify-between">
         {/* Monogram Logo */}
         <button
           onClick={handleLogoClick}
