@@ -14,7 +14,7 @@ export function MonographProjectsTopology() {
   return (
     <section
       id="section-projects"
-      className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 pt-8 sm:pt-14 flex flex-col justify-between scroll-mt-24"
+      className="relative w-full md:min-h-[85dvh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 pt-8 sm:pt-14 flex flex-col justify-between scroll-mt-24"
     >
       {/* Background Soft Light Pattern */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">

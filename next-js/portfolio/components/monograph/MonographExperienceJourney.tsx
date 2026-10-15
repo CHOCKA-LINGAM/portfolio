@@ -112,7 +112,7 @@ export function MonographExperienceJourney() {
   const activeExp = experiences[selectedIdx] || experiences[0];
 
   return (
-    <section id="section-experience" className="relative w-full rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24">
+    <section id="section-experience" className="relative w-full md:min-h-[85dvh] rounded-3xl overflow-hidden border border-slate-200 bg-[#f8fafc] text-slate-900 shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24">
       {/* Header Bar */}
       <div className="flex flex-col gap-2 border-b border-slate-200 pb-6 relative z-10">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-300 bg-white text-slate-700 text-xs font-mono font-bold tracking-widest w-max shadow-sm">

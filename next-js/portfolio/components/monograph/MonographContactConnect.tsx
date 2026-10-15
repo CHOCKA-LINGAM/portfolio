@@ -20,7 +20,7 @@ export function MonographContactConnect() {
   return (
     <section
       id="section-contact"
-      className="relative w-full rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24"
+      className="relative w-full md:min-h-[85dvh] rounded-3xl overflow-hidden border border-cyan-500/20 bg-slate-950 text-white shadow-2xl p-5 sm:p-10 lg:p-16 flex flex-col justify-between scroll-mt-24"
     >
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
