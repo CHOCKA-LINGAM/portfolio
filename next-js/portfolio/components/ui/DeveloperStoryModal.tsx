@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -159,7 +159,7 @@ const STORY_SLIDES: StorySlide[] = [
     subtitle: "Architecting Microservices, Lakehouses & AI Workflows",
     quote: `Combining ${getExperienceYearsLabel()} years of production engineering experience across high-scale backend microservices, PySpark distributed data lakes, multi-tenant architectures, and enterprise AI integrations.`,
     highlights: [
-      "5+ Years Senior Software Engineering",
+      `${getExperienceYearsLabel()} Years Software Engineering`,
       "Multi-Tenant & Lakehouse Architecture",
       "Open for Global Remote & Relocation",
     ],
@@ -194,7 +194,11 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
   const [reactions, setReactions] = useState<FloatingReaction[]>([]);
   const lastNavTimeRef = useRef<number>(0);
-  const [progress, setProgress] = useState(0);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  // Auto-advance is skipped for reduced-motion users; they step through manually
+  const [autoAdvance] = useState(
+    () => typeof window === "undefined" || !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   const currentSlide = STORY_SLIDES[currentIdx];
 
@@ -207,7 +211,8 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
       if (typeof window === "undefined") return;
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
-      const ctx = new AudioCtx();
+      if (!audioCtxRef.current) audioCtxRef.current = new AudioCtx();
+      const ctx = audioCtxRef.current;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
@@ -234,38 +239,6 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
     }
   }, [currentIdx, soundEnabled, isOpen]);
 
-  // Auto-advance progress timer (6s per slide)
-  useEffect(() => {
-    if (!isOpen || isPaused || selectedTechInfo !== null) return;
-
-    const DURATION = 6000;
-    const STEP = 50;
-
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) return 100;
-        return prev + (STEP / DURATION) * 100;
-      });
-    }, STEP);
-
-    return () => clearInterval(interval);
-  }, [isOpen, isPaused, selectedTechInfo]);
-
-  useEffect(() => {
-    if (progress >= 100) {
-      const now = Date.now();
-      if (now - lastNavTimeRef.current >= 300) {
-        lastNavTimeRef.current = now;
-        if (currentIdx < STORY_SLIDES.length - 1) {
-          setCurrentIdx((i) => i + 1);
-          setProgress(0);
-        } else {
-          onClose();
-        }
-      }
-    }
-  }, [progress, currentIdx, onClose]);
-
   const goToSlide = (idx: number, e?: React.SyntheticEvent) => {
     if (e) {
       e.preventDefault();
@@ -277,11 +250,10 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     if (idx < 0 || idx >= STORY_SLIDES.length) return;
     setCurrentIdx(idx);
-    setProgress(0);
     setSelectedTechInfo(null);
   };
 
-  const nextSlide = (e?: React.SyntheticEvent) => {
+  const nextSlide = useCallback((e?: React.SyntheticEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -292,14 +264,13 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     if (currentIdx < STORY_SLIDES.length - 1) {
       setCurrentIdx((prev) => prev + 1);
-      setProgress(0);
       setSelectedTechInfo(null);
     } else {
       onClose();
     }
-  };
+  }, [currentIdx, onClose]);
 
-  const prevSlide = (e?: React.SyntheticEvent) => {
+  const prevSlide = useCallback((e?: React.SyntheticEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -310,10 +281,9 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     if (currentIdx > 0) {
       setCurrentIdx((prev) => prev - 1);
-      setProgress(0);
       setSelectedTechInfo(null);
     }
-  };
+  }, [currentIdx]);
 
   const toggleSound = () => {
     const nextState = !soundEnabled;
@@ -357,16 +327,21 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, currentIdx, onClose]);
+  }, [isOpen, nextSlide, prevSlide, onClose]);
 
   useEffect(() => {
     if (!isOpen) {
       setCurrentIdx(0);
-      setProgress(0);
       setSelectedTechInfo(null);
       setReactions([]);
     }
   }, [isOpen]);
+
+  useEffect(() => () => {
+    audioCtxRef.current?.close().catch(() => {});
+  }, []);
+
+  const timerRunning = autoAdvance && !isPaused && selectedTechInfo === null;
 
   if (!isOpen) return null;
 
@@ -421,17 +396,17 @@ export const DeveloperStoryModal: React.FC<DeveloperStoryModalProps> = ({
                 title={`${slide.category}`}
               >
                 <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden group-hover:bg-slate-700 transition-colors">
-                  <div
-                    className="h-full bg-cyan-400 transition-all duration-75"
-                    style={{
-                      width:
-                        idx < currentIdx
-                          ? "100%"
-                          : idx === currentIdx
-                          ? `${progress}%`
-                          : "0%",
-                    }}
-                  />
+                  {idx === currentIdx && autoAdvance ? (
+                    // CSS-driven 6s timer: no per-frame React renders; finishing it advances the story
+                    <div
+                      key={currentIdx}
+                      className="story-progress h-full w-full bg-cyan-400 origin-left"
+                      style={{ animationPlayState: timerRunning ? "running" : "paused" }}
+                      onAnimationEnd={() => nextSlide()}
+                    />
+                  ) : (
+                    <div className={`h-full bg-cyan-400 ${idx <= currentIdx ? "w-full" : "w-0"}`} />
+                  )}
                 </div>
               </div>
             ))}

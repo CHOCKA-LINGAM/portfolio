@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Command, Terminal, Menu, X, Github } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Page } from "@/hooks/useNav";
+import { PERSONAL } from "@/data/index";
 
 export function MonographNavHeader({
   currentSection,
@@ -19,6 +20,11 @@ export function MonographNavHeader({
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  // Show the platform-correct shortcut hint (set after mount to keep SSR markup stable)
+  const [shortcutLabel, setShortcutLabel] = useState("Ctrl K");
+  useEffect(() => {
+    if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) setShortcutLabel("⌘ K");
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,24 +89,26 @@ export function MonographNavHeader({
         {/* Monogram Logo */}
         <button
           onClick={handleLogoClick}
+          aria-label="Back to top"
           className="flex items-center gap-3 cursor-pointer group"
         >
           <div className="w-9 h-9 rounded-xl bg-slate-900 border border-white/20 flex items-center justify-center font-display font-extrabold text-sm text-white group-hover:border-cyan-400 group-hover:text-cyan-300 transition-all shadow-md">
             C B
           </div>
-          <span className="font-mono text-xs font-bold text-slate-300 group-hover:text-white tracking-widest uppercase">
+          <span className="hidden xs:inline font-mono text-xs font-bold text-slate-300 group-hover:text-white tracking-widest uppercase">
             CHOCKA.dev
           </span>
         </button>
 
         {/* Center Nav Items (Desktop) */}
-        <nav className="hidden lg:flex items-center gap-1 p-1 rounded-full bg-slate-900/80 border border-white/10 backdrop-blur-md font-mono text-xs shadow-lg">
+        <nav aria-label="Sections" className="hidden lg:flex items-center gap-1 p-1 rounded-full bg-slate-900/80 border border-white/10 backdrop-blur-md font-mono text-xs shadow-lg">
           {navItems.map((item) => {
             const isActive = currentSection === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id as Page)}
+                aria-current={isActive ? "true" : undefined}
                 className={`px-4 py-1.5 rounded-full transition-all cursor-pointer font-medium ${
                   isActive
                     ? "bg-white text-slate-950 font-bold shadow-md"
@@ -117,10 +125,11 @@ export function MonographNavHeader({
         <div className="flex items-center gap-2 sm:gap-3">
           {/* GitHub Profile Button */}
           <a
-            href="https://github.com/CHOCKA-LINGAM"
+            href={PERSONAL.github}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 border border-white/15 text-slate-300 hover:text-white hover:border-cyan-400 font-mono text-xs transition-all cursor-pointer shadow-md"
+            aria-label="GitHub profile"
+            className="flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-full bg-slate-900 border border-white/15 text-slate-300 hover:text-white hover:border-cyan-400 font-mono text-xs transition-all cursor-pointer shadow-md"
             title="GitHub Profile"
           >
             <Github className="w-3.5 h-3.5 text-cyan-400" />
@@ -130,20 +139,22 @@ export function MonographNavHeader({
           {/* Cmd + K Button */}
           <button
             onClick={onOpenCmdPalette}
-            className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-slate-900 border border-white/15 text-slate-300 hover:text-white hover:border-cyan-400 font-mono text-xs transition-all cursor-pointer shadow-md"
+            aria-label="Open command palette"
+            className="hidden sm:flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-slate-900 border border-white/15 text-slate-300 hover:text-white hover:border-cyan-400 font-mono text-xs transition-all cursor-pointer shadow-md"
             title="Search & Command Palette"
           >
             <Command className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">Cmd + K</span>
+            <span>{shortcutLabel}</span>
           </button>
 
           {/* System Radar & CLI Trigger Dot */}
           <button
             onClick={onTriggerEasterEgg}
-            title="System Radar & CLI 💻"
-            className="w-8 h-8 rounded-full bg-slate-900 border border-white/15 flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 transition-all cursor-pointer shadow-md group relative"
+            title="Developer terminal"
+            aria-label="Open developer terminal"
+            className="hidden sm:flex w-8 h-8 rounded-full bg-slate-900 border border-white/15 items-center justify-center text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 transition-all cursor-pointer shadow-md group relative"
           >
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping absolute" />
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping absolute motion-reduce:hidden" />
             <span className="w-2 h-2 rounded-full bg-cyan-400 relative" />
           </button>
 
@@ -151,7 +162,7 @@ export function MonographNavHeader({
           <button
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             className="touch-manipulation flex lg:hidden p-2.5 rounded-xl bg-slate-900 border border-white/15 text-slate-300 hover:text-white transition-all cursor-pointer"
-            aria-label="Toggle Navigation Menu"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-5 h-5 text-cyan-400" /> : <Menu className="w-5 h-5 text-slate-300" />}
@@ -179,6 +190,7 @@ export function MonographNavHeader({
                   <button
                     key={item.id}
                     onClick={() => handleMobileNav(item.id as Page)}
+                    aria-current={isActive ? "true" : undefined}
                     className={`touch-manipulation px-4 py-3 rounded-xl text-left text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
                       isActive
                         ? "bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-md"
@@ -193,7 +205,7 @@ export function MonographNavHeader({
 
               <div className="border-t border-white/10 pt-2 mt-1 flex flex-col gap-1.5">
                 <a
-                  href="https://github.com/CHOCKA-LINGAM"
+                  href={PERSONAL.github}
                   target="_blank"
                   rel="noreferrer"
                   className="px-4 py-2.5 rounded-xl text-left text-xs font-bold text-slate-200 bg-slate-900 border border-white/10 flex items-center justify-between hover:text-white cursor-pointer"
@@ -214,9 +226,23 @@ export function MonographNavHeader({
                 >
                   <span className="flex items-center gap-2">
                     <Terminal className="w-4 h-4 text-cyan-400" />
-                    System Radar &amp; CLI
+                    Developer terminal
                   </span>
                   <span className="text-[11px] text-cyan-400">💻</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenCmdPalette();
+                  }}
+                  className="px-4 py-2.5 rounded-xl text-left text-xs font-bold text-slate-200 bg-slate-900 border border-white/10 flex items-center justify-between cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Command className="w-4 h-4 text-cyan-400" />
+                    Quick actions
+                  </span>
+                  <span className="text-[11px] text-slate-500">resume · Q&amp;A · story</span>
                 </button>
               </div>
             </div>

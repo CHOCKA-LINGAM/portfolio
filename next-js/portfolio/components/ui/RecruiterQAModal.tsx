@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,12 +16,12 @@ const RECRUITER_FAQS = [
   {
     id: "experience",
     question: "How many years of enterprise production experience do you have?",
-    answer: `${getExperienceYearsLabel()} years of production engineering experience building enterprise microservices, PySpark ETL data platforms, and GenAI workflows at iLink Digital & Standard Chartered.`,
+    answer: `${getExperienceYearsLabel()} years of production engineering experience building backend services, PySpark data platforms, and LLM-powered workflows at iLink Digital, Tiger Analytics, and KAAR Technologies.`,
   },
   {
     id: "stack",
     question: "What is your primary tech stack?",
-    answer: "Python 3.11+, PySpark, Databricks Delta Lake, FastAPI, PostgreSQL, SQLGlot, AWS Bedrock, OpenAI/LangChain, Azure AKS, Docker, and Next.js / TypeScript for full-stack interfaces.",
+    answer: "Python, FastAPI, Django, PySpark, Azure Databricks, Delta Lake, Apache Airflow, Celery, SQL Server / PostgreSQL, OpenAI, Claude and AWS Bedrock, Docker and AKS, with React for full-stack interfaces.",
   },
   {
     id: "location",
@@ -31,7 +31,7 @@ const RECRUITER_FAQS = [
   {
     id: "highlight",
     question: "What is your biggest engineering accomplishment?",
-    answer: "Architected and open-sourced 'schema-shield' — an automated schema compatibility guardrail and AST safety engine for Databricks Delta Lake and PostgreSQL, ensuring 100% zero-downtime DDL migrations across 500+ production runs.",
+    answer: "At iLink Digital I architected a DAG-based engine that converts Tableau Prep flows into dependency-ordered PySpark workflows, with LLM accelerators generating Databricks notebooks, and cut an AI claims API from 25s to 10s. On the side I built and published 'schema-shield' on PyPI, which classifies schema changes as SAFE, WARNING, or BREAKING for Delta Lake and PostgreSQL pipelines.",
   },
   {
     id: "availability",
@@ -56,6 +56,15 @@ export function RecruiterQAModal({
   const dialogRef = useRef<HTMLDivElement>(null);
   useFocusTrap(isOpen, dialogRef);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -66,11 +75,13 @@ export function RecruiterQAModal({
         aria-modal="true"
         aria-label="Recruiter quick answers"
         className="fixed inset-0 z-[2200] flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md">
+        {/* Backdrop click closes the modal */}
+        <div className="absolute inset-0 z-0" onClick={onClose} />
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-3xl rounded-3xl bg-slate-900 border border-cyan-500/30 text-white shadow-2xl overflow-hidden flex flex-col max-h-[88dvh] sm:max-h-[90dvh]"
+          className="relative z-10 w-full max-w-3xl rounded-3xl bg-slate-900 border border-cyan-500/30 text-white shadow-2xl overflow-hidden flex flex-col max-h-[88dvh] sm:max-h-[90dvh]"
         >
           {/* Header */}
           <div className="p-4 sm:p-6 border-b border-white/10 flex items-start justify-between bg-slate-950/70 gap-3">
@@ -115,13 +126,14 @@ export function RecruiterQAModal({
                   <button
                     key={faq.id}
                     onClick={() => setActiveFaq(faq)}
-                    className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all flex items-center justify-between cursor-pointer ${
+                    aria-pressed={isSelected}
+                    className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all flex items-center justify-between gap-2 cursor-pointer ${
                       isSelected
                         ? "bg-cyan-950/80 border-cyan-400 text-cyan-200 shadow-md"
                         : "bg-slate-950/50 border-white/10 text-slate-300 hover:border-slate-700 hover:bg-slate-800/80"
                     }`}
                   >
-                    <span className="truncate max-w-[200px]">{faq.question}</span>
+                    <span className="leading-snug">{faq.question}</span>
                     <ChevronRight className={`w-3.5 h-3.5 shrink-0 ${isSelected ? "text-cyan-400" : "text-slate-600"}`} />
                   </button>
                 );
@@ -178,6 +190,7 @@ export function RecruiterQAModal({
                 >
                   <button
                     onClick={() => setOpenMobileFaqId(isOpen ? null : faq.id)}
+                    aria-expanded={isOpen}
                     className="w-full p-3.5 text-left text-xs font-bold text-slate-200 flex items-center justify-between gap-2 cursor-pointer"
                   >
                     <span>{faq.question}</span>

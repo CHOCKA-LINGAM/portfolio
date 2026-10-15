@@ -65,7 +65,7 @@ function TechCapabilitiesFixedPopover({ tags }: { tags: string[] }) {
               <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
                 <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                  ORIGINAL TECH BRAND LOGOS ({tags.length})
+                  TECH STACK ({tags.length})
                 </span>
                 <span className="text-[11px] font-mono text-slate-400">
                   Tap or hover
@@ -138,15 +138,14 @@ export function MonographExperienceJourney() {
             const isSelected = selectedIdx === idx;
             return (
               <div key={exp.id} className="flex flex-col gap-2">
-                <motion.button
+                <button
                   onClick={() =>
                     setSelectedIdx(
                       selectedIdx === idx && typeof window !== "undefined" && window.innerWidth < 1024 ? -1 : idx
                     )
                   }
                   aria-expanded={isSelected}
-                  whileHover={{ x: 4 }}
-                  className={`relative z-10 p-4 rounded-2xl border text-left font-mono transition-all cursor-pointer flex items-center justify-between shadow-md ${
+                                    className={`relative z-10 p-4 rounded-2xl border text-left font-mono transition-all cursor-pointer flex items-center justify-between shadow-md ${
                     isSelected
                       ? "bg-slate-950 text-white border-slate-950 shadow-xl"
                       : "bg-white text-slate-800 border-slate-200 hover:border-slate-400 hover:bg-slate-50"
@@ -160,7 +159,7 @@ export function MonographExperienceJourney() {
                     </span>
 
                     <div className="flex flex-col truncate">
-                      <span className="font-display font-extrabold text-sm sm:text-base text-slate-950 truncate max-w-[260px] sm:max-w-full font-bold flex items-center gap-2" style={{ color: isSelected ? "#ffffff" : undefined }}>
+                      <span className="font-display font-extrabold text-sm sm:text-base text-slate-950 truncate font-bold flex items-center gap-2" style={{ color: isSelected ? "#ffffff" : undefined }}>
                         {getOriginalCompanyIcon(exp.company, "w-5 h-5 shrink-0")}
                         <span className="truncate">{exp.role}</span>
                       </span>
@@ -174,7 +173,7 @@ export function MonographExperienceJourney() {
                     <ChevronDown className={`w-4 h-4 lg:hidden transition-transform duration-200 ${isSelected ? "rotate-180 text-emerald-400" : "text-slate-400"}`} />
                     <ArrowUpRight className={`hidden lg:block w-4 h-4 ${isSelected ? "text-emerald-400" : "text-slate-400"}`} />
                   </div>
-                </motion.button>
+                </button>
 
                 <AnimatePresence>
                   {isSelected && (

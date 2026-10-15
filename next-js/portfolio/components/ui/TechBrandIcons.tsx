@@ -32,54 +32,6 @@ export function ILinkLogoIcon({ className = "w-6 h-6", markOnly = false }: { cla
   );
 }
 
-// ─── 2. TIGER ANALYTICS EXACT CORPORATE BRAND LOGO (Serif A with Orange Swoosh) ───
-export function TigerAnalyticsLogoIcon({ className = "w-6 h-6" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Serif "Tiger" text */}
-      <text x="5" y="20" fontFamily="Georgia, serif" fontSize="18" fontWeight="bold" fill="currentColor">
-        Tiger
-      </text>
-      {/* Serif "Analytics" text */}
-      <text x="5" y="42" fontFamily="Georgia, serif" fontSize="18" fontWeight="bold" fill="currentColor">
-        Analytics
-      </text>
-      {/* Signature Orange Swoosh over the letter "A" */}
-      <path
-        d="M 5 44 C 15 34, 25 36, 32 40 C 22 42, 12 45, 5 44 Z"
-        fill="#EA580C"
-      />
-    </svg>
-  );
-}
-
-// ─── 3. KAARTECH EXACT CORPORATE BRAND LOGO (Ripple Rings + Red Splash Teardrops) ───
-export function KaarLogoIcon({ className = "w-6 h-6" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Concentric Ripple Ellipses */}
-      <ellipse cx="50" cy="30" rx="38" ry="12" stroke="#991B1B" strokeWidth="2.5" fill="none" />
-      <ellipse cx="50" cy="30" rx="24" ry="7" stroke="#DC2626" strokeWidth="2" fill="none" />
-      <ellipse cx="50" cy="30" rx="10" ry="3" stroke="#DC2626" strokeWidth="1.5" fill="none" />
-      
-      {/* Dual Red Splash Teardrops at top */}
-      <path
-        d="M 44 24 C 40 14, 42 6, 45 2 C 48 10, 48 18, 44 24 Z"
-        fill="#B91C1C"
-      />
-      <path
-        d="M 54 22 C 52 14, 53 8, 55 4 C 57 10, 57 17, 54 22 Z"
-        fill="#EF4444"
-      />
-
-      {/* KaarTech Text */}
-      <text x="12" y="52" fontFamily="Arial, sans-serif" fontSize="13" fontWeight="900" fontStyle="italic" fill="currentColor">
-        KaarTech
-      </text>
-    </svg>
-  );
-}
-
 // ─── ORIGINAL TECH BRAND SVG LOGOS ───
 
 export function PythonBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -218,8 +170,10 @@ export function OpenAIBrandIcon({ className = "w-4 h-4" }: { className?: string 
 
 export function PostgresBrandIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="#4169E1">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="#4169E1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="5" rx="8" ry="3" />
+      <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+      <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
     </svg>
   );
 }
@@ -228,6 +182,15 @@ export function AirflowBrandIcon({ className = "w-4 h-4" }: { className?: string
   return (
     <svg className={className} viewBox="0 0 24 24" fill="#017CEE">
       <path d="M12 0L2 12h8v12l10-12h-8L12 0z"/>
+    </svg>
+  );
+}
+
+// Neutral mark for LLM / AI tooling that is not OpenAI-specific
+export function AISparkIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="#8B5CF6">
+      <path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4L12 2z" />
     </svg>
   );
 }
@@ -249,9 +212,10 @@ export function getOriginalTechIcon(techName: string, className = "w-4 h-4") {
   if (lower.includes("angular")) return <AngularBrandIcon className={className} />;
   if (lower.includes("html") || lower.includes("css")) return <HTMLCSSBrandIcon className={className} />;
   if (lower.includes("next")) return <NextjsBrandIcon className={className} />;
-  if (lower.includes("typescript") || lower.includes("js") || lower.includes("javascript")) return <TypeScriptBrandIcon className={className} />;
+  if (lower.includes("typescript") || lower.includes("javascript")) return <TypeScriptBrandIcon className={className} />;
   if (lower.includes("tailwind")) return <TailwindBrandIcon className={className} />;
-  if (lower.includes("openai") || lower.includes("claude") || lower.includes("llm")) return <OpenAIBrandIcon className={className} />;
+  if (lower.includes("openai")) return <OpenAIBrandIcon className={className} />;
+  if (/claude|llm|\bai\b|prompt|context engineering|semantic|multi-model/.test(lower)) return <AISparkIcon className={className} />;
   if (lower.includes("postgres") || lower.includes("sql")) return <PostgresBrandIcon className={className} />;
   if (lower.includes("airflow")) return <AirflowBrandIcon className={className} />;
 

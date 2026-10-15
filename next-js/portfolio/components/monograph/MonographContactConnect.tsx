@@ -55,7 +55,7 @@ export function MonographContactConnect() {
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">DIRECT EMAIL</span>
-                <span className="text-xs sm:text-sm font-bold text-white truncate break-all">{PERSONAL.email}</span>
+                <span className="text-xs sm:text-sm font-bold text-white break-all">{PERSONAL.email}</span>
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-300 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
@@ -103,7 +103,7 @@ export function MonographContactConnect() {
             </div>
             <div className="flex flex-col">
               <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">LOCATION &amp; RELOCATION</span>
-              <span className="text-xs sm:text-sm font-bold text-white">Chennai, India • Open for Global Remote / Relocation</span>
+              <span className="text-xs sm:text-sm font-bold text-white">{PERSONAL.location} • Open to remote or relocation</span>
             </div>
           </div>
 
@@ -116,7 +116,7 @@ export function MonographContactConnect() {
               OPPORTUNITIES &amp; COLLABORATIONS
             </span>
             <p className="text-base sm:text-lg font-sans text-slate-200 leading-relaxed font-normal">
-              &quot;Ready to discuss high-scale backend architecture, PySpark pipelines, or senior engineering roles.&quot;
+              Open to senior backend, data platform and AI engineering roles. Happy to talk architecture, PySpark pipelines, or how I can help your team ship.
             </p>
           </div>
 
@@ -125,7 +125,7 @@ export function MonographContactConnect() {
             href={`mailto:${PERSONAL.email}?subject=${encodeURIComponent("[Portfolio Inquiry] Hello Chocka")}`}
             className="w-full sm:w-auto px-6 py-3.5 rounded-2xl font-mono font-bold text-xs text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Send className="w-3.5 h-3.5 text-slate-950" /> Send Direct Message →
+            <Send className="w-3.5 h-3.5 text-slate-950" /> Email me
           </a>
             <button
               onClick={copyEmail}

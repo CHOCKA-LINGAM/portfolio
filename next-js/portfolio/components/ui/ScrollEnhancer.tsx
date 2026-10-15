@@ -19,7 +19,7 @@ export const ScrollEnhancer: React.FC = () => {
             const currentProgress = (window.scrollY / totalHeight) * 100;
             const progress = Math.min(100, Math.max(0, currentProgress));
             if (progressBarRef.current) {
-              progressBarRef.current.style.width = `${progress}%`;
+              progressBarRef.current.style.transform = `scaleX(${progress / 100})`;
             }
           }
           setShowBackToTop(window.scrollY > 240);
@@ -41,11 +41,11 @@ export const ScrollEnhancer: React.FC = () => {
   return (
     <>
       {/* ── TOP SCROLL PROGRESS BAR ── */}
-      <div className="fixed top-0 left-0 right-0 h-1 z-[1000] bg-slate-950/40 pointer-events-none">
+      <div aria-hidden="true" className="fixed top-0 left-0 right-0 h-1 z-[1000] bg-slate-950/40 pointer-events-none">
         <div
           ref={progressBarRef}
-          className="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-indigo-400 shadow-[0_0_10px_rgba(56,189,248,0.5)] transition-all duration-75 ease-out"
-          style={{ width: "0%" }}
+          className="h-full w-full origin-left bg-gradient-to-r from-sky-400 via-emerald-400 to-indigo-400 shadow-[0_0_10px_rgba(56,189,248,0.5)]"
+          style={{ transform: "scaleX(0)" }}
         />
       </div>
 
@@ -59,7 +59,7 @@ export const ScrollEnhancer: React.FC = () => {
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 z-[900] flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[var(--surface-1)]/90 backdrop-blur-xl border border-[var(--border-strong)] text-sky-400 text-xs font-semibold shadow-2xl hover:border-sky-400/50 hover:bg-[var(--surface-2)] transition-all cursor-pointer group"
+            className="fixed bottom-6 right-6 z-[900] flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-slate-900/90 backdrop-blur-xl border border-white/20 text-sky-400 text-xs font-semibold shadow-2xl hover:border-sky-400/50 hover:bg-slate-800 transition-colors cursor-pointer group"
             aria-label="Scroll to top"
             title="Scroll back to top"
           >

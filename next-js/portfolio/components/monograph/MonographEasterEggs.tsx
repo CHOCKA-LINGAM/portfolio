@@ -102,7 +102,7 @@ export function MonographEasterEggs({
   const logEndRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   useFocusTrap(isOpen, dialogRef);
-  const [moonData, setMoonData] = useState<LiveMoonData>(calculateLiveMoonData());
+  const [moonData, setMoonData] = useState<LiveMoonData>(calculateLiveMoonData);
   const [ celestialClicks, setCelestialClicks] = useState(0);
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [localTimeStr, setLocalTimeStr] = useState("");

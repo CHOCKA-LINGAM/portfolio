@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowDown, FileDown, HelpCircle } from "lucide-react";
+import { ArrowDown, FileText, HelpCircle } from "lucide-react";
 import { getExperienceYearsLabel } from "@/data/index";
 import {
   PythonBrandIcon,
@@ -61,7 +61,7 @@ export function MonographHomeSignal({
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span>01 // HOME</span>
           <span className="text-slate-300">•</span>
-          <span className="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 font-extrabold text-[11px] border border-cyan-300 shadow-xs">
+          <span className="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 font-extrabold text-[11px] border border-cyan-300 shadow-sm">
             {expYears} Years Exp
           </span>
         </div>
@@ -73,9 +73,9 @@ export function MonographHomeSignal({
         {/* Left Column: Giant Headline & Responsive Bio */}
         <div className="lg:col-span-7 flex flex-col gap-5 sm:gap-6 max-w-2xl">
           <div className="flex flex-col gap-3">
-            <span className="font-mono text-[11px] sm:text-xs font-bold text-slate-600 tracking-wider uppercase">
-              Chockalingam Balan · Senior Software Engineer
-            </span>
+            <p className="font-mono text-xs sm:text-sm font-bold text-slate-700 tracking-wider uppercase">
+              Chockalingam Balan · Senior Software Engineer · Chennai, India
+            </p>
             <h1 className="text-3xl sm:text-5xl xl:text-6xl font-display font-extrabold tracking-tight text-slate-950 leading-[1.08]">
               I build <RotatingWord /> that hold up in production.
             </h1>
@@ -102,7 +102,7 @@ export function MonographHomeSignal({
               onClick={onExplore}
               className="px-6 py-3 rounded-2xl font-bold text-xs text-white bg-slate-950 hover:bg-slate-800 transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
             >
-              <span>Explore Topology</span>
+              <span>See my experience</span>
               <ArrowDown className="w-3.5 h-3.5 text-cyan-400" />
             </button>
 
@@ -111,8 +111,8 @@ export function MonographHomeSignal({
                 onClick={onOpenResume}
                 className="px-5 py-3 rounded-2xl font-bold text-xs text-slate-900 bg-white hover:bg-slate-100 border border-slate-300 transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
               >
-                <FileDown className="w-3.5 h-3.5 text-cyan-600" />
-                <span>Download Resume</span>
+                <FileText className="w-3.5 h-3.5 text-cyan-600" />
+                <span>View Resume</span>
               </button>
             )}
 
@@ -129,7 +129,7 @@ export function MonographHomeSignal({
         </div>
 
         {/* Right Column: Dynamic SVG Branching Graph with Zero Mobile Clipping */}
-        <div className="lg:col-span-5 relative w-full h-[300px] sm:h-[340px] lg:h-[360px] flex items-center justify-center px-2 sm:px-6">
+        <div aria-hidden="true" className="lg:col-span-5 relative w-full h-[300px] sm:h-[340px] lg:h-[360px] hidden sm:flex items-center justify-center px-2 sm:px-6">
           
           {/* Root Origin Node on Left: SYSTEM badge */}
           <div

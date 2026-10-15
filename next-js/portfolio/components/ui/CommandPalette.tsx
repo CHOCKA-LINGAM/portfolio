@@ -15,6 +15,7 @@ import {
   FileText,
   X,
   Terminal,
+  HelpCircle,
 } from "lucide-react";
 import { Page } from "@/hooks/useNav";
 import { PERSONAL } from "@/data/index";
@@ -25,6 +26,7 @@ interface CommandPaletteProps {
   goTo: (page: Page) => void;
   onOpenStory: () => void;
   onOpenResumeModal: () => void;
+  onOpenRecruiterQA?: () => void;
 }
 
 interface CommandItem {
@@ -42,6 +44,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   goTo,
   onOpenStory,
   onOpenResumeModal,
+  onOpenRecruiterQA,
 }) => {
   const [query, setQuery] = useState("");
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -110,6 +113,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   ];
 
   const actionCommands: CommandItem[] = [
+    ...(onOpenRecruiterQA
+      ? [
+          {
+            id: "act-recruiter",
+            category: "Actions" as const,
+            title: "Recruiter Quick Answers",
+            subtitle: "Roles, stack, location & availability",
+            icon: <HelpCircle className="w-4 h-4 text-emerald-400" />,
+            action: () => { onOpenRecruiterQA(); onClose(); },
+          },
+        ]
+      : []),
     {
       id: "act-resume",
       category: "Actions",
@@ -133,7 +148,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       subtitle: "github.com/CHOCKA-LINGAM",
       icon: <ArrowRight className="w-4 h-4 text-cyan-400" />,
       action: () => {
-        window.open(PERSONAL.github, "_blank");
+        window.open(PERSONAL.github, "_blank", "noopener,noreferrer");
         onClose();
       },
     },
@@ -144,7 +159,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       subtitle: PERSONAL.email,
       icon: <Mail className="w-4 h-4 text-emerald-400" />,
       action: () => {
-        navigator.clipboard.writeText(PERSONAL.email);
+        navigator.clipboard?.writeText(PERSONAL.email).catch(() => {});
         onClose();
       },
     },
@@ -211,6 +226,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             <Search className="w-5 h-5 text-sky-400 shrink-0" />
             <input
               type="text"
+              aria-label="Search commands"
               autoFocus
               value={query}
               onChange={(e) => {
@@ -281,7 +297,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               <span>↵ Select</span>
               <span>ESC Close</span>
             </div>
-            <span>Cmd + K</span>
+            <span>Ctrl / ⌘ + K</span>
           </div>
         </motion.div>
       </div>
